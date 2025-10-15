@@ -223,19 +223,61 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\Object\AttachableObject.cpp" />
+    <ClCompile Include="Actor\Object\MovableObject.cpp" />
+    <ClCompile Include="Actor\Object\StageObjectBase.cpp" />
+    <ClCompile Include="Actor\Object\StaticObject.cpp" />
+    <ClCompile Include="Actor\Player.cpp" />
+    <ClCompile Include="Actor\Sphere.cpp" />
+    <ClCompile Include="Actor\SphereScaleManager.cpp" />
+    <ClCompile Include="Collision\CollisionManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="SceneLoader\SceneLoader.cpp" />
+    <ClCompile Include="SceneLoader\TransformHelper.cpp" />
+    <ClCompile Include="Sound\SoundManager.cpp" />
+    <ClCompile Include="SphereCamera.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="UICamera.cpp" />
+    <ClCompile Include="Util\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\Object\AttachableObject.h" />
+    <ClInclude Include="Actor\Object\MovableObject.h" />
+    <ClInclude Include="Actor\Object\StageObjectBase.h" />
+    <ClInclude Include="Actor\Object\StaticObject.h" />
+    <ClInclude Include="Actor\Player.h" />
+    <ClInclude Include="Actor\Sphere.h" />
+    <ClInclude Include="Actor\SphereScaleManager.h" />
+    <ClInclude Include="Collision\CollisionManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Json\json.hpp" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="SceneLoader\SceneLoader.h" />
+    <ClInclude Include="SceneLoader\TransformHelper.h" />
+    <ClInclude Include="Sound\SoundManager.h" />
+    <ClInclude Include="Sound\Types.h" />
+    <ClInclude Include="SphereCamera.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="UICamera.h" />
+    <ClInclude Include="Util\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

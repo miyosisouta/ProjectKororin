@@ -4,8 +4,7 @@
 #include<InitGUID.h>
 #include<dxgidebug.h>
 
-#include "Game.h"
-
+#include "GameManager.h"
 
 
 void ReportLiveObjects()
@@ -33,8 +32,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここから初期化を行うコードを記述する。
 	//////////////////////////////////////
 
+	// レイトレーシングを使用しないようにする
+	g_renderingEngine->DisableRaytracing();
+
 	//Gameクラスのオブジェクトを作成。
-	NewGO<Game>(0, "game");
+	NewGO<GameManager>(0, "gameManager");
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
