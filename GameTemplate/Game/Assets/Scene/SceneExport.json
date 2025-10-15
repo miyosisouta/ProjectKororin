@@ -1,0 +1,3172 @@
+{
+  "objects": [
+    {
+      "name": "NGrassFence(1)",
+      "Transform": {
+        "position": {
+          "x": -452.8514,
+          "y": 0.0,
+          "z": 941.8022
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(6)",
+      "Transform": {
+        "position": {
+          "x": -721.4515,
+          "y": 0.0,
+          "z": 611.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "BHouse_02_color01",
+      "Transform": {
+        "position": {
+          "x": 1210.09851,
+          "y": 0.0,
+          "z": -415.4178
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse02_color01",
+        "colliderCenter": {
+          "x": -0.4235,
+          "y": 4.5219,
+          "z": -0.1057
+        },
+        "colliderSize": {
+          "x": 16.0,
+          "y": 8.0,
+          "z": 13.0
+        }
+      }
+    },
+    {
+      "name": "VTaxi",
+      "Transform": {
+        "position": {
+          "x": 2119.962,
+          "y": 0.0,
+          "z": -142.7355
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VTaxi",
+        "colliderCenter": {
+          "x": -0.0064,
+          "y": 1.2162,
+          "z": -0.1932
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 2.4,
+          "z": 6.3
+        }
+      }
+    },
+    {
+      "name": "VPickUpTruck_color03",
+      "Transform": {
+        "position": {
+          "x": 641.2985,
+          "y": 0.2,
+          "z": -498.368
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VPickupTruck_Color02",
+        "colliderCenter": {
+          "x": -0.0009,
+          "y": 1.1323,
+          "z": 0.134
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 6.0
+        }
+      }
+    },
+    {
+      "name": "NBush01(3)",
+      "Transform": {
+        "position": {
+          "x": 301.9936,
+          "y": 0.0,
+          "z": -799.3578
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NBush01",
+        "colliderCenter": {
+          "x": 0.029,
+          "y": 1.5357,
+          "z": -0.0049
+        },
+        "colliderSize": {
+          "x": 1.0,
+          "y": 3.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "PStreetLight",
+      "Transform": {
+        "position": {
+          "x": 416.1486,
+          "y": 0.2,
+          "z": -990.9331
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "RLane01(1)",
+      "Transform": {
+        "position": {
+          "x": 1210.09851,
+          "y": 0.0,
+          "z": -1284.41785
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "BHouse_02_color02",
+      "Transform": {
+        "position": {
+          "x": -942.6514,
+          "y": 0.0,
+          "z": 1042.132
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse02_color02",
+        "colliderCenter": {
+          "x": -0.4235,
+          "y": 4.5219,
+          "z": -0.1057
+        },
+        "colliderSize": {
+          "x": 16.0,
+          "y": 9.0,
+          "z": 13.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(8)",
+      "Transform": {
+        "position": {
+          "x": 1230.63843,
+          "y": 0.0,
+          "z": 611.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NGrassTile(2)",
+      "Transform": {
+        "position": {
+          "x": -764.9014,
+          "y": 0.0,
+          "z": 393.025
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.5,
+          "y": 1.0,
+          "z": 2.75
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NGrassTile",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 60.0,
+          "y": 0.1,
+          "z": 31.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(12)",
+      "Transform": {
+        "position": {
+          "x": 638.9286,
+          "y": 0.0,
+          "z": -593.1678
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.5
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(1)",
+      "Transform": {
+        "position": {
+          "x": 1701.87341,
+          "y": 0.2,
+          "z": -356.1678
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "VSUV_color01(2)",
+      "Transform": {
+        "position": {
+          "x": 1240.52271,
+          "y": 0.2,
+          "z": 664.8014
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VSUV_Color01",
+        "colliderCenter": {
+          "x": -0.0907,
+          "y": 1.1288,
+          "z": 0.0919
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 5.7
+        }
+      }
+    },
+    {
+      "name": "NGrassFence(5)",
+      "Transform": {
+        "position": {
+          "x": 843.9337,
+          "y": 0.0,
+          "z": -364.0677
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(2)",
+      "Transform": {
+        "position": {
+          "x": 1701.87341,
+          "y": 0.2,
+          "z": 433.8322
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "NGrassTile",
+      "Transform": {
+        "position": {
+          "x": 716.3486,
+          "y": 0.0,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.25,
+          "y": 1.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NGrassTile",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 40.0,
+          "y": 0.1,
+          "z": 29.5
+        }
+      }
+    },
+    {
+      "name": "NBush01(2)",
+      "Transform": {
+        "position": {
+          "x": 391.6585,
+          "y": 0.0,
+          "z": -799.3578
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NBush01",
+        "colliderCenter": {
+          "x": 0.029,
+          "y": 1.5357,
+          "z": -0.0049
+        },
+        "colliderSize": {
+          "x": 1.0,
+          "y": 3.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "NGrassFence",
+      "Transform": {
+        "position": {
+          "x": -1476.69141,
+          "y": 0.0,
+          "z": -365.648
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor",
+      "Transform": {
+        "position": {
+          "x": -369.9014,
+          "y": 0.0,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 10.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 11.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(2)",
+      "Transform": {
+        "position": {
+          "x": -2147.40137,
+          "y": 0.0,
+          "z": -584.4778
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NRockBig(2)",
+      "Transform": {
+        "position": {
+          "x": -823.3614,
+          "y": 0.0,
+          "z": -331.678
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NRock_Big",
+        "colliderCenter": {
+          "x": 0.0009,
+          "y": 0.5016,
+          "z": 0.0026
+        },
+        "colliderSize": {
+          "x": 2.5,
+          "y": 1.0,
+          "z": 2.2
+        }
+      }
+    },
+    {
+      "name": "PBusStop",
+      "Transform": {
+        "position": {
+          "x": -649.1664,
+          "y": 0.2,
+          "z": -621.6078
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PBusStop",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 2.4875,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 5.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(10)",
+      "Transform": {
+        "position": {
+          "x": 1154.79846,
+          "y": 0.0,
+          "z": -691.9178
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(5)",
+      "Transform": {
+        "position": {
+          "x": -998.7414,
+          "y": 0.0,
+          "z": 611.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NCubeTree",
+      "Transform": {
+        "position": {
+          "x": -2249.75537,
+          "y": 0.0,
+          "z": -818.3177
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NGrassTile(1)",
+      "Transform": {
+        "position": {
+          "x": -1851.15137,
+          "y": 0.0,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.25,
+          "y": 1.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NGrassTile",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 100.0,
+          "y": 0.1,
+          "z": 29.5
+        }
+      }
+    },
+    {
+      "name": "BHouse_03_color02",
+      "Transform": {
+        "position": {
+          "x": 25.0986,
+          "y": 0.0,
+          "z": 1085.58215
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse03_color02",
+        "colliderCenter": {
+          "x": -0.077,
+          "y": 4.7429,
+          "z": -0.1799
+        },
+        "colliderSize": {
+          "x": 17.0,
+          "y": 9.0,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(3)",
+      "Transform": {
+        "position": {
+          "x": 1701.87341,
+          "y": 0.2,
+          "z": 1081.632
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "BHouse_04_color03",
+      "Transform": {
+        "position": {
+          "x": 356.8986,
+          "y": 0.0,
+          "z": -332.4676
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse04_color03",
+        "colliderCenter": {
+          "x": 0.7986,
+          "y": 3.7148,
+          "z": 0.1155
+        },
+        "colliderSize": {
+          "x": 25.0,
+          "y": 8.0,
+          "z": 15.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree(5)",
+      "Transform": {
+        "position": {
+          "x": -920.5314,
+          "y": 0.0,
+          "z": -499.9478
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "RLane04",
+      "Transform": {
+        "position": {
+          "x": 2000.09863,
+          "y": 0.0,
+          "z": 1085.58215
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane04",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.1,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.2,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "VSUV_color02",
+      "Transform": {
+        "position": {
+          "x": -717.1065,
+          "y": 0.2,
+          "z": 642.3922
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VSUV_Color02",
+        "colliderCenter": {
+          "x": -0.0907,
+          "y": 1.1288,
+          "z": 0.0919
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 5.7
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(1)",
+      "Transform": {
+        "position": {
+          "x": -1270.50146,
+          "y": 0.0,
+          "z": 595.7824
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree(1)",
+      "Transform": {
+        "position": {
+          "x": -511.3115,
+          "y": 0.0,
+          "z": 35.6721
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "PHydrant(1)",
+      "Transform": {
+        "position": {
+          "x": 1692.78857,
+          "y": 0.2,
+          "z": -946.6927
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "PHydrant",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.5102,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.4,
+          "y": 1.0,
+          "z": 0.4
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(11)",
+      "Transform": {
+        "position": {
+          "x": 1431.29846,
+          "y": 0.0,
+          "z": -691.9178
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "PTrafficSignal(1)",
+      "Transform": {
+        "position": {
+          "x": 2302.27368,
+          "y": 0.2,
+          "z": -990.1429
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PTrafficSignal_Big",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.01,
+          "z": -0.0198
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.0199,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "RLane01(3)",
+      "Transform": {
+        "position": {
+          "x": 2000.09863,
+          "y": 0.0,
+          "z": -494.4178
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "PBusStop(1)",
+      "Transform": {
+        "position": {
+          "x": -885.3764,
+          "y": 0.2,
+          "z": -621.6078
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PBusStop",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 2.4875,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 5.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(4)",
+      "Transform": {
+        "position": {
+          "x": 2294.37354,
+          "y": 0.2,
+          "z": 433.8322
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "VPickUpTruck_color01",
+      "Transform": {
+        "position": {
+          "x": -2094.47144,
+          "y": 0.2,
+          "z": -575.0192
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VPickupTruck_Color01",
+        "colliderCenter": {
+          "x": -0.0009,
+          "y": 1.1323,
+          "z": 0.134
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 6.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree(2)",
+      "Transform": {
+        "position": {
+          "x": -1224.6814,
+          "y": 0.0,
+          "z": -499.9478
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "PBench1",
+      "Transform": {
+        "position": {
+          "x": -869.2851,
+          "y": 0.2,
+          "z": -680.0677
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "PBench_01",
+        "colliderCenter": {
+          "x": 0.0018,
+          "y": 0.4621,
+          "z": -0.0019
+        },
+        "colliderSize": {
+          "x": 4.0,
+          "y": 1.0,
+          "z": 1.1
+        }
+      }
+    },
+    {
+      "name": "PBench1(1)",
+      "Transform": {
+        "position": {
+          "x": -646.7964,
+          "y": 0.2,
+          "z": -680.0677
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "PBench_01",
+        "colliderCenter": {
+          "x": 0.0018,
+          "y": 0.4621,
+          "z": -0.0019
+        },
+        "colliderSize": {
+          "x": 4.0,
+          "y": 1.0,
+          "z": 1.1
+        }
+      }
+    },
+    {
+      "name": "PHydrant",
+      "Transform": {
+        "position": {
+          "x": 2300.29858,
+          "y": 0.2,
+          "z": -946.6927
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "PHydrant",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.5102,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.4,
+          "y": 1.0,
+          "z": 0.4
+        }
+      }
+    },
+    {
+      "name": "NRockBig(1)",
+      "Transform": {
+        "position": {
+          "x": -867.6014,
+          "y": 0.0,
+          "z": -270.4529
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NRock_Big",
+        "colliderCenter": {
+          "x": 0.0009,
+          "y": 0.5016,
+          "z": 0.0026
+        },
+        "colliderSize": {
+          "x": 2.5,
+          "y": 1.0,
+          "z": 2.2
+        }
+      }
+    },
+    {
+      "name": "NRockBig",
+      "Transform": {
+        "position": {
+          "x": -758.1865,
+          "y": 0.0,
+          "z": -270.4529
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NRock_Big",
+        "colliderCenter": {
+          "x": 0.0009,
+          "y": 0.5016,
+          "z": 0.0026
+        },
+        "colliderSize": {
+          "x": 2.5,
+          "y": 1.0,
+          "z": 2.2
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(5)",
+      "Transform": {
+        "position": {
+          "x": 2294.37354,
+          "y": 0.2,
+          "z": 1081.632
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(4)",
+      "Transform": {
+        "position": {
+          "x": 724.2484,
+          "y": 0.0,
+          "z": 595.7824
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(9)",
+      "Transform": {
+        "position": {
+          "x": 950.1885,
+          "y": 0.0,
+          "z": 611.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(7)",
+      "Transform": {
+        "position": {
+          "x": 25.0986,
+          "y": 0.0,
+          "z": 611.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "VTaxi(1)",
+      "Transform": {
+        "position": {
+          "x": -1558.85144,
+          "y": 0.2,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VTaxi",
+        "colliderCenter": {
+          "x": -0.0064,
+          "y": 1.2162,
+          "z": -0.1932
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 2.4,
+          "z": 6.3
+        }
+      }
+    },
+    {
+      "name": "NFirTree(6)",
+      "Transform": {
+        "position": {
+          "x": -1130.67139,
+          "y": 0.0,
+          "z": 35.6721
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "RLane01(4)",
+      "Transform": {
+        "position": {
+          "x": 420.0986,
+          "y": 0.0,
+          "z": -1284.41785
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "VTaxi(2)",
+      "Transform": {
+        "position": {
+          "x": 305.5485,
+          "y": 0.2,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VTaxi",
+        "colliderCenter": {
+          "x": -0.0064,
+          "y": 1.2162,
+          "z": -0.1932
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 2.4,
+          "z": 6.3
+        }
+      }
+    },
+    {
+      "name": "NGrassFence(3)",
+      "Transform": {
+        "position": {
+          "x": 1585.34851,
+          "y": 0.0,
+          "z": 941.8022
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "NBush01(1)",
+      "Transform": {
+        "position": {
+          "x": 948.2137,
+          "y": 0.0,
+          "z": -799.3578
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NBush01",
+        "colliderCenter": {
+          "x": 0.029,
+          "y": 1.5357,
+          "z": -0.0049
+        },
+        "colliderSize": {
+          "x": 1.0,
+          "y": 3.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "VContainer_color03",
+      "Transform": {
+        "position": {
+          "x": 1727.54834,
+          "y": 0.0,
+          "z": -1169.868
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VContainer_color03",
+        "colliderCenter": {
+          "x": -0.0047,
+          "y": 2.0722,
+          "z": 0.0297
+        },
+        "colliderSize": {
+          "x": 3.6,
+          "y": 4.1,
+          "z": 9.1
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(6)",
+      "Transform": {
+        "position": {
+          "x": 1206.14856,
+          "y": 0.2,
+          "z": -990.9331
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(3)",
+      "Transform": {
+        "position": {
+          "x": -2147.40137,
+          "y": 0.0,
+          "z": 1264.51709
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree(4)",
+      "Transform": {
+        "position": {
+          "x": -620.3314,
+          "y": 0.0,
+          "z": -499.9478
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(3)",
+      "Transform": {
+        "position": {
+          "x": 356.8986,
+          "y": 0.0,
+          "z": 595.7824
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "VBus_color01",
+      "Transform": {
+        "position": {
+          "x": -766.8754,
+          "y": 0.0,
+          "z": -873.618
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VBus_color01",
+        "colliderCenter": {
+          "x": -0.0014,
+          "y": 1.7842,
+          "z": -0.0502
+        },
+        "colliderSize": {
+          "x": 3.7,
+          "y": 3.6,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(4)",
+      "Transform": {
+        "position": {
+          "x": -2147.40137,
+          "y": 0.0,
+          "z": 615.9272
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 2.5,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "BHouse_02_color03",
+      "Transform": {
+        "position": {
+          "x": 1012.59857,
+          "y": 0.0,
+          "z": 1057.14209
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse02_color03",
+        "colliderCenter": {
+          "x": -0.4235,
+          "y": 4.5219,
+          "z": -0.1057
+        },
+        "colliderSize": {
+          "x": 16.0,
+          "y": 9.0,
+          "z": 13.0
+        }
+      }
+    },
+    {
+      "name": "NGrassFence(2)",
+      "Transform": {
+        "position": {
+          "x": 542.5485,
+          "y": 0.0,
+          "z": 941.8022
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "BHouse_04_color02",
+      "Transform": {
+        "position": {
+          "x": -1914.35144,
+          "y": 0.0,
+          "z": 903.882
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse04_color02",
+        "colliderCenter": {
+          "x": 0.7986,
+          "y": 3.7148,
+          "z": 0.1155
+        },
+        "colliderSize": {
+          "x": 23.0,
+          "y": 8.0,
+          "z": 15.0
+        }
+      }
+    },
+    {
+      "name": "NGrassFence(4)",
+      "Transform": {
+        "position": {
+          "x": 1586.13843,
+          "y": 0.0,
+          "z": -364.0677
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "VSUV_color01",
+      "Transform": {
+        "position": {
+          "x": -2135.55151,
+          "y": 0.2,
+          "z": 619.482
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VSUV_Color01",
+        "colliderCenter": {
+          "x": -0.0907,
+          "y": 1.1288,
+          "z": 0.0919
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 5.7
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(7)",
+      "Transform": {
+        "position": {
+          "x": 2294.37354,
+          "y": 0.2,
+          "z": -356.1678
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "RIntersection01",
+      "Transform": {
+        "position": {
+          "x": 2000.09863,
+          "y": 0.0,
+          "z": -1284.41785
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RIntersection01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "RLane01(2)",
+      "Transform": {
+        "position": {
+          "x": 2000.09863,
+          "y": 0.0,
+          "z": 295.5822
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "NGrassFence(6)",
+      "Transform": {
+        "position": {
+          "x": -1472.34644,
+          "y": 0.0,
+          "z": 941.8022
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 3.8
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "NGrassFence",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.6,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 1.2,
+          "y": 1.2,
+          "z": 9.3
+        }
+      }
+    },
+    {
+      "name": "VPickUpTruck_color01(1)",
+      "Transform": {
+        "position": {
+          "x": 1438.01343,
+          "y": 0.2,
+          "z": -766.9676
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VPickupTruck_Color01",
+        "colliderCenter": {
+          "x": -0.0009,
+          "y": 1.1323,
+          "z": 0.134
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 6.0
+        }
+      }
+    },
+    {
+      "name": "NRockBig(3)",
+      "Transform": {
+        "position": {
+          "x": -802.5485,
+          "y": 0.0,
+          "z": -232.928
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NRock_Big",
+        "colliderCenter": {
+          "x": 0.0009,
+          "y": 0.5016,
+          "z": 0.0026
+        },
+        "colliderSize": {
+          "x": 2.5,
+          "y": 1.0,
+          "z": 2.2
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(6)",
+      "Transform": {
+        "position": {
+          "x": -2249.75537,
+          "y": 0.0,
+          "z": -8.5677
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "BHouse_01_color01",
+      "Transform": {
+        "position": {
+          "x": -1898.55164,
+          "y": 0.0,
+          "z": -348.268
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "BHouse01_color01",
+        "colliderCenter": {
+          "x": -0.5606,
+          "y": 4.526,
+          "z": -0.1333
+        },
+        "colliderSize": {
+          "x": 18.0,
+          "y": 9.0,
+          "z": 12.0
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(5)",
+      "Transform": {
+        "position": {
+          "x": 1462.89856,
+          "y": 0.0,
+          "z": 595.7824
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "RLane01",
+      "Transform": {
+        "position": {
+          "x": -1949.90137,
+          "y": 0.0,
+          "z": -1284.41785
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLane01",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 20.0,
+          "y": 0.1,
+          "z": 20.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree",
+      "Transform": {
+        "position": {
+          "x": -822.5714,
+          "y": 0.0,
+          "z": 35.6721
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NBush01",
+      "Transform": {
+        "position": {
+          "x": 1030.37341,
+          "y": 0.0,
+          "z": -799.3578
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NBush01",
+        "colliderCenter": {
+          "x": 0.029,
+          "y": 1.5357,
+          "z": -0.0049
+        },
+        "colliderSize": {
+          "x": 1.0,
+          "y": 3.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "name": "PTrafficSignal",
+      "Transform": {
+        "position": {
+          "x": 1701.87341,
+          "y": 0.2,
+          "z": -990.1429
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PTrafficSignal_Big",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.01,
+          "z": -0.0198
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.0199,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "RLaneBusStop",
+      "Transform": {
+        "position": {
+          "x": -764.9014,
+          "y": 0.0,
+          "z": -1284.41785
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 0,
+        "objectAssetName": "RLaneBusStop",
+        "colliderCenter": {
+          "x": 3.52,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 27.0024,
+          "y": 0.1,
+          "z": 40.0
+        }
+      }
+    },
+    {
+      "name": "PStreetLight(8)",
+      "Transform": {
+        "position": {
+          "x": -1949.90137,
+          "y": 0.2,
+          "z": -990.9331
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "PStreetLight",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.2137,
+          "z": -0.0012
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 6.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "NHouseFloor(1)",
+      "Transform": {
+        "position": {
+          "x": -2147.40137,
+          "y": 0.0,
+          "z": -234.9025
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 1,
+        "requiredSphereSize": 0,
+        "objectAssetName": "NHouseFloor",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 6.0,
+          "y": 0.1,
+          "z": 10.0
+        }
+      }
+    },
+    {
+      "name": "NCubeTree(2)",
+      "Transform": {
+        "position": {
+          "x": -247.4515,
+          "y": 0.0,
+          "z": 595.7824
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NCubeTree",
+        "colliderCenter": {
+          "x": -0.1302,
+          "y": 2.0144,
+          "z": 0.0202
+        },
+        "colliderSize": {
+          "x": 3.3,
+          "y": 4.0,
+          "z": 3.0
+        }
+      }
+    },
+    {
+      "name": "NFirTree(3)",
+      "Transform": {
+        "position": {
+          "x": -334.3514,
+          "y": 0.0,
+          "z": -499.9478
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 2,
+        "objectAssetName": "NFirTree",
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 3.6744,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 7.0,
+          "z": 3.0
+        }
+      }
+    }
+  ]
+}

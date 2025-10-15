@@ -1,0 +1,33 @@
+donotExporter … 出力しないもの（例：mainCameraなど）
+JsonExportable … Jsonファイルで出力
+
+<オブジェクトに新しい情報をつける手順>
+1.Unityにてscriptを追加
+2.スクリプトにて、JsonExportableMonoBehaviourを継承
+3.ExportDataを実装
+
+例）
+
+public class Attribute : JsonExportableMonoBehaviour
+{
+    [SerializeField] enAttribute attribute_;
+
+
+    public override Dictionary<string, object> ExportData()
+    {
+        var data = new Dictionary<string, object>()
+        {
+            ["Attribute"] = attribute_
+        };
+
+
+        return data;
+    }
+}
+
+
+4.UnityのtoolsタブのSceneJsonExporterをクリック
+5.Select Export Locationをクリックし保存する場所を選択
+6.ExportSceneをクリック　→　そのUnityのファイルにjsonファイルが出力される
+7.出力されたjsonファイルを作っているゲームのファイルの特定の位置に置く
+	例）LoadScene("Assets/Scene/SceneExport.json", [&](const nlohmann::json& j)…
