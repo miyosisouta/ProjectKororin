@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{c1507053-3e5f-4265-9174-617975673ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{660abbd1-0c0f-474b-97e9-733c64f13cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json">
+      <UniqueIdentifier>{9bc7f582-6f64-4ebe-904a-840258ecac58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneLoader">
+      <UniqueIdentifier>{a80e3dd2-0ad4-499b-971e-88b53648a22d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Object">
+      <UniqueIdentifier>{aefd8041-2f37-42ab-9b47-da1ce3bd0160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{93181a84-a5f3-4453-97a3-d6b6e3eae83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{75baf61a-0aab-4fe8-b17f-ba231ba62198}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="system\system.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="UICamera.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="SphereCamera.cpp" />
+    <ClCompile Include="Actor\Player.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Sphere.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\SphereScaleManager.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Transform.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="SceneLoader\SceneLoader.cpp">
+      <Filter>SceneLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader\TransformHelper.cpp">
+      <Filter>SceneLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Object\MovableObject.cpp">
+      <Filter>Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Object\StaticObject.cpp">
+      <Filter>Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Object\AttachableObject.cpp">
+      <Filter>Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Object\StageObjectBase.cpp">
+      <Filter>Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CollisionManager.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\SoundManager.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system\system.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="UICamera.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="SphereCamera.h" />
+    <ClInclude Include="Actor\Player.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Sphere.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Actor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\SphereScaleManager.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Transform.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Json\json.hpp">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader\SceneLoader.h">
+      <Filter>SceneLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader\TransformHelper.h">
+      <Filter>SceneLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Object\AttachableObject.h">
+      <Filter>Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Object\MovableObject.h">
+      <Filter>Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Object\StaticObject.h">
+      <Filter>Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Object\StageObjectBase.h">
+      <Filter>Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\Types.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CollisionManager.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
