@@ -28,6 +28,15 @@ namespace nsK2EngineLow {
 		/// <param name="worldMatrix">ワールド行列</param>
 		/// <param name="restitution">反発力</param>
 		void CreateFromModel(Model& model, const Matrix& worldMatrix, const float restitution = 0.0f);
+
+		/**
+		 * @brief 静的ボックスコライダーを作成します。
+		 * @param pos コライダーの中心位置を表すベクトル。
+		 * @param size コライダーのサイズを表すベクトル。
+		 * @param worldMatrix ワールド空間でのコライダーの変換行列。
+		 * @param restitution 反発力（デフォルトは0.0f）。
+		 */
+		void CreateBoxCollider(const Vector3& pos, const Vector3& size, const Matrix& worldMatrix, const float restitution = 0.0f);
 		/// <summary>
 		/// 摩擦力を設定する。
 		/// </summary>
@@ -49,6 +58,8 @@ namespace nsK2EngineLow {
 		}
 	private:
 		MeshCollider m_meshCollider;		//メッシュコライダー。
+		BoxCollider m_boxCollider;
+
 		RigidBody m_rigidBody;				//剛体。
 	};
 }
