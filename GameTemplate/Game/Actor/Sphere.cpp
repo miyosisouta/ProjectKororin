@@ -67,13 +67,6 @@ void Sphere::Render(RenderContext& rc)
 	sphereRender_.Draw(rc);
 }
 
-void Sphere::SetParent(AttachableObject* attachableObject)
-{
-	Transform* parentTransform = this->GetTransform(); // Sphereのトランスフォームを取得
-	Transform* childTransform = attachableObject->GetTransform(); // AttachableObjectのトランスフォームを取得
-
-	childTransform->SetParent(parentTransform);
-}
 
 void Sphere::Move() 
 {
@@ -149,19 +142,14 @@ void Sphere::SetGravity()
 	sphereRender_.SetPosition(transform_.m_position);
 }
 
-void Sphere::HitRay()
+
+void Sphere::SetParent(AttachableObject* attachableObject)
 {
-	//std::vector<Vector3> hitPositions; // ヒット座標を格納
+	attachableObject->GetTransform()->SetParent(&transform_);
+	//Transform* parentTransform = this->GetTransform(); // Sphereのトランスフォームを取得
+	//Transform* childTransform = attachableObject->GetTransform(); // AttachableObjectのトランスフォームを取得
 
-	//rayStarts_ = transform_.m_position;
-	//Vector3 rayEnd = rayStarts_ + rayDirections * rayLength_;
-	//Vector3 hitPos;
-	//bool isHit = physicsWorld_->RayTest(rayStarts_, rayEnd, hitPos);
-
-	//if (isHit) {
-	//	std::cout << "HIT!!";
-	//}
-	
+	//childTransform->SetParent(parentTransform);
 }
 
 

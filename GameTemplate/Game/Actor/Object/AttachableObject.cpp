@@ -28,6 +28,9 @@ bool AttachableObject::Start()
 
 void AttachableObject::Update() 
 {
+	transform_.UpdateTransform();
+	modelRender_.SetPosition(transform_.m_position);
+	modelRender_.SetRotation(transform_.m_rotation);
 	modelRender_.Update();
 }
 

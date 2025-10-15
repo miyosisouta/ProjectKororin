@@ -77,11 +77,6 @@ private:
 	 */
 	void SetGravity();
 
-	/**
-	 * @brief レイをヒットさせる処理を実行します。
-	 */
-	void HitRay();
-
 
 private: // Sphere関係の変数
 
@@ -96,13 +91,6 @@ private: // Sphere関係の変数
 	float radius_ = 1.0f; //!< 半径
 
 	CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト
-
-private: // Ray関係の変数
-
-	PhysicsWorld* physicsWorld_ = nullptr;
-	Vector3 rayStarts_; //!< レイ開始点
-	Vector3 rayDirections = Vector3(1, 0, 0); //!< レイ方向
-	float rayLength_ = 0.0f; //!<レイの長さ
 
 };
 
