@@ -21,5 +21,18 @@ namespace nsK2EngineLow {
 		rbInfo.mass = 0.0f;
 		rbInfo.restitution = restitution;
 		m_rigidBody.Init(rbInfo);
+
 	}
+
+	void PhysicsStaticObject::CreateBoxCollider(const Vector3& pos, const Vector3& size, const Matrix& worldMatrix, const float restitution)
+	{
+		m_boxCollider.Create(size);
+		RigidBodyInitData rbInfo;
+		rbInfo.pos = pos;
+		rbInfo.collider = &m_boxCollider;
+		rbInfo.mass = 0.0f;
+		rbInfo.restitution = restitution;
+		m_rigidBody.Init(rbInfo);
+	}
+	
 }
