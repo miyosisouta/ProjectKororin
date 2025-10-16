@@ -57,4 +57,7 @@ public:
 		m_parent_ = p;
 		m_parent_->m_children_.push_back(this);
 	}
+
+	void ResetLocalPosition();
+	void ResetLocalRotation();
 };

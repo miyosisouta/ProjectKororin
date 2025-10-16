@@ -96,6 +96,9 @@ void Transform::Release()
 		(*it)->m_parent_ = nullptr;
 		//子トランスフォームへの紐づけを外す
 		m_children_.erase(it);
+		if (m_children_.size() <= 0) {
+			break;
+		}
 		//イテレータを進める
 		++it;
 	}
@@ -126,3 +129,20 @@ void Transform::RemoveChild(Transform* t)
 		++it;
 	}
 }
+
+
+void Transform::ResetLocalPosition()
+{
+	m_localPosition.x = 0.0f;
+	m_localPosition.y = 0.0f;
+	m_localPosition.z = 0.0f;
+}
+
+
+void Transform::ResetLocalRotation()
+{
+	m_localRotation.x = 0.0f;
+	m_localRotation.y = 0.0f;
+	m_localRotation.z = 0.0f;
+}
+

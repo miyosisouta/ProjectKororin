@@ -44,6 +44,7 @@ void CollisionHitManager::Update()
 				// すでに登録済みではないなら追加する
 				if (!exists) {
 					m_collisionPairList.push_back(CollisionPair(infoA, infoB));
+					
 
 				}
 			}
@@ -95,8 +96,10 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 	}
 
 	// 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる
-	attachableObject->DeletePhysicsStatics();
 	sphere->SetParent(attachableObject);
+	attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
+	attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
+	attachableObject->DeletePhysicsStatics();
 
 	return true;
 }
