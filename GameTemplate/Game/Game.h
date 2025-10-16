@@ -47,4 +47,8 @@ public:
 	SphereCamera* m_sphereCamera = nullptr; //!< ボール追従カメラ
 	Stage* m_stage = nullptr; //!< ステージ
 
+
+public:
+
+
 };

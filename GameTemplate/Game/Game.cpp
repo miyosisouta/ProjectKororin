@@ -26,8 +26,7 @@ bool Game::Start()
 	m_sphereCamera = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
 	m_stage = NewGO<Stage>(0,"stage"); // ステージ
 
-	// @todo for test
-	auto* inputSystem = NewGO<InputSystem>(0, "inputSyste");
+	auto* inputSystem = NewGO<InputSystem>(0, "inputSystem");
 	inputSystem->SetTarget(m_sphere);
 
 	CollisionHitManager::Create();

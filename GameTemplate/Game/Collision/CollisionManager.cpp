@@ -3,6 +3,7 @@
 
 #include "Actor/Sphere.h"
 #include "Actor/Object/AttachableObject.h"
+#include "Sound/SoundManager.h"
 
 
 CollisionHitManager* CollisionHitManager::instance_ = nullptr;
@@ -12,6 +13,7 @@ CollisionHitManager::CollisionHitManager()
 {
 	m_collisionInfoList.clear();
 	m_collisionPairList.clear();
+	SoundManager::CreateInstance(); // SoundManagerのインスタンスを作成
 }
 
 
@@ -55,9 +57,11 @@ void CollisionHitManager::Update()
 	for (auto& pair : m_collisionPairList)
 	{
 		// 吸着可能な場合処理を続行
-		if (UpdateHitAttatchableObject(pair)) {
+		if (UpdateHitAttatchableObject(pair)) 
+		{
 			continue;
 		}
+
 	}
 }
 
@@ -95,11 +99,23 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 		return false;
 	}
 
-	// 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる
-	sphere->SetParent(attachableObject);
+
+	/** 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる */
+
+	// pairが引っ付いたとき一度だけSEを流す
+	if (pair.isPlayedSE)  
+	{
+		SoundManager& soundManagerInstance = SoundManager::Get(); // SoundMangaerのインスタンスを取得
+		soundManagerInstance.PlaySE(enSoundKind_Attach);
+		pair.isPlayedSE = false;
+	}
+
+	//オブジェクトを塊につけ、一緒に動くようにする
+	sphere->SetParent(attachableObject); // transformの親子関係を設定
 	attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
 	attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
 	attachableObject->DeletePhysicsStatics();
+
 
 	return true;
 }

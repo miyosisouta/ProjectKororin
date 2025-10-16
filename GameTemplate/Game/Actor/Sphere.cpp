@@ -6,7 +6,8 @@
 namespace 
 {
 	const float ALWAYS_SPEED = 100.0f;	// 固定移動速度
-	const float INITIAL_RADIUS = 1.0f;	// 初期半径
+	const float INITIAL_RADIUS = 15.0f;	// 初期半径
+	//const float INITIAL_MASS = 1.0f; // 初期質量
 }
 
 bool Sphere::Start() 
@@ -22,18 +23,16 @@ bool Sphere::Start()
 	sphereRender_.Update();
 
 
-	// レイを飛ばすためのインスタンスをGet
-	//physicsWorld_ = PhysicsWorld::GetInstance();
-
 	// コリジョンを作成
 	collisionObject_ = NewGO<CollisionObject>(0, "collisionObject");
 	collisionObject_->CreateSphere(
 		transform_.m_position,	// 座標
 		transform_.m_rotation,	// 回転
-		INITIAL_RADIUS* 16.0f			// 球形の半径
+		INITIAL_RADIUS			// 球形の半径
 	);
 	// コリジョンが消えないようにする
 	collisionObject_->SetIsEnableAutoDelete(false);
+
 
 	// 当たり判定の登録
 	CollisionHitManager::Get().RegisterCollisionObject(
@@ -41,6 +40,12 @@ bool Sphere::Start()
 		this,                     // Sphere自身（IGameObject*）
 		collisionObject_          // Sphereのコリジョン
 	);
+
+
+	// todo for test : BurretPhysicsを使った新しい当たり判定とコリジョン設定
+	//btCollisionShape* initialShape = new btSphereShape(INITIAL_RADIUS);
+	//btVector3 localInertia(0, 0, 0); // 慣性モーメント : 回転運動における物体の回転のしにくさ
+	//initialShape->calculateLocalInertia(INITIAL_MASS, localInertia);
 
 
 	// キャラコンの初期
@@ -87,6 +92,7 @@ void Sphere::Move()
 	sphereRender_.SetPosition(transform_.m_position);
 }
 
+
 void Sphere::Rotation()
 {
 	// 回転速度を計算
@@ -117,6 +123,7 @@ void Sphere::Rotation()
 	sphereRender_.SetRotation(transform_.m_rotation);
 }
 
+
 void Sphere::SetGravity()
 {
 	// 地面に付いていたら
@@ -143,9 +150,12 @@ void Sphere::SetGravity()
 }
 
 
+
 void Sphere::SetParent(AttachableObject* attachableObject)
 {
 	attachableObject->GetTransform()->SetParent(&transform_);
+
+	// 上のコードをわかりやすくしたもの
 	//Transform* parentTransform = this->GetTransform(); // Sphereのトランスフォームを取得
 	//Transform* childTransform = attachableObject->GetTransform(); // AttachableObjectのトランスフォームを取得
 
