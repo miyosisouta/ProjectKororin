@@ -19,5 +19,5 @@ public:
 	~MovableObject() {};
 
 
-	virtual bool Start() override;
+	bool Start() override;
 };
