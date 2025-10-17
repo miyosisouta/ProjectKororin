@@ -232,6 +232,7 @@
     <ClCompile Include="Actor\Sphere\Sphere.cpp" />
     <ClCompile Include="Actor\Sphere\SphereScaleManager.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
+    <ClCompile Include="Core\LateStageObjectUpdateManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputSystem.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Actor\Sphere\Sphere.h" />
     <ClInclude Include="Actor\Sphere\SphereScaleManager.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
+    <ClInclude Include="Core\LateStageObjectUpdateManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="InputSystem.h" />

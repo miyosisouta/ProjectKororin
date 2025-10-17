@@ -7,6 +7,7 @@
 #include "Actor/Sphere/Sphere.h"
 #include "InputSystem.h"
 #include "Collision/CollisionManager.h"
+#include "Core/LateStageObjectUpdateManager.h"
 
 Game::~Game()
 {
@@ -16,6 +17,8 @@ Game::~Game()
 	DeleteGO(stage_);
 
 	CollisionHitManager::Delete();
+	LateStageObjectUpdateManager::Get().UnRegisterSphere();
+	LateStageObjectUpdateManager::Delete();
 }
 
 bool Game::Start()
@@ -30,6 +33,8 @@ bool Game::Start()
 	inputSystem->SetTarget(sphere_);
 
 	CollisionHitManager::Create();
+	LateStageObjectUpdateManager::Create();
+	LateStageObjectUpdateManager::Get().RegisterSphere(sphere_);
 
 	return true;
 }
@@ -37,6 +42,7 @@ bool Game::Start()
 void Game::Update()
 {
 	CollisionHitManager::Get().Update();
+	LateStageObjectUpdateManager::Get().Update();
 }
 
 void Game::Render(RenderContext& rc)

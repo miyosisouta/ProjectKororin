@@ -28,6 +28,9 @@
     <Filter Include="Actor\Sphere">
       <UniqueIdentifier>{b2b8fbbd-0163-40af-afc2-89540c292352}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{eb62131d-937a-4b8a-bcd1-713e8e40a3c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -81,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="Actor\Sphere\Sphere.cpp">
       <Filter>Actor\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\LateStageObjectUpdateManager.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="Actor\Sphere\Sphere.h">
       <Filter>Actor\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LateStageObjectUpdateManager.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
