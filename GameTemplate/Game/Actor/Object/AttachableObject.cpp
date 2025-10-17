@@ -28,6 +28,13 @@ bool AttachableObject::Start()
 
 void AttachableObject::Update() 
 {
+	btRigidBody* btBody = physicsStaticObject_->GetRigidBody()->GetBody();
+	btTransform& trans = btBody->getWorldTransform();
+
+	physicsStaticObject_->GetCollider()->GetBody()
+
+	transform_.m_localPosition = Vector3(trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z());
+
 	transform_.UpdateTransform();
 	modelRender_.SetPosition(transform_.m_position);
 	modelRender_.SetRotation(transform_.m_rotation);

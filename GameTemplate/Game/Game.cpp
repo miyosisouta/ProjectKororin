@@ -3,31 +3,31 @@
 #include "GameManager.h"
 #include "SphereCamera.h"
 #include "Stage.h"
-#include "Actor/Player.h"
-#include "Actor/Sphere.h"
+#include "Actor/Sphere/Player.h"
+#include "Actor/Sphere/Sphere.h"
 #include "InputSystem.h"
 #include "Collision/CollisionManager.h"
 
 Game::~Game()
 {
-	DeleteGO(m_sphere);
+	DeleteGO(sphere_);
 	DeleteGO(m_player);
-	DeleteGO(m_sphereCamera);
-	DeleteGO(m_stage);
+	DeleteGO(sphereCamera_);
+	DeleteGO(stage_);
 
 	CollisionHitManager::Delete();
 }
 
 bool Game::Start()
 {
-	m_gameManager = FindGO<GameManager>("gameManager");	//!< ゲームマネージャー
+	gameManager_ = FindGO<GameManager>("gameManager");	//!< ゲームマネージャー
 	//m_player = NewGO<Player>(0,"player"); // プレイヤー
-	m_sphere = NewGO<Sphere>(0,"sphere"); // 塊
-	m_sphereCamera = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
-	m_stage = NewGO<Stage>(0,"stage"); // ステージ
+	sphere_ = NewGO<Sphere>(0,"sphere"); // 塊
+	sphereCamera_ = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
+	stage_ = NewGO<Stage>(0,"stage"); // ステージ
 
 	auto* inputSystem = NewGO<InputSystem>(0, "inputSystem");
-	inputSystem->SetTarget(m_sphere);
+	inputSystem->SetTarget(sphere_);
 
 	CollisionHitManager::Create();
 

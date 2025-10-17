@@ -25,6 +25,9 @@
     <Filter Include="Collision">
       <UniqueIdentifier>{75baf61a-0aab-4fe8-b17f-ba231ba62198}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Actor\Sphere">
+      <UniqueIdentifier>{b2b8fbbd-0163-40af-afc2-89540c292352}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -39,16 +42,7 @@
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="SphereCamera.cpp" />
-    <ClCompile Include="Actor\Player.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor\Sphere.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\Actor.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor\SphereScaleManager.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="Util\Transform.cpp">
@@ -79,6 +73,15 @@
     <ClCompile Include="Sound\SoundManager.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\Sphere\Player.cpp">
+      <Filter>Actor\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Sphere\SphereScaleManager.cpp">
+      <Filter>Actor\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Sphere\Sphere.cpp">
+      <Filter>Actor\Sphere</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -91,16 +94,7 @@
     <ClInclude Include="UICamera.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="SphereCamera.h" />
-    <ClInclude Include="Actor\Player.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor\Sphere.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Actor\Actor.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor\SphereScaleManager.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="Util\Transform.h">
@@ -137,8 +131,15 @@
     <ClInclude Include="Sound\SoundManager.h">
       <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Json</Filter>
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Actor\Sphere\Player.h">
+      <Filter>Actor\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Sphere\SphereScaleManager.h">
+      <Filter>Actor\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Sphere\Sphere.h">
+      <Filter>Actor\Sphere</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
