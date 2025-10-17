@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "InputSystem.h"
-#include "Actor/Sphere.h"
+#include "Actor/Sphere/Sphere.h"
 
 
 bool InputSystem::Start()

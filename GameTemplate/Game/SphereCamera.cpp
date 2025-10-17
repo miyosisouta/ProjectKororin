@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SphereCamera.h"
-#include "Actor/sphere.h"
+#include "Actor/Sphere/sphere.h"
 
 bool SphereCamera::Start() 
 {

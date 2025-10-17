@@ -35,6 +35,14 @@ public:
 	virtual void Update() override {};
 	virtual void Render(RenderContext& rc) override {};
 
+	
+public:
+	// @todo for test
+	inline PhysicsStaticObject* GetPhysicsStaticObject()
+	{
+		return physicsStaticObject_;
+	}
+
 
 public:
 	/**

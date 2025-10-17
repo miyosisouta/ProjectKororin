@@ -41,10 +41,14 @@ public:
 	void Render(RenderContext& rc);
 
 public:
-	GameManager* m_gameManager = nullptr; //!< ゲーム管理クラスへの参照
+	GameManager* gameManager_ = nullptr; //!< ゲーム管理クラスへの参照
 	Player* m_player = nullptr; //!< プレイヤーキャラクタ
-	Sphere* m_sphere = nullptr; //!< ボール（Sphere）
-	SphereCamera* m_sphereCamera = nullptr; //!< ボール追従カメラ
-	Stage* m_stage = nullptr; //!< ステージ
+	Sphere* sphere_ = nullptr; //!< ボール（Sphere）
+	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
+	Stage* stage_ = nullptr; //!< ステージ
+
+
+public:
+
 
 };

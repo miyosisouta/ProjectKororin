@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "CollisionManager.h"
 
-#include "Actor/Sphere.h"
+#include "Actor/Sphere/Sphere.h"
 #include "Actor/Object/AttachableObject.h"
+#include "Sound/SoundManager.h"
 
 
 CollisionHitManager* CollisionHitManager::instance_ = nullptr;
@@ -12,6 +13,7 @@ CollisionHitManager::CollisionHitManager()
 {
 	m_collisionInfoList.clear();
 	m_collisionPairList.clear();
+	SoundManager::CreateInstance(); // SoundManagerのインスタンスを作成
 }
 
 
@@ -55,10 +57,14 @@ void CollisionHitManager::Update()
 	for (auto& pair : m_collisionPairList)
 	{
 		// 吸着可能な場合処理を続行
-		if (UpdateHitAttatchableObject(pair)) {
+		if (UpdateHitAttatchableObject(pair)) 
+		{
 			continue;
 		}
+
 	}
+
+	m_collisionPairList.clear();
 }
 
 
@@ -95,11 +101,45 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 		return false;
 	}
 
-	// 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる
-	sphere->SetParent(attachableObject);
-	attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
-	attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
-	attachableObject->DeletePhysicsStatics();
+
+	/** 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる */
+
+	// pairが引っ付いたとき一度だけSEを流す
+	if (pair.isPlayedSE)  
+	{
+		SoundManager& soundManagerInstance = SoundManager::Get(); // SoundMangaerのインスタンスを取得
+		soundManagerInstance.PlaySE(enSoundKind_Attach);
+		pair.isPlayedSE = false;
+	}
+
+	//オブジェクトを塊につけ、一緒に動くようにする
+	//sphere->SetParent(attachableObject); // transformの親子関係を設定
+	//attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
+	//attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
+	//attachableObject->DeletePhysicsStatics();
+
+	// 吸着可能オブジェクトの当たり判定を取得
+	auto* attachableObjectCollider = attachableObject->GetPhysicsStaticObject()->GetCollider()->GetBody();
+
+	bool isFind = false; // 当たり判定を見つけているかのフラグ
+	const int size = sphere->GetCollider()->GetBody()->getNumChildShapes(); // 塊の当たり判定の子の数を取得
+	if (size > 0) {
+		auto* childList = sphere->GetCollider()->GetBody()->getChildList(); // 塊の当たり判定の子どもにいるオブジェクトを格納
+		// 塊に吸着しているオブジェクトの数だけ繰り返す
+		for (int i = 0; i < size; ++i)
+		{
+			auto* child = &childList[i];
+			if (child->m_childShape == attachableObjectCollider) // 吸着しているオブジェクトが見つかった場合
+			{
+				isFind = true; // 探さない
+				break;
+			}
+		}
+	}
+	if (!isFind)
+	{ // 見つかっていない場合、塊の当たり判定の子どもに加える
+		sphere->GetCollider()->GetBody()->addChildShape(btTransform(), attachableObjectCollider);
+	}
 
 	return true;
 }

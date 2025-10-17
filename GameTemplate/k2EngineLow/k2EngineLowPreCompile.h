@@ -97,6 +97,7 @@ static const int MAX_BONE = 512;	// ƒ{[ƒ“‚ÌÅ‘å”B
 #include "physics/MeshCollider.h"
 #include "physics/SphereCollider.h"
 #include "physics/BoxCollider.h"
+#include "physics/CompoundCollider.h"
 #include "physics/CollisionAttr.h"
 #include "physics/CharacterController.h"
 #include "physics/PhysicsStaticObject.h"

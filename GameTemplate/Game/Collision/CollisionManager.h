@@ -7,7 +7,7 @@
 
 class Sphere; // 塊
 class StageObjectBase; // オブジェクト管理
-
+class SoundHitManager;
 
 enum EnCollisionType
 {
@@ -33,6 +33,7 @@ struct CollisionPair
 {
 	CollisionInfo* m_left;	// 当たり判定A
 	CollisionInfo* m_right;	// 当たり判定B
+	bool isPlayedSE = true;
 	//
 	CollisionPair() : m_left(nullptr), m_right(nullptr) {}
 	CollisionPair(CollisionInfo* left, CollisionInfo* right) : m_left(left), m_right(right) {}
@@ -52,7 +53,7 @@ private:
 	std::vector<CollisionInfo> m_collisionInfoList;
 	/** 当たり判定のペア */
 	std::vector<CollisionPair> m_collisionPairList;
-
+	
 
 private:
 	CollisionHitManager();

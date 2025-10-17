@@ -56,6 +56,17 @@ namespace nsK2EngineLow {
 		{
 			m_rigidBody.Release();
 		}
+
+		// @todo for test
+		BoxCollider* GetCollider()
+		{
+			return &m_boxCollider;
+		}
+		RigidBody* GetRigidBody()
+		{
+			return &m_rigidBody;
+		}
+
 	private:
 		MeshCollider m_meshCollider;		//メッシュコライダー。
 		BoxCollider m_boxCollider;
