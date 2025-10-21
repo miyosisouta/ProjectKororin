@@ -105,6 +105,13 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 
 	/** 吸着可能なオブジェクトとスフィアの当たり判定処理が、ここからできる */
 
+	// Sphereのレベルが吸着可能レベルに達しているか判定
+	if (CanAttach(*sphere, *attachableObject)) 
+	{
+		return false;
+	}
+
+
 	// pairが引っ付いたとき一度だけSEを流す
 	if (pair.isPlayedSE)  
 	{
@@ -118,6 +125,11 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 	attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
 	attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
 	attachableObject->DeletePhysicsStatics();
+
+	// 塊の半径を広げる
+	sphere->GrowByRadius(attachableObject->GetGrowAmount());
+
+
 
 	//// 吸着可能オブジェクトの当たり判定を取得
 	//auto* attachableObjectCollider = attachableObject->GetPhysicsStaticObject()->GetCollider()->GetBody();
@@ -149,4 +161,22 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 	//}
 
 	return true;
+}
+
+
+bool CollisionHitManager::CanAttach(Sphere& sphere, AttachableObject& target)
+{
+	// 吸着可能オブジェクトかどうかの判定
+	if (target.GetObjectSize() == 0) 
+	{
+		return true;
+	}
+
+	// 塊のレベルがオブジェクトのサイズ以上の場合
+	if (sphere.GetSphereSizeLevel() < target.GetObjectSize()) 
+	{
+		return true;
+	}
+
+	return false;
 }

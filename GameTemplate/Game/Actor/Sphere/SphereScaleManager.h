@@ -9,6 +9,7 @@
 
 class SphereScaleManager : public Sphere 
 {
+public:
 	/**
 	 * @brief コンストラクタ
 	 */
@@ -17,4 +18,14 @@ class SphereScaleManager : public Sphere
 	 * @brief デストラクタ
 	 */
 	~SphereScaleManager() {};
+
+
+public:
+	// todo for test : Sphereとオブジェクトのサイズを比較
+	//bool CanAttach(const SphereScaleManager& sphere, const AttachableObject& target);
+
+
+private:
+
+
 };

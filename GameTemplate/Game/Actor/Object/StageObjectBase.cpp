@@ -28,11 +28,12 @@ bool StageObjectBase:: Start()
 	// boxcolliderの当たり判定
 	physicsStaticObject_->CreateBoxCollider(colliderPos, colliderSize, modelRender_.GetModel().GetWorldMatrix());
 	// todo for test : 当たり判定の描画
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
-	collisionObject_ = NewGO<CollisionObject>(0);
-	collisionObject_->CreateBox(colliderPos, transform_.m_rotation, colliderSize);
-	collisionObject_->SetIsEnableAutoDelete(false);
+	// コリジョンの設定
+	collisionObject_ = NewGO<CollisionObject>(0); 
+	collisionObject_->CreateBox(colliderPos, transform_.m_rotation, colliderSize); // 四角いコリジョンを作成(座標, 回転, 大きさ)
+	collisionObject_->SetIsEnableAutoDelete(false); // コリジョンが自動で削除されないよう設定
 
 
 	// モデルの設定

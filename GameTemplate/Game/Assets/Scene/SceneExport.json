@@ -24,6 +24,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -60,6 +61,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -96,6 +98,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse02_color01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -132,6 +135,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -168,6 +172,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VPickupTruck_Color02",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": -0.0009,
           "y": 1.1323,
@@ -204,6 +209,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NBush01",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.029,
           "y": 1.5357,
@@ -238,8 +244,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -276,6 +283,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -312,6 +320,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse02_color02",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -348,6 +357,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -384,6 +394,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NGrassTile",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -420,6 +431,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -456,6 +468,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -492,6 +505,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color01",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -528,6 +542,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -564,6 +579,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -600,6 +616,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NGrassTile",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -636,6 +653,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NBush01",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.029,
           "y": 1.5357,
@@ -672,6 +690,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -708,6 +727,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -744,6 +764,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -780,6 +801,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -816,6 +838,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PBusStop",
+        "objectRadius": 40,
         "colliderCenter": {
           "x": 0.0,
           "y": 2.4875,
@@ -852,6 +875,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -888,6 +912,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -924,6 +949,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -960,6 +986,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NGrassTile",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -996,6 +1023,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse03_color02",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": -0.077,
           "y": 4.7429,
@@ -1032,6 +1060,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -1068,6 +1097,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse04_color03",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.7986,
           "y": 3.7148,
@@ -1104,6 +1134,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1140,6 +1171,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane04",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.1,
@@ -1176,6 +1208,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color02",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -1212,6 +1245,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -1248,6 +1282,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1284,6 +1319,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "PHydrant",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.5102,
@@ -1320,6 +1356,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -1356,6 +1393,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PTrafficSignal_Big",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.01,
@@ -1392,6 +1430,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -1428,6 +1467,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PBusStop",
+        "objectRadius": 40,
         "colliderCenter": {
           "x": 0.0,
           "y": 2.4875,
@@ -1464,6 +1504,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -1500,6 +1541,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VPickupTruck_Color01",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": -0.0009,
           "y": 1.1323,
@@ -1536,6 +1578,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1572,6 +1615,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "PBench_01",
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0018,
           "y": 0.4621,
@@ -1608,6 +1652,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "PBench_01",
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0018,
           "y": 0.4621,
@@ -1642,8 +1687,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 2,
         "objectAssetName": "PHydrant",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.5102,
@@ -1680,6 +1726,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -1716,6 +1763,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -1752,6 +1800,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -1788,6 +1837,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -1824,6 +1874,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -1860,6 +1911,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -1896,6 +1948,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -1932,6 +1985,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1968,6 +2022,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2004,6 +2059,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -2040,6 +2096,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -2076,6 +2133,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NBush01",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.029,
           "y": 1.5357,
@@ -2112,6 +2170,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VContainer_color03",
+        "objectRadius": 70,
         "colliderCenter": {
           "x": -0.0047,
           "y": 2.0722,
@@ -2148,6 +2207,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -2184,6 +2244,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2220,6 +2281,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -2256,6 +2318,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -2292,6 +2355,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VBus_color01",
+        "objectRadius": 70,
         "colliderCenter": {
           "x": -0.0014,
           "y": 1.7842,
@@ -2328,6 +2392,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2364,6 +2429,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse02_color03",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -2400,6 +2466,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -2436,6 +2503,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse04_color02",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.7986,
           "y": 3.7148,
@@ -2472,6 +2540,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -2508,6 +2577,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color01",
+        "objectRadius": 55,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -2544,6 +2614,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -2580,6 +2651,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RIntersection01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2616,6 +2688,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2652,6 +2725,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "NGrassFence",
+        "objectRadius": 50,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.6,
@@ -2688,6 +2762,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VPickupTruck_Color01",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": -0.0009,
           "y": 1.1323,
@@ -2724,6 +2799,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -2760,6 +2836,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -2796,6 +2873,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "BHouse01_color01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": -0.5606,
           "y": 4.526,
@@ -2832,6 +2910,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -2868,6 +2947,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -2902,8 +2982,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -2940,6 +3021,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NBush01",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.029,
           "y": 1.5357,
@@ -2976,6 +3058,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PTrafficSignal_Big",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.01,
@@ -3012,6 +3095,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 0,
         "objectAssetName": "RLaneBusStop",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 3.52,
           "y": 0.0,
@@ -3048,6 +3132,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "PStreetLight",
+        "objectRadius": 60,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.2137,
@@ -3084,6 +3169,7 @@
         "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "NHouseFloor",
+        "objectRadius": 0,
         "colliderCenter": {
           "x": 0.0,
           "y": 0.0,
@@ -3120,6 +3206,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
+        "objectRadius": 10,
         "colliderCenter": {
           "x": -0.1302,
           "y": 2.0144,
@@ -3156,6 +3243,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NFirTree",
+        "objectRadius": 15,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,

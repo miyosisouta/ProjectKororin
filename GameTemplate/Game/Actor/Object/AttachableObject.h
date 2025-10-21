@@ -24,6 +24,26 @@ public:
 	void Render(RenderContext& rc)override;
 
 public:
+	inline const int GetObjectSize() 
+	{
+		return objectSize_;
+	}
+
+	inline const int GetObjectValue() 
+	{
+		return attachableValue_;
+	}
+
+	inline const int GetGrowAmount()
+	{
+		return grouthAmount_;
+	}
+
+
+public:
+	/**
+	 * @brief “–‚½‚è”»’è‚Ì”jŠü‚Ænullptr
+	 */
 	void DeletePhysicsStatics();
 };
 
