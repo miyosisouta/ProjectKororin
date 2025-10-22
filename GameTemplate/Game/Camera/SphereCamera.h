@@ -3,10 +3,10 @@
  * @brief 球体に追従するカメラの宣言。
  */
 #pragma once
-
+#include "Camera/CameraBase.h"
 
 class Sphere;
-class SphereCamera : public IGameObject
+class SphereCamera : public CameraBase
 {
 public:
 	/**
@@ -23,15 +23,14 @@ public:
 	 * @brief 初期化処理。
 	 * @return 成功した場合は true。
 	 */
-	bool Start();
+	bool Start() override;
 	/**
 	 * @brief 毎フレームの更新処理。
 	 */
-	void Update();
+	void Update() override;
 
 
 private:
 	Sphere* m_sphere_ = nullptr; //!< 追従対象の球体
-	Vector3 m_cameraPos_ = Vector3::Zero; //!< カメラのワールド座標
 };
 

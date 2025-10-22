@@ -99,6 +99,12 @@ namespace
 		return attributeJson["requiredSphereSize"].get<int>();
 	}
 
+	// attachableValueデータを取得しint型で返すための関数
+	auto ParseGrowthAmount(const nlohmann::json& attributeJson)
+	{
+		return attributeJson["objectRadius"].get<int>();
+	}
+
 	// objectAssetNameデータを取得しstring型で返すための関数
 	auto ParseObjectAssetName(const nlohmann::json& attributeJson) {
 		return attributeJson["objectAssetName"].get<std::string>();
@@ -132,6 +138,7 @@ bool Stage::Start()
 				const auto attributeValue = ParseAttachableValue(attributeJson); // 吸着可能かどうかのデータを格納
 				const auto requiredSphereSize = ParseRequiredSphereSize(attributeJson); // 塊が吸着できるサイズを格納
 				const auto objectAssetName = ParseObjectAssetName(attributeJson); // アセットの名前を格納
+				const auto growthAmount = ParseGrowthAmount(attributeJson);
 				const auto colliderPivot = ParseVector3(attributeJson.at("colliderCenter")); // コライダーの起点のポジションを格納
 				const auto colliderSize = ParseVector3(attributeJson.at("colliderSize")); // コライダーの大きさを格納
 
@@ -143,21 +150,21 @@ bool Stage::Start()
 				{
 					auto* obj = NewGO<AttachableObject>(0, "AttachableObject");
 					const auto colliderPivot = ParseVector3(attributeJson.at("colliderCenter")); // コライダーの起点のポジションを格納
-					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, objectAssetName, requiredSphereSize, colliderPivot, colliderSize);
+					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize ,objectAssetName, growthAmount , colliderPivot, colliderSize);
 					attachableObjectList_.push_back(obj);
 					break;
 				}
 				case 1:
 				{
 					auto* obj = NewGO<StaticObject>(0, "StaticObject");
-					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, objectAssetName, requiredSphereSize, colliderPivot, colliderSize);
+					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize);
 					staticObjectList_.push_back(obj);
 					break;
 				}
 				case 2:
 				{
 					auto* obj = NewGO<MovableObject>(0, "MovableObject");
-					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, objectAssetName, requiredSphereSize, colliderPivot, colliderSize);
+					obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize);
 					movableObjectList_.push_back(obj);
 					break;
 				}

@@ -31,6 +31,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{eb62131d-937a-4b8a-bcd1-713e8e40a3c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{d36df258-52c9-4c20-ab99-af77e4bf02be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -41,10 +44,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="UICamera.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="SphereCamera.cpp" />
     <ClCompile Include="Actor\Actor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -88,6 +89,15 @@
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Camera\SphereCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\UICamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\CameraBase.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -97,9 +107,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Result.h" />
-    <ClInclude Include="UICamera.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="SphereCamera.h" />
     <ClInclude Include="Actor\Actor.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -149,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="Core\LateStageObjectUpdateManager.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\SphereCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\UICamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\CameraBase.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

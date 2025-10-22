@@ -46,7 +46,7 @@ public:
 	 * @brief 移動方向を設定します。
 	 * @param direction 設定する移動方向を表す Vector3 型の値。
 	 */
-	void SetMoveDirection(const Vector3& direction)
+	inline void SetMoveDirection(const Vector3& direction)
 	{
 		moveDirection_ = direction;
 	}
@@ -55,17 +55,47 @@ public:
 	 * @brief 球体の半径を取得します。
 	 * @return 半径。
 	 */
-	const float GetRadius() const
+	inline const float GetRadius() const
 	{
 		return radius_;
 	}
 
 
+	/**
+	 * @brief 球体のサイズレベルを設定します。
+	 * @return 設定された球体のサイズレベルを表す整数値。
+	 */
+	inline int SetSphereSizeLevel(const int level)
+	{
+		sizeLevel_ = level;
+	}
+	/**
+	 * @brief 球体のサイズレベルを取得します。
+	 * @return 現在のサイズレベル（int型）を返します。
+	 */
+	inline const int GetSphereSizeLevel() 
+	{
+		return sizeLevel_;
+	}
+	
+	inline int GrowByRadius(int grouthAmount) 
+	{
+		radius_ += grouthAmount;
+	}
+
 public:
+	/**
+	 * @brief コライダーを取得します。
+	 * @return m_collider メンバーへのポインタ。
+	 */
 	inline CCompoundCollider* GetCollider()
 	{
 		return m_collider;
 	}
+	/**
+	 * @brief 衝突オブジェクトを取得します。
+	 * @return collisionObject_ ポインタを返します。
+	 */
 	inline CollisionObject* GetCollisionObject()
 	{
 		return collisionObject_;
@@ -100,7 +130,8 @@ private: // Sphere関係の変数
 	Vector3 moveSpeed_ = Vector3::Zero; //!< 移動速度
 	Vector3 moveDirection_ = Vector3::Zero; //!< 移動方向
 	Vector3 beforePosition_ = Vector3::Zero; //!< 前の座標を保存
-	Vector3 vertical_ = Vector3::Zero;
+	Vector3 vertical_ = Vector3::Zero; // 外積
+	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ
 	float moveSpeedMultiply_ = 0.0f; //!< 移動速度乗算
 	float radius_ = 1.0f; //!< 半径
 

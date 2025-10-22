@@ -3,7 +3,7 @@
  * 当たり判定管理
  */
 #pragma once
-
+#include "Actor/Object/AttachableObject.h"
 
 class Sphere; // 塊
 class StageObjectBase; // オブジェクト管理
@@ -68,6 +68,7 @@ public:
 	/** 判定処理をしたいオブジェクトを登録 */
 	void RegisterCollisionObject(EnCollisionType type, IGameObject* object, CollisionObject* collision);
 	void UnregisterCollisionObject(IGameObject* object);
+	bool CanAttach(Sphere& sphereScaleManager, AttachableObject& target);
 
 
 private:

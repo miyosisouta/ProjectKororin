@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "GameManager.h"
-#include "SphereCamera.h"
+#include "Camera/SphereCamera.h"
 #include "Stage.h"
 #include "Actor/Sphere/Player.h"
 #include "Actor/Sphere/Sphere.h"

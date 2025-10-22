@@ -3,11 +3,12 @@
  * @brief UI用のカメラを表すクラスの宣言。
  */
 #pragma once
+#include "Camera/CameraBase.h"
 
 /**
  * @brief UI描画用のカメラオブジェクト。
  */
-class UICamera : public IGameObject
+class UICamera : public CameraBase
 {
 public:
 	/**
