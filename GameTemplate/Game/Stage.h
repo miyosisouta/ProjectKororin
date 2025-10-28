@@ -23,18 +23,20 @@ public:
 	/**
 	 * @brief コンストラクタ。
 	 */
-	Stage() {};
+	Stage() {}
 	/**
 	 * @brief デストラクタ。
 	 */
-	~Stage() {};
+	~Stage() {}
 
 
 	/**
 	 * @brief 初期化処理。
 	 * @return 成功した場合は true。
 	 */
-	bool Start();
+	bool Start()override;
+	void Update() override{}
+	void Render(RenderContext& rc) override{}
 
 
 	const std::vector<AttachableObject*>& const GetAttachableObjectList(){	return attachableObjectList_;	}

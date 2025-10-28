@@ -11,11 +11,11 @@ public:
 	/**
 	 * @brief コンストラクタ。
 	 */
-	Result() {};
+	Result() {}
 	/**
 	 * @brief デストラクタ。
 	 */
-	~Result() {};
+	~Result() {}
 
 
 	/**

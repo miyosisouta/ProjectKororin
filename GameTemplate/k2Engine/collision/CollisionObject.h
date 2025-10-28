@@ -201,7 +201,7 @@ namespace nsK2Engine {
 		const char* m_name = nullptr;					//名前。
 		float						m_timer = 0.0f;						//タイマー。
 		float						m_timeLimit = 0.0f;					//削除されるまでの時間。
-		bool						m_isEnableAutoDelete = true;		//自動で削除されるならtrue。
+		bool						m_isEnableAutoDelete = false;		//自動で削除されるならtrue。
 		bool						m_isEnable = true;					//trueなら当たり判定有効。
 	};
 

@@ -11,6 +11,7 @@ class Player;
 class Sphere;
 class SphereCamera;
 class Stage;
+class Canvas;
 
 class Game : public IGameObject
 {
@@ -18,7 +19,7 @@ public:
 	/**
 	 * @brief コンストラクタ。
 	 */
-	Game() {};
+	Game() {}
 	/**
 	* @brief デストラクタ。
 	 */
@@ -29,26 +30,28 @@ public:
 	 * @brief 初期化処理。
 	 * @return 成功した場合は true。
 	 */
-	bool Start();
+	bool Start()override;
 	/**
 	 * @brief 毎フレームの更新処理。
 	 */
-	void Update();
+	void Update()override;
 	/**
-	 * @brief 描画処理。
-	 * @param rc 描画に使用するレンダーコンテキスト。
+	 * @brief 描画処理
 	 */
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 
 public:
-	GameManager* gameManager_ = nullptr; //!< ゲーム管理クラスへの参照
 	Player* m_player = nullptr; //!< プレイヤーキャラクタ
 	Sphere* sphere_ = nullptr; //!< ボール（Sphere）
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
 	Stage* stage_ = nullptr; //!< ステージ
+	Canvas* canvas_ = nullptr; //!< キャンバス
 
 
-public:
-
+private:
+	/**
+	 * @brief ゲームクリア、ゲームオーバーの判定をここで行う
+	 */
+	void CheckAndHandleGameState();
 
 };

@@ -11,27 +11,27 @@ public:
 	/**
 	 * @brief コンストラクタ
 	 */
-	CameraBase() {};
+	CameraBase() {}
 	/**
 	 * @brief デストラクタ
 	 */
-	virtual ~CameraBase() {};
+	virtual ~CameraBase() {}
 
 
 	/**
 	 * @brief 初期化処理
 	 * @return 
 	 */
-	virtual bool Start() { return true; };
+	virtual bool Start() { return true; }
 	/**
 	 * @brief 更新処理
 	 */
-	virtual void Update()override {};
+	virtual void Update()override {}
 	/**
 	 * @brief 描画処理
 	 * @param rc 
 	 */
-	virtual void Render(RenderContext& rc)override {};
+	virtual void Render(RenderContext& rc)override {}
 
 
 

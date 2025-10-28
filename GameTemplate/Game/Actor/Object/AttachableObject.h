@@ -24,19 +24,29 @@ public:
 	void Render(RenderContext& rc)override;
 
 public:
-	inline const int GetObjectSize() 
+	inline int GetObjectSize() const
 	{
 		return objectSize_;
 	}
 
-	inline const int GetObjectValue() 
+	inline int GetObjectValue() const
 	{
 		return attachableValue_;
 	}
 
-	inline const int GetGrowAmount()
+	inline int GetGrowAmount() const
 	{
 		return grouthAmount_;
+	}
+
+	inline void SetPlayedSE(bool isPlayedSE)
+	{
+		isPlayedSE_ = isPlayedSE;
+	}
+
+	inline bool IsPlayedSE() const
+	{
+		return isPlayedSE_;
 	}
 
 
@@ -45,5 +55,9 @@ public:
 	 * @brief “–‚½‚è”»’è‚Ì”jŠü‚Ænullptr
 	 */
 	void DeletePhysicsStatics();
+
+
+private:
+	bool isPlayedSE_ = false;
 };
 

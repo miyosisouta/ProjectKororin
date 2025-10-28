@@ -39,7 +39,7 @@ bool Sphere::Start()
 
 	// 当たり判定の登録
 	CollisionHitManager::Get().RegisterCollisionObject(
-		enCollisionType_Sphere,   // 種類
+		GameObjectType::Sphere,   // 種類
 		this,                     // Sphere自身（IGameObject*）
 		collisionObject_          // Sphereのコリジョン
 	);

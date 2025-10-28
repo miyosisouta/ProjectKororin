@@ -13,27 +13,27 @@ public:
 	/**
 	 * @brief コンストラクタ。
 	 */
-	Sphere() {};
+	Sphere() {}
 	/**
 	 * @brief デストラクタ。
 	 */
-	~Sphere() {};
+	~Sphere() {}
 
 
 	/**
 	 * @brief 初期化処理。
 	 * @return 成功した場合は true。
 	 */
-	bool Start() override;
+	virtual bool Start() override;
 	/**
 	 * @brief 毎フレームの更新処理。
 	 */
-	void Update() override;
+	virtual void Update() override;
 	/**
 	 * @brief 描画処理。
 	 * @param rc 描画に使用するレンダーコンテキスト。
 	 */
-	void Render(RenderContext& rc) override;
+	virtual void Render(RenderContext& rc) override;
 
 	/**
 	 * @brief transformの親子関係の設定
@@ -81,6 +81,9 @@ public:
 	inline int GrowByRadius(int grouthAmount) 
 	{
 		radius_ += grouthAmount;
+
+		// @todo for test
+		return 0;
 	}
 
 public:

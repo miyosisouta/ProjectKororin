@@ -10,6 +10,12 @@ AttachableObject::~AttachableObject()
 		delete physicsStaticObject_;
 		physicsStaticObject_ = nullptr;
 	}
+
+	CollisionHitManager::Get().UnregisterCollisionObject(this);
+	if (collisionObject_) {
+		DeleteGO(collisionObject_);
+		collisionObject_ = nullptr;
+	}
 }
 
 bool AttachableObject::Start()
@@ -18,7 +24,7 @@ bool AttachableObject::Start()
 
 	// 当たり判定を登録
 	CollisionHitManager::Get().RegisterCollisionObject(
-		enCollisionType_AttachableObject,   // 種類（オブジェクトの場合）
+		GameObjectType::AttachableObject,   // 種類（オブジェクトの場合）
 		this,								// ひっつくオブジェクト自身
 		collisionObject_					// そのコリジョン
 	);
@@ -49,6 +55,9 @@ void AttachableObject::Render(RenderContext& rc)
 	modelRender_.Draw(rc);
 }
 
+// @todo for test
+// 後で名前かえといて
+// コリジョン削除みたいな感じになるわ
 void AttachableObject::DeletePhysicsStatics()
 {
 	if (physicsStaticObject_)
@@ -56,5 +65,10 @@ void AttachableObject::DeletePhysicsStatics()
 		physicsStaticObject_->Release(); // 剛体(当たり判定)を破棄
 		delete physicsStaticObject_;
 		physicsStaticObject_ = nullptr;
+	}
+	CollisionHitManager::Get().UnregisterCollisionObject(this);
+	if (collisionObject_) {
+		DeleteGO(collisionObject_);
+		collisionObject_ = nullptr;
 	}
 }

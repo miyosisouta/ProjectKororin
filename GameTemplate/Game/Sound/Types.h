@@ -10,12 +10,16 @@
 enum enSoundKind
 {
 	enSoundKind_SE = 0,
-	enSoundKind_Attach = enSoundKind_SE, // ‹z’…‚ÌSE
+	enSoundKind_AttachSuccess = enSoundKind_SE, // ‹z’…¬Œ÷
 	/* ‚±‚±‚©‚çSE‚ğ’Ç‰Á */
+	enSoundKind_AttachFailure, // ‹z’…¸”s
 	enSoundKind_SE_Max,	// SE‚ÌÅ‘å”
 	enSoundKind_BGM = enSoundKind_SE_Max,
-	enSoundKind_Game = enSoundKind_BGM,
+	enSoundKind_Title = enSoundKind_BGM,
 	/* ‚±‚±‚©‚çBGM‚ğ’Ç‰Á */
+	enSoundKind_Game,
+	enSoundKind_ResultSuccess,
+	enSoundKind_ResultFailureSound,
 	enSoundKind_Max, // ƒTƒEƒ“ƒh‚ÌÅ‘å”
 	enSoundKind_None = enSoundKind_Max,
 };
@@ -37,6 +41,15 @@ struct SoundInformation
 static SoundInformation soundInformation[enSoundKind_SE_Max] =
 {
 	// SE
-	SoundInformation("Assets/Audio/SE/AttachSound.wav"),
+	SoundInformation("Assets/Audio/SE/AttachSuccess.wav"),
+	SoundInformation("Assets/Audio/SE/AttachFailure.wav"),
+
+	////BGM
+	//SoundInformation("Assets/Audio/BGM/TitleSound.wav"),
+	//SoundInformation("Assets/Audio/BGM/GameSound.wav"),
+	//SoundInformation("Assets/Audio/BGM/ResultSuccess.wav"),
+	//SoundInformation("Assets/Audio/BGM/ResultFailureSound.wav"),
+
+
 };
 
