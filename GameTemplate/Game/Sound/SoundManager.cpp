@@ -35,7 +35,8 @@ void SoundManager::Update()
 		const auto key = it.first;
 		auto* se = it.second;
 		// Ä¶‚ªI‚í‚Á‚Ä‚¢‚é‚È‚çíœ
-		if (!se->IsPlaying()) {
+		if (!se->IsPlaying()) 
+		{
 			eraseList.push_back(key);
 		}
 	}

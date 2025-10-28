@@ -230,11 +230,11 @@
     <ClCompile Include="Actor\Object\StaticObject.cpp" />
     <ClCompile Include="Actor\Sphere\Player.cpp" />
     <ClCompile Include="Actor\Sphere\Sphere.cpp" />
-    <ClCompile Include="Actor\Sphere\SphereScaleManager.cpp" />
     <ClCompile Include="Camera\CameraBase.cpp" />
     <ClCompile Include="Camera\SphereCamera.cpp" />
     <ClCompile Include="Camera\UICamera.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
+    <ClCompile Include="Core\InGameManager.cpp" />
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -252,6 +252,11 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="UI\Canvas.cpp" />
+    <ClCompile Include="UI\BlackOverRay.cpp" />
+    <ClCompile Include="UI\ObjectView.cpp" />
+    <ClCompile Include="UI\SphereSizeText.cpp" />
+    <ClCompile Include="UI\Timer.cpp" />
     <ClCompile Include="Util\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -262,11 +267,11 @@
     <ClInclude Include="Actor\Object\StaticObject.h" />
     <ClInclude Include="Actor\Sphere\Player.h" />
     <ClInclude Include="Actor\Sphere\Sphere.h" />
-    <ClInclude Include="Actor\Sphere\SphereScaleManager.h" />
     <ClInclude Include="Camera\CameraBase.h" />
     <ClInclude Include="Camera\SphereCamera.h" />
     <ClInclude Include="Camera\UICamera.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
+    <ClInclude Include="Core\InGameManager.h" />
     <ClInclude Include="Core\LateStageObjectUpdateManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
@@ -281,6 +286,12 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="UI\Canvas.h" />
+    <ClInclude Include="UI\BlackOverRay.h" />
+    <ClInclude Include="UI\ObjectView.h" />
+    <ClInclude Include="UI\SphereSizeText.h" />
+    <ClInclude Include="UI\Timer.h" />
     <ClInclude Include="Util\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -111,6 +111,21 @@ namespace nsK2Engine {
 		/// <param name="rc">レンダーコンテキスト。</param>
 		void Draw(RenderContext& rc);
 
+
+		/**
+		 * @brief 位置、スケール、およびスプライトの乗算色を設定するメソッド。
+		 * @param pos オブジェクトの位置を指定する3次元ベクトル。
+		 * @param scale オブジェクトのスケール（拡大縮小）を指定する3次元ベクトル。
+		 * @param color スプライトに適用する乗算色を表す4成分ベクトル（通常はRGBA）。
+		 */
+		void SetPSM(const Vector3& pos, const Vector3& scale, const Vector4& color)
+		{
+			m_position = pos;
+			m_scale = scale;
+			m_sprite.SetMulColor(color);
+		}
+
+
 	private:
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。

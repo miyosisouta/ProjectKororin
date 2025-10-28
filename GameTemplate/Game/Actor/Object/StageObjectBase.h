@@ -12,9 +12,9 @@ protected:
 	Vector3 colliderPivot_; // コライダーの初期位置
 	Vector3 colliderSize_; // コライダーの大きさ
 	std::string assetName_; // アセットの名前
-	int attachableValue_; // 吸着可能かどうか
-	int objectSize_; // 吸着可能サイズ
-	int grouthAmount_; // 塊のサイズの増加量
+	uint8_t attachableValue_; // 吸着可能かどうか
+	uint8_t objectSize_; // 吸着可能サイズ
+	uint8_t grouthAmount_; // 塊のサイズの増加量
 
 	// 静的な当たり判定(物理的に当たったということをしたい用)
 	PhysicsStaticObject* physicsStaticObject_ = nullptr;
@@ -50,7 +50,7 @@ public:
 	 * @brief 初期化
 	 * @note  NewGOした直後に絶対呼んでください！！！！
 	 */
-	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const float size, const std::string& assetName, const int grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize)
+	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const float size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize)
 	{
 		transform_.m_localPosition = position; // 座標
 		transform_.m_localScale = scale; // 大きさ

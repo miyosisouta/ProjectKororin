@@ -35,8 +35,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// レイトレーシングを使用しないようにする
 	g_renderingEngine->DisableRaytracing();
 
-	//Gameクラスのオブジェクトを作成。
-	NewGO<GameManager>(0, "gameManager");
+	//GameManagerクラスのインスタンスを作成
+	GameManager::CreateInstance();
+	GameManager::Get().Start();
+
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -45,11 +47,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+		//  GameManagerのUpdate処理を最初に実行 
+		if (GameManager::IsAvailable()) 
+		{
+			GameManager::Get().Update();
+		}
+
 		if (g_pad[0]->IsTrigger(enButtonA) ){
 			g_pad[0]->SetVibration(/*durationSec=*/0.5f, /*normalizedPower=*/1.0f);
 		}
 		K2Engine::GetInstance()->Execute();
 	}
+
+	// GameManagerのインスタンスを破棄
+	GameManager::DeleteInstance();
 
 	K2Engine::DeleteInstance();
 

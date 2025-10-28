@@ -22,7 +22,7 @@ void Player::Update()
 	transform_.UpdateTransform();
 	m_charaCon.SetPosition(transform_.m_position);
 	transform_.m_localPosition = m_charaCon.Execute(
-		m_moveSpeed,
+		moveSpeed_,
 		g_gameTime->GetFrameDeltaTime()
 	);
 	transform_.UpdateTransform();

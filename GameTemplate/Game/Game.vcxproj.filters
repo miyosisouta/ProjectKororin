@@ -34,6 +34,9 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{d36df258-52c9-4c20-ab99-af77e4bf02be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{8e7c5978-108f-4d15-ada8-7e87159043dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -80,9 +83,6 @@
     <ClCompile Include="Actor\Sphere\Player.cpp">
       <Filter>Actor\Sphere</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Sphere\SphereScaleManager.cpp">
-      <Filter>Actor\Sphere</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\Sphere\Sphere.cpp">
       <Filter>Actor\Sphere</Filter>
     </ClCompile>
@@ -97,6 +97,24 @@
     </ClCompile>
     <ClCompile Include="Camera\CameraBase.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\InGameManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ObjectView.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SphereSizeText.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Timer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\BlackOverRay.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Canvas.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +167,6 @@
     <ClInclude Include="Actor\Sphere\Player.h">
       <Filter>Actor\Sphere</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Sphere\SphereScaleManager.h">
-      <Filter>Actor\Sphere</Filter>
-    </ClInclude>
     <ClInclude Include="Actor\Sphere\Sphere.h">
       <Filter>Actor\Sphere</Filter>
     </ClInclude>
@@ -166,6 +181,25 @@
     </ClInclude>
     <ClInclude Include="Camera\CameraBase.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\InGameManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="UI\ObjectView.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SphereSizeText.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Timer.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\BlackOverRay.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Canvas.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

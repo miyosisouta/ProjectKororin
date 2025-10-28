@@ -30,7 +30,7 @@ void Title::Render(RenderContext& rc)
 
 void Title::LoadGameScene()
 {
-	m_gameManager_->m_nextScene = m_gameManager_->EnGame;
+	GameManager::Get().SetNextScene(GameManager::SceneState::EnGame);
 }
 
 

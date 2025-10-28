@@ -61,7 +61,7 @@ private:
 
 
 public:
-	static void Create()
+	static void CreateInstance()
 	{
 		if (instance_ == nullptr)
 		{

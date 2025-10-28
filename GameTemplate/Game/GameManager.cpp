@@ -3,21 +3,35 @@
 #include "Title.h"
 #include "Game.h"
 #include "Result.h"
+#include "Sound/SoundManager.h"
+
+GameManager* GameManager::instance_ = nullptr;
+
+
+GameManager::~GameManager()
+{
+	SoundManager::DestroyInstance();
+}
 
 
 bool GameManager::Start()
 {
+	SoundManager::CreateInstance(); // SoundManagerのインスタンスを作成
+
 	return true;
 }
 
 
 void GameManager::Update()
 {
-	if (m_currentScene_ != m_nextScene) // 現在シーンと次シーンが異なる場合に遷移
+	if (m_currentScene_ != m_nextScene_) // 現在シーンと次シーンが異なる場合に遷移
 	{
-		ChangeScene(m_nextScene, m_currentScene_);
+		ChangeScene(m_nextScene_, m_currentScene_);
 	}
+
+	SoundManager::Get().Update();
 }
+
 
 void GameManager::ChangeScene(SceneState createScene,SceneState deleteScene)
 {
@@ -65,7 +79,7 @@ void GameManager::ChangeScene(SceneState createScene,SceneState deleteScene)
 	default:
 		break;
 	}
-	m_currentScene_ = m_nextScene; // 遷移が完了したので現在シーンを更新
+	m_currentScene_ = m_nextScene_; // 遷移が完了したので現在シーンを更新
 }
 
 void GameManager::Init() 

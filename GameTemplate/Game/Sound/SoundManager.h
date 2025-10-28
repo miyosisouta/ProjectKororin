@@ -4,6 +4,7 @@
  * 必要なサウンドファイルを読み込んだり再生したりなど管理する
  */
 #pragma once
+#include <memory>
 #include "Sound/SoundSource.h"
 #include "sound/Types.h"
 

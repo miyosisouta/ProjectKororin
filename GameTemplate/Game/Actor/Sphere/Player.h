@@ -41,9 +41,9 @@ private:
 	CharacterController m_charaCon; //!< キャラクターコントローラ
 	AnimationClip m_playerAnimClips[PlayerAnimClips::Max];
 	PlayerState::Enum m_playerState = PlayerState::Idle;
-	Sphere* m_sphere = nullptr; //!< ボール
+	Sphere* Sphere_ = nullptr; //!< ボール
 
-	Vector3 m_moveSpeed = Vector3::Zero; //!< 移動速度
+	Vector3 moveSpeed_ = Vector3::Zero; //!< 移動速度
 
 
 public:

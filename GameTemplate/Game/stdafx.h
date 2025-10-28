@@ -8,3 +8,5 @@ using namespace nsK2Engine;
 /** ”Ä—p */
 #include "Util/Transform.h"
 #include "Json/json.hpp"
+
+#include "Types.h"
