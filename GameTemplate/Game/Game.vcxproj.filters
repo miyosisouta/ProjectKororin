@@ -116,6 +116,15 @@
     <ClCompile Include="UI\Canvas.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Core\ParameterManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collision.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameUIManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -167,9 +176,6 @@
     <ClInclude Include="Actor\Sphere\Player.h">
       <Filter>Actor\Sphere</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Sphere\Sphere.h">
-      <Filter>Actor\Sphere</Filter>
-    </ClInclude>
     <ClInclude Include="Core\LateStageObjectUpdateManager.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -200,6 +206,21 @@
     </ClInclude>
     <ClInclude Include="UI\Canvas.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Sphere\Sphere.h">
+      <Filter>Actor\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ParameterManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Crc32.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameUIManager.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

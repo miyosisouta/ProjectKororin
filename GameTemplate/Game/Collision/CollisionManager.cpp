@@ -68,7 +68,8 @@ void CollisionHitManager::Update()
 }
 
 
-void CollisionHitManager::RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision)
+//void CollisionHitManager::RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision)
+void CollisionHitManager::RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, ICollision* collision)
 {
 	CollisionInfo info(type, object, collision);
 	m_collisionInfoList.push_back(std::move(info));
@@ -112,40 +113,5 @@ bool CollisionHitManager::UpdateHitAttatchableObject(CollisionPair& pair)
 	notify->rightType = GameObjectType::Sphere;
 
 	InGameManager::Get().Notify(notify);
-	return true;
-
-	
-
-
-
-	//// 吸着可能オブジェクトの当たり判定を取得
-	//auto* attachableObjectCollider = attachableObject->GetPhysicsStaticObject()->GetCollider()->GetBody();
-
-	//bool isFind = false; // 当たり判定を見つけているかのフラグ
-	//auto* shpereBody = sphere->GetCollider()->GetBody();
-	//const int size = shpereBody->getNumChildShapes(); // 塊の当たり判定の子の数を取得
-	//if (size > 0) {
-	//	auto* childList = shpereBody->getChildList(); // 塊の当たり判定の子どもにいるオブジェクトを格納
-	//	// 塊に吸着しているオブジェクトの数だけ繰り返す
-	//	for (int i = 0; i < size; ++i)
-	//	{
-	//		auto* child = &childList[i];
-	//		if (child->m_childShape == attachableObjectCollider) // 吸着しているオブジェクトが見つかった場合
-	//		{
-	//			isFind = true; // 探さない
-	//			break;
-	//		}
-	//	}
-	//}
-	//if (!isFind)
-	//{ // 見つかっていない場合、塊の当たり判定の子どもに加える
-	//	btTransform transform;
-	//	transform.setIdentity();
-	//	shpereBody->addChildShape(transform, attachableObjectCollider);
-
-	//	// @todo for test
-	//	LateStageObjectUpdateManager::Get().RegisterObject(attachableObject);
-	//}
-
 	return true;
 }

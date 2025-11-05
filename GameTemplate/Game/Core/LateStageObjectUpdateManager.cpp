@@ -26,36 +26,36 @@ void LateStageObjectUpdateManager::Update()
 	return;
 
 	//sphere_->GetCollider()
-	if (sphere_ != nullptr) {
-		const auto& sphereCollision = sphere_->GetCollisionObject()->GetbtCollisionObject(); // 衝突判定のコリジョンをゲット
-		auto* shpereBody = sphere_->GetCollider()->GetBody(); // 当たり判定をゲット
-		const int size = shpereBody->getNumChildShapes(); // 塊の当たり判定の子の数を取得
-		if (size > 0) {
-			const auto* childList = shpereBody->getChildList(); // 塊の当たり判定にあたったオブジェクトのリストを取得
+	//if (sphere_ != nullptr) {
+	//	const auto& sphereCollision = sphere_->GetCollisionObject()->GetbtCollisionObject(); // 衝突判定のコリジョンをゲット
+	//	auto* shpereBody = sphere_->GetCollider()->GetBody(); // 当たり判定をゲット
+	//	const int size = shpereBody->getNumChildShapes(); // 塊の当たり判定の子の数を取得
+	//	if (size > 0) {
+	//		const auto* childList = shpereBody->getChildList(); // 塊の当たり判定にあたったオブジェクトのリストを取得
 
-			// 塊に吸着しているオブジェクトの数だけ繰り返す
-			for (int i = 0; i < size; ++i)
-			{
-				const auto& child = childList[i]; // 子になったオブジェクトのリストを取得
-				const auto& childTransform = child.m_transform; // 子のローカル座標を取得
+	//		// 塊に吸着しているオブジェクトの数だけ繰り返す
+	//		for (int i = 0; i < size; ++i)
+	//		{
+	//			const auto& child = childList[i]; // 子になったオブジェクトのリストを取得
+	//			const auto& childTransform = child.m_transform; // 子のローカル座標を取得
 
-				auto& origin = childTransform.getOrigin(); // 座標確認用変数
-				K2_LOG("Position: X: %f, Y: %f, Z: %f \n", origin.x(), origin.y(), origin.z());
+	//			auto& origin = childTransform.getOrigin(); // 座標確認用変数
+	//			K2_LOG("Position: X: %f, Y: %f, Z: %f \n", origin.x(), origin.y(), origin.z());
 
-				auto parentTransform = sphereCollision.getWorldTransform(); // 塊のワールド座標を取得
-				const auto computeTransform = parentTransform * childTransform; // 子のワールド座標を取得
-				
-				auto* targetObject = FindTargetObject(child.m_childShape); // 子の当たり判定を探す
+	//			auto parentTransform = sphereCollision.getWorldTransform(); // 塊のワールド座標を取得
+	//			const auto computeTransform = parentTransform * childTransform; // 子のワールド座標を取得
+	//			
+	//			auto* targetObject = FindTargetObject(child.m_childShape); // 子の当たり判定を探す
 
-				// 子の当たり判定があった場合
-				if (targetObject) {
-					// @todo for test
-					auto* targetTransform = static_cast<AttachableObject*>(targetObject)->GetTransform(); // AttachableObject型のトランスフォームを取得
-					targetTransform->m_localPosition = Vector3(computeTransform.getOrigin().x(), computeTransform.getOrigin().y(), computeTransform.getOrigin().z()); // 子のローカル座標にワールド座標を代入
-				}
-			}
-		}
-	}
+	//			// 子の当たり判定があった場合
+	//			if (targetObject) {
+	//				// @todo for test
+	//				auto* targetTransform = static_cast<AttachableObject*>(targetObject)->GetTransform(); // AttachableObject型のトランスフォームを取得
+	//				targetTransform->m_localPosition = Vector3(computeTransform.getOrigin().x(), computeTransform.getOrigin().y(), computeTransform.getOrigin().z()); // 子のローカル座標にワールド座標を代入
+	//			}
+	//		}
+	//	}
+	//}
 
 
 	//// ヒットするオブジェクトのペアを作る

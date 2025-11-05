@@ -96,7 +96,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color01",
         "objectRadius": 0,
         "colliderCenter": {
@@ -207,7 +207,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NBush01",
         "objectRadius": 10,
         "colliderCenter": {
@@ -216,7 +216,7 @@
           "z": -0.0049
         },
         "colliderSize": {
-          "x": 1.0,
+          "x": 0.5,
           "y": 3.0,
           "z": 1.0
         }
@@ -280,7 +280,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
         "objectRadius": 0,
@@ -318,7 +318,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color02",
         "objectRadius": 0,
         "colliderCenter": {
@@ -651,7 +651,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NBush01",
         "objectRadius": 10,
         "colliderCenter": {
@@ -660,7 +660,7 @@
           "z": -0.0049
         },
         "colliderSize": {
-          "x": 1.0,
+          "x": 0.5,
           "y": 3.0,
           "z": 1.0
         }
@@ -801,7 +801,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
-        "objectRadius": 0,
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -947,7 +947,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -1021,7 +1021,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse03_color02",
         "objectRadius": 0,
         "colliderCenter": {
@@ -1095,7 +1095,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse04_color03",
         "objectRadius": 0,
         "colliderCenter": {
@@ -1168,7 +1168,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane04",
         "objectRadius": 0,
@@ -1243,7 +1243,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -1427,7 +1427,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
         "objectRadius": 0,
@@ -1726,7 +1726,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
-        "objectRadius": 0,
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -1761,9 +1761,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NRock_Big",
-        "objectRadius": 0,
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -1835,7 +1835,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2019,7 +2019,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
         "objectRadius": 0,
@@ -2131,7 +2131,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NBush01",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2140,7 +2140,7 @@
           "z": -0.0049
         },
         "colliderSize": {
-          "x": 1.0,
+          "x": 0.5,
           "y": 3.0,
           "z": 1.0
         }
@@ -2316,7 +2316,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2427,7 +2427,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color03",
         "objectRadius": 0,
         "colliderCenter": {
@@ -2501,7 +2501,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse04_color02",
         "objectRadius": 0,
         "colliderCenter": {
@@ -2648,7 +2648,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RIntersection01",
         "objectRadius": 0,
@@ -2685,7 +2685,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
         "objectRadius": 0,
@@ -2799,7 +2799,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 2,
         "objectAssetName": "NRock_Big",
-        "objectRadius": 0,
+        "objectRadius": 10,
         "colliderCenter": {
           "x": 0.0009,
           "y": 0.5016,
@@ -2834,7 +2834,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2871,7 +2871,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 0,
+        "requiredSphereSize": 4,
         "objectAssetName": "BHouse01_color01",
         "objectRadius": 0,
         "colliderCenter": {
@@ -2908,7 +2908,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2944,7 +2944,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLane01",
         "objectRadius": 0,
@@ -3019,7 +3019,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NBush01",
         "objectRadius": 10,
         "colliderCenter": {
@@ -3028,7 +3028,7 @@
           "z": -0.0049
         },
         "colliderSize": {
-          "x": 1.0,
+          "x": 0.5,
           "y": 3.0,
           "z": 1.0
         }
@@ -3092,7 +3092,7 @@
         }
       },
       "Attribute": {
-        "attachableValue": 0,
+        "attachableValue": 1,
         "requiredSphereSize": 0,
         "objectAssetName": "RLaneBusStop",
         "objectRadius": 0,
@@ -3204,7 +3204,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 1,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {

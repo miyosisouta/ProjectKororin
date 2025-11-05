@@ -20,6 +20,8 @@ protected:
 	PhysicsStaticObject* physicsStaticObject_ = nullptr;
 	// ゴーストな当たり判定(物理的にあたらない)
 	CollisionObject* collisionObject_ = nullptr;
+	// ICollisionインターフェース型を指すユニークポインタ
+	std::unique_ptr<BoxCollision> collider_;
 
 
 public:
@@ -38,11 +40,9 @@ public:
 
 	
 public:
-	// @todo for test
-	inline PhysicsStaticObject* GetPhysicsStaticObject()
-	{
-		return physicsStaticObject_;
-	}
+	inline PhysicsStaticObject* GetPhysicsStaticObject() { return physicsStaticObject_; }
+	inline const Vector3 GetSize() { return size_; }
+	inline const Vector3 GetPosition() { return position_; }
 
 
 public:
@@ -50,7 +50,7 @@ public:
 	 * @brief 初期化
 	 * @note  NewGOした直後に絶対呼んでください！！！！
 	 */
-	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const float size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize)
+	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const int size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize)
 	{
 		transform_.m_localPosition = position; // 座標
 		transform_.m_localScale = scale; // 大きさ
@@ -79,4 +79,8 @@ private:
 
 	/* 求めた差異を考慮された値を乗算 */
 	Vector3 Multply(Vector3 a, Vector3 b);
+
+private:
+	Vector3 size_ = Vector3::One;
+	Vector3 position_ = Vector3::Zero;
 };

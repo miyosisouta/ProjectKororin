@@ -35,12 +35,13 @@ public:
 	 * @return 成功した場合は true。
 	 */
 	bool Start()override;
-	void Update() override{}
-	void Render(RenderContext& rc) override{}
+	void Update() override {}
+	void Render(RenderContext& rc) override {}
 
 
 	const std::vector<AttachableObject*>& const GetAttachableObjectList(){	return attachableObjectList_;	}
 	const std::vector<StaticObject*>& const GetStaticObjectList(){	return staticObjectList_;	}
 	const std::vector<MovableObject*>& const GetMovableObjectList(){	return movableObjectList_;	}
+
 };
 

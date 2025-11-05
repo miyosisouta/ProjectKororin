@@ -65,7 +65,6 @@ struct NotifyCollisionHit : INotify
 };
 
 
-
 class InGameManager
 {
 private:

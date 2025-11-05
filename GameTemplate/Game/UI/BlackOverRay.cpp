@@ -7,14 +7,20 @@
 namespace
 {
     const std::string FAILPATH = "BackGroundCircle.DDS";
-    const int PIXEL_SIZE = 256;
-    const Vector3 SPRITE_SCALE = Vector3::One;
-    const Vector4 SPRITE_MULCOLOR = Vector4::White;
+    const int PIXEL_SIZE = 128;
+    const Vector4 SPRITE_MULCOLOR = Vector4(1.0f, 1.0f, 1.0f, 0.35f);
+
+
+	
 }
 
-void BlackOverRay::RenderDarkOverlay(SpriteRender* spriteRender, Vector3 pos)
+void BlackOverRay::RenderDarkOverlay(SpriteRender* spriteRender, Vector3 pos, Vector3 scale)
 {
-    Initialize(spriteRender, FAILPATH, PIXEL_SIZE, pos, SPRITE_SCALE, SPRITE_MULCOLOR);
+    std::string spritePath = FindFailPath_Sprite(FAILPATH); // ファイルパスの格納
+    spriteRender->Init(spritePath.c_str(), PIXEL_SIZE, PIXEL_SIZE); // 画像の初期化・サイズの設定
+
+    spriteRender->SetPSM(pos, scale, SPRITE_MULCOLOR); // 座標・大きさ・乗算カラーの設定
+    spriteRender->Update(); // 初期化情報を更新
 }
 
 

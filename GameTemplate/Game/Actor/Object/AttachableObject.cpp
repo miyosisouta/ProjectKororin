@@ -22,11 +22,18 @@ bool AttachableObject::Start()
 {
 	StageObjectBase::Start();
 
+	// コリジョンの設定
+	// BoxCollisionのユニークポインタの作成と初期化
+	auto boxCollider = std::make_unique<BoxCollision>();
+	boxCollider->Init(GetPosition(), GetSize());
+
+	// ICollisionに所有権を移動
+	collider_ = std::move(boxCollider);
 	// 当たり判定を登録
 	CollisionHitManager::Get().RegisterCollisionObject(
 		GameObjectType::AttachableObject,   // 種類（オブジェクトの場合）
 		this,								// ひっつくオブジェクト自身
-		collisionObject_					// そのコリジョン
+		collider_.get()						// そのコリジョン
 	);
 
 	return true;
@@ -55,9 +62,7 @@ void AttachableObject::Render(RenderContext& rc)
 	modelRender_.Draw(rc);
 }
 
-// @todo for test
-// 後で名前かえといて
-// コリジョン削除みたいな感じになるわ
+
 void AttachableObject::DeletePhysicsStatics()
 {
 	if (physicsStaticObject_)
@@ -66,8 +71,10 @@ void AttachableObject::DeletePhysicsStatics()
 		delete physicsStaticObject_;
 		physicsStaticObject_ = nullptr;
 	}
+
 	CollisionHitManager::Get().UnregisterCollisionObject(this);
-	if (collisionObject_) {
+	if (collisionObject_) 
+	{
 		DeleteGO(collisionObject_);
 		collisionObject_ = nullptr;
 	}

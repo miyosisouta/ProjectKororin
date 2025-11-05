@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "StageObjectBase.h"
 #include "Actor/Sphere/Sphere.h"
+#include "Collision/Collision.h"
 
 
 namespace 
@@ -10,6 +11,9 @@ namespace
 }
 bool StageObjectBase:: Start() 
 {
+
+	 
+
 	// モデルの初期化
 	// アセットの名前は文字列の連結をしないといけない
 	std::string modelName = "Assets/modelData/stage/" + assetName_ + ".tkm";
@@ -21,19 +25,14 @@ bool StageObjectBase:: Start()
 
 	// コライダーの変更
 	Vector3 collisionCorrection = ApplyCollisionSizeDelta(transform_.m_localScale) * COLLISION_CORRECTION; // スケールの調整
-	Vector3 colliderPos = transform_.m_position + colliderPivot_* COLLISION_POSITIONADJUSTMENT;	// 起点
-	Vector3 colliderSize = Multply(collisionCorrection, colliderSize_);							// サイズ
+	position_ = transform_.m_position + colliderPivot_* COLLISION_POSITIONADJUSTMENT;	// 起点
+	size_ = Multply(collisionCorrection, colliderSize_);							// サイズ
 	//当たり判定に実態を持たせる
 	physicsStaticObject_ = new PhysicsStaticObject;
 	// boxcolliderの当たり判定
-	physicsStaticObject_->CreateBoxCollider(colliderPos, colliderSize, modelRender_.GetModel().GetWorldMatrix());
+	physicsStaticObject_->CreateBoxCollider(position_, size_, modelRender_.GetModel().GetWorldMatrix());
 	// todo for test : 当たり判定の描画
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
-	// コリジョンの設定
-	collisionObject_ = NewGO<CollisionObject>(0); 
-	collisionObject_->CreateBox(colliderPos, transform_.m_rotation, colliderSize); // 四角いコリジョンを作成(座標, 回転, 大きさ)
-	collisionObject_->SetIsEnableAutoDelete(false); // コリジョンが自動で削除されないよう設定
 
 
 	// モデルの設定

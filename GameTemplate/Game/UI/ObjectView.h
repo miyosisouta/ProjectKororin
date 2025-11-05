@@ -10,5 +10,7 @@ public:
 	void Update() override;
 	void Render(RenderContext& rc) override;
 
+public:
+	
 };
 
