@@ -39,6 +39,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameManager::CreateInstance();
 	GameManager::Get().Start();
 
+	ParameterManager::CreateInstance();
+
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -58,6 +60,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 		K2Engine::GetInstance()->Execute();
 	}
+
+	ParameterManager::DestroyInstance();
 
 	// GameManagerのインスタンスを破棄
 	GameManager::DeleteInstance();

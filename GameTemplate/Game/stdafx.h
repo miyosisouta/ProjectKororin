@@ -10,3 +10,8 @@ using namespace nsK2Engine;
 #include "Json/json.hpp"
 
 #include "Types.h"
+
+#include "Util/Crc32.h"
+#include "Core/ParameterManager.h"
+
+#include "Collision/Collision.h"

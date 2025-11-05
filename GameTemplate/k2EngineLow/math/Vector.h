@@ -122,6 +122,14 @@ namespace nsK2EngineLow {
 			Set(x, y, z);
 		}
 		/// <summary>
+		/// コンストラクタ。
+		/// </summary>
+		/// <param name="xyz"></param>
+		Vector3(float xyz)
+		{
+			Set(xyz, xyz, xyz);
+		}
+		/// <summary>
 		/// 線形補完
 		/// </summary>
 		/// <remarks>

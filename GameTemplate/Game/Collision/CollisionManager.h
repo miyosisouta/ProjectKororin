@@ -13,10 +13,12 @@ struct CollisionInfo
 {
 	int type;	// オブジェクトの種類(プレイヤーと壁がヒットしたみたいな処理をするために必要。自分がだれかの判断)
 	IGameObject* object;	// 当たり判定を持つオブジェクトのポインタ
-	CollisionObject* collision; // 当たり判定オブジェクトのポインタ
+	//CollisionObject* collision; // 当たり判定オブジェクトのポインタ
+	ICollision* collision;
 	//
 	CollisionInfo() : type(GameObjectType::Sphere), object(nullptr), collision(nullptr) {}
-	CollisionInfo(const GameObjectType::Enum type, IGameObject* object, CollisionObject* collision) : type(type), object(object), collision(collision) {}
+	//CollisionInfo(const GameObjectType::Enum type, IGameObject* object, CollisionObject* collision) : type(type), object(object), collision(collision) {}
+	CollisionInfo(const GameObjectType::Enum type, IGameObject* object, ICollision* collision) : type(type), object(object), collision(collision) {}
 };
 
 
@@ -58,7 +60,8 @@ public:
 
 public:
 	/** 判定処理をしたいオブジェクトを登録 */
-	void RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision);
+	//void RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision);
+	void RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, ICollision* collision);
 	void UnregisterCollisionObject(IGameObject* object);
 
 

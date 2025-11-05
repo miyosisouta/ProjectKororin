@@ -17,6 +17,7 @@ public:
 	void Update()override;
 	void Render(RenderContext& rc)override;
 
+
 private:
 	BlackOverRay* blackOverRay_ = nullptr;
 	ObjectView* objectView_ = nullptr;

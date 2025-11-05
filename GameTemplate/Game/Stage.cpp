@@ -114,7 +114,6 @@ namespace
 
 bool Stage::Start() 
 {
-
 	// for•ª‚ÅŒJ‚è•Ô‚³‚ê‚é
 	LoadScene("Assets/Scene/SceneExport.json", [&](const nlohmann::json& j)
 		{
@@ -184,3 +183,4 @@ bool Stage::Start()
 
 	return true;
 }
+

@@ -5,7 +5,41 @@
 
 #pragma once
 #include "Actor/Actor.h"
+
+
 class AttachableObject;
+
+
+class SphereStatus
+{
+private:
+	int levelUpNum_ = 0;	// レベルアップに必要な数(吸着したオブジェクトの数)
+	int currentLevel = 1;	// 現在の吸着できるレベル(初期値は1)
+
+
+public:
+	SphereStatus();
+	~SphereStatus();
+
+	/* レベルアップに必要な吸着したオブジェクトの数の取得 */
+	int GetLevelUpNum() const { return levelUpNum_; }
+	/* 現在のレベルを1増やす */
+	void AddLevel() { ++currentLevel; }
+	int GetLevel() { return currentLevel; }
+
+public:
+	/**
+	 * 対象のパラメーターを受け取って設定する
+	 * NOTE:初期設定やレベルアップしたときに呼ばれる
+	 */
+	void Setup(const MasterSphereStatusParameter& parameter);
+};
+
+
+
+
+/**************************/
+
 
 class Sphere : public Actor
 {
@@ -17,7 +51,7 @@ public:
 	/**
 	 * @brief デストラクタ。
 	 */
-	~Sphere() {}
+	~Sphere();
 
 
 	/**
@@ -46,43 +80,41 @@ public:
 	 * @brief 移動方向を設定します。
 	 * @param direction 設定する移動方向を表す Vector3 型の値。
 	 */
-	inline void SetMoveDirection(const Vector3& direction)
-	{
-		moveDirection_ = direction;
-	}
+	inline void SetMoveDirection(const Vector3& direction){ moveDirection_ = direction;	}
 
 	/**
 	 * @brief 球体の半径を取得します。
 	 * @return 半径。
 	 */
-	inline const float GetRadius() const
-	{
-		return radius_;
-	}
-
+	inline const float GetRadius() { return radius_; }
 
 	/**
 	 * @brief 球体のサイズレベルを設定します。
 	 * @return 設定された球体のサイズレベルを表す整数値。
 	 */
-	inline int SetSphereSizeLevel(const int level)
-	{
-		sizeLevel_ = level;
-	}
+	inline const int SetSphereSizeLevel(const int level){	sizeLevel_ = level;	}
+
 	/**
 	 * @brief 球体のサイズレベルを取得します。
 	 * @return 現在のサイズレベル（int型）を返します。
 	 */
-	inline const int GetSphereSizeLevel() 
-	{
-		return sizeLevel_;
-	}
+	inline const int GetSphereSizeLevel() {	return sizeLevel_; }
 	
+	/**
+	 * @brief 球体のポジションを取得
+	 * @return 
+	 */
+	inline const Vector3 GetPosition() { return transform_.m_position; }
+
+
+	/**
+	 * @brief 塊のサイズを成長させる
+	 * @param grouthAmount オブジェクトの大きさ
+	 */
 	inline int GrowByRadius(int grouthAmount) 
 	{
+		movementRadius_ += grouthAmount / 5.0f;
 		radius_ += grouthAmount;
-
-		// @todo for test
 		return 0;
 	}
 
@@ -91,19 +123,15 @@ public:
 	 * @brief コライダーを取得します。
 	 * @return m_collider メンバーへのポインタ。
 	 */
-	inline CCompoundCollider* GetCollider()
-	{
-		return m_collider;
-	}
-	/**
-	 * @brief 衝突オブジェクトを取得します。
-	 * @return collisionObject_ ポインタを返します。
-	 */
-	inline CollisionObject* GetCollisionObject()
-	{
-		return collisionObject_;
-	}
+	inline SphereCollision* GetCollider() { return collider_.get(); }
 
+
+	/** ステータス取得 */
+	SphereStatus* GetStatus() { return status_.get(); }
+
+
+	/* 吸着したオブジェクトの数を増やす */
+	void AddCurrentLevelUpNum() { ++currentLevelUpNum_; }
 
 
 private:
@@ -122,11 +150,15 @@ private:
 	 */
 	void SetGravity();
 
+	/**
+	 * @brief レベルアップチェック用の関数
+	 */
+	void UpdateLevelUp(const bool isInit = false);
+
 
 private: // Sphere関係の変数
 
 	ModelRender sphereRender_; //!< 球体モデル描画用
-	//CharacterController charaCon_; //!< キャラクターコントローラ
 	CCompoundCollider* m_collider = nullptr;	//!< 当たり判定(子どもに追加していけるやつ)
 	RigidBody* m_rigidBody = nullptr;			//!< 剛体(物理空間での判定に必要)
 
@@ -134,11 +166,17 @@ private: // Sphere関係の変数
 	Vector3 moveDirection_ = Vector3::Zero; //!< 移動方向
 	Vector3 beforePosition_ = Vector3::Zero; //!< 前の座標を保存
 	Vector3 vertical_ = Vector3::Zero; // 外積
-	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ
+	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ		// @todo for たぶんいらない
 	float moveSpeedMultiply_ = 0.0f; //!< 移動速度乗算
+	float movementRadius_ = 30.0f; //!< 動くときに反映する半径
 	float radius_ = 1.0f; //!< 半径
 
-	CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト
 
+	//CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト
+	//SphereCollision* sphereCollision_ = nullptr; // 衝突判定ゴーストオブジェクト
+
+	std::unique_ptr<SphereStatus> status_;	//!< ステータス
+	std::unique_ptr<SphereCollision> collider_;	//!< 抽象化された衝突オブジェクトを所有・管理するための器
+	int currentLevelUpNum_;	//!< レベルアップに必要な巻き込んだ数
 };
 

@@ -10,11 +10,6 @@ bool Title::Start()
 
 void Title::Update() 
 {
-	if (m_gameManager_ == nullptr) // ゲームマネージャーが見つからない場合
-	{
-		m_gameManager_ = FindGO<GameManager>("gameManager");
-	}
-
 	if (g_pad[0]->IsTrigger(enButtonA))  // Aボタンが押された場合
 	{
 		LoadGameScene();

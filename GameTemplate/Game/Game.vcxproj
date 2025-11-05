@@ -233,9 +233,12 @@
     <ClCompile Include="Camera\CameraBase.cpp" />
     <ClCompile Include="Camera\SphereCamera.cpp" />
     <ClCompile Include="Camera\UICamera.cpp" />
+    <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
+    <ClCompile Include="Core\GameUIManager.cpp" />
     <ClCompile Include="Core\InGameManager.cpp" />
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp" />
+    <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputSystem.cpp" />
@@ -270,9 +273,12 @@
     <ClInclude Include="Camera\CameraBase.h" />
     <ClInclude Include="Camera\SphereCamera.h" />
     <ClInclude Include="Camera\UICamera.h" />
+    <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
+    <ClInclude Include="Core\GameUIManager.h" />
     <ClInclude Include="Core\InGameManager.h" />
     <ClInclude Include="Core\LateStageObjectUpdateManager.h" />
+    <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="InputSystem.h" />
@@ -292,6 +298,7 @@
     <ClInclude Include="UI\ObjectView.h" />
     <ClInclude Include="UI\SphereSizeText.h" />
     <ClInclude Include="UI\Timer.h" />
+    <ClInclude Include="Util\Crc32.h" />
     <ClInclude Include="Util\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

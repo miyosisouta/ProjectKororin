@@ -9,6 +9,7 @@
 #include "Collision/CollisionManager.h"
 #include "Core/LateStageObjectUpdateManager.h"
 #include "Core/InGameManager.h"
+#include "Core/GameUIManager.h"
 #include "UI/Canvas.h"
 
 
@@ -23,6 +24,7 @@ Game::~Game()
 	LateStageObjectUpdateManager::Get().UnRegisterSphere();
 	LateStageObjectUpdateManager::Delete();
 	InGameManager::DeleteInstance();
+	GameUIManager::DeleteInstance();
 }
 
 
@@ -39,6 +41,7 @@ bool Game::Start()
 	// NewGO<クラス名>(数字：実行する順番を設定できる)
 	NewGO<InGameUpdateObject>(GameObjectPriority::InGameManager);
 	NewGO<InGameLateUpdateObject>(GameObjectPriority::InGameManagerLate);
+	NewGO<GameUIUpdate>(GameObjectPriority::UI);
 
 
 	// 操作用クラスの作成と操作する物の設定
@@ -51,6 +54,7 @@ bool Game::Start()
 	LateStageObjectUpdateManager::CreateInstance();
 	LateStageObjectUpdateManager::Get().RegisterSphere(sphere_);
 	InGameManager::CreateInstance();
+	GameUIManager::CreateInstance();
 	
 
 	return true;
@@ -61,7 +65,7 @@ void Game::Update()
 {
 	CollisionHitManager::Get().Update();
 	LateStageObjectUpdateManager::Get().Update();
-	InGameManager::Get().Update();
+
 
 	CheckAndHandleGameState(); // クリアチェック
 	

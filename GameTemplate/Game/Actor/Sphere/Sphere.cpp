@@ -5,53 +5,79 @@
 #include "Actor/Object/AttachableObject.h"
 namespace 
 {
-	const float ALWAYS_SPEED = 100.0f;	// 固定移動速度
+	const float ALWAYS_SPEED = 300.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
-
-	// @todo for test
-	const float radius = 15.0f;
-
 }
 
-bool Sphere::Start() 
+
+SphereStatus::SphereStatus()
 {
+	ParameterManager::Get().LoadParameter<MasterSphereStatusParameter>("Assets/Parameter/SphereStatusParameter.json", [](const nlohmann::json& j, MasterSphereStatusParameter& status)
+		{
+			status.level = j["Level"];
+			status.levelUpNum = j["LevelUpNum"];
+		});
+}
+
+
+SphereStatus::~SphereStatus()
+{
+	ParameterManager::Get().UnloadParameter<MasterSphereStatusParameter>();
+}
+
+
+void SphereStatus::Setup(const MasterSphereStatusParameter& parameter)
+{
+	levelUpNum_ = parameter.levelUpNum;
+}
+
+
+
+/*******************************/
+
+
+Sphere::~Sphere()
+{
+	CollisionHitManager::Get().UnregisterCollisionObject(this);
+}
+
+bool Sphere::Start()
+{
+	// ステータス生成
+	status_ = std::make_unique<SphereStatus>();
+	UpdateLevelUp(true);
+
+	// コリジョンを生成
+	auto sphereCollider = std::make_unique<SphereCollision>();
+	sphereCollider->Init(GetPosition(), radius_);
+	// ICollisionに所有権を移動
+	collider_ = std::move(sphereCollider);
+
 	// モデルのInit
 	sphereRender_.Init("Assets/modelData/mass/model/mass.tkm");
 
+	// 塊の初期の大きさを代入
+	radius_ = INITIAL_RADIUS;
+
 	// 初期化
-	transform_.m_scale = Vector3(radius_, radius_, radius_);
+	transform_.m_scale = Vector3::One;
 	sphereRender_.SetPosition(transform_.m_position);
 	sphereRender_.SetRotation(transform_.m_rotation);
 	sphereRender_.SetScale(transform_.m_scale);
 	sphereRender_.Update();
 
 
-	// コリジョンを作成
-	collisionObject_ = NewGO<CollisionObject>(0, "collisionObject");
-	collisionObject_->CreateSphere(
-		transform_.m_position,	// 座標
-		transform_.m_rotation,	// 回転
-		INITIAL_RADIUS			// 球形の半径
-	);
-	// コリジョンが消えないようにする
-	collisionObject_->SetIsEnableAutoDelete(false);
-
-
 	// 当たり判定の登録
 	CollisionHitManager::Get().RegisterCollisionObject(
 		GameObjectType::Sphere,   // 種類
 		this,                     // Sphere自身（IGameObject*）
-		collisionObject_          // Sphereのコリジョン
+		collider_.get()          // Sphereのコリジョン
 	);
-
-
-	// キャラコンの初期
-	//charaCon_.Init(15.0f, 15.0f, transform_.m_position);
 
 	//
 
 	m_collider = new CCompoundCollider();
-	m_collider->Init(radius);
+	m_collider->Init(radius_);
 
 	//剛体を初期化。
 	RigidBodyInitData rbInfo;
@@ -61,18 +87,22 @@ bool Sphere::Start()
 	m_rigidBody->Init(rbInfo);
 	btTransform& trans = m_rigidBody->GetBody()->getWorldTransform();
 	//剛体の位置を更新。
-	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius, transform_.m_position.z));
+	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
+
+
 	//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 	m_rigidBody->GetBody()->setUserIndex(enCollisionAttr_Character);
 	m_rigidBody->GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
-
+	transform_.UpdateTransform();
 
 	return true;
 }
 
 void Sphere::Update()
 {
+	UpdateLevelUp();
+
 	// 前の座標を保存
 	beforePosition_ = transform_.m_position;
 
@@ -80,9 +110,8 @@ void Sphere::Update()
 	Rotation();
 	SetGravity();
 	sphereRender_.Update();
-	collisionObject_->SetPosition(transform_.m_position);
-	collisionObject_->SetRotation(transform_.m_rotation);
-	collisionObject_->Update();
+
+	collider_->SetPosition(transform_.m_position);
 }
 
 void Sphere::Render(RenderContext& rc) 
@@ -91,10 +120,10 @@ void Sphere::Render(RenderContext& rc)
 }
 
 
-void Sphere::Move() 
+void Sphere::Move()
 {
 	//移動方向の計算
-	moveSpeedMultiply_ = ALWAYS_SPEED * (INITIAL_RADIUS / radius_);
+	moveSpeedMultiply_ = ALWAYS_SPEED * (INITIAL_RADIUS / movementRadius_);
 
 	// 移動方向をもとに速度を出す
 	moveSpeed_.x = moveDirection_.x * moveSpeedMultiply_;
@@ -114,7 +143,7 @@ void Sphere::Move()
 	btBody->setActivationState(DISABLE_DEACTIVATION);
 	btTransform& trans = btBody->getWorldTransform();
 	//剛体の位置を更新。
-	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius, transform_.m_position.z));
+	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
 
 	// 絵描きさんに座標を教える。
 	sphereRender_.SetPosition(transform_.m_position);
@@ -191,4 +220,25 @@ void Sphere::SetParent(AttachableObject* attachableObject)
 }
 
 
-
+void Sphere::UpdateLevelUp(const bool isInit)
+{
+	if (currentLevelUpNum_ >= status_->GetLevelUpNum()) {
+		currentLevelUpNum_ -= status_->GetLevelUpNum();
+		
+		// ステータスセットアップ
+		const MasterSphereStatusParameter* parameter = ParameterManager::Get().FindParameter<MasterSphereStatusParameter>([&](const MasterSphereStatusParameter& parameter)
+			{
+				if (status_->GetLevel() == parameter.level) {
+					return true;
+				}
+				return false;
+			});
+		if (parameter) {
+			// 初期化の時はレベルアップしません
+			if (!isInit) {
+				status_->AddLevel();
+			}
+			status_->Setup(*parameter);
+		}
+	}
+}
