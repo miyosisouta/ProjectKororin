@@ -5,7 +5,7 @@
 #include "Actor/Object/AttachableObject.h"
 namespace 
 {
-	const float ALWAYS_SPEED = 300.0f;	// 固定移動速度
+	const float ALWAYS_SPEED = 500.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
 }
 
@@ -123,7 +123,7 @@ void Sphere::Render(RenderContext& rc)
 void Sphere::Move()
 {
 	//移動方向の計算
-	moveSpeedMultiply_ = ALWAYS_SPEED * (INITIAL_RADIUS / movementRadius_);
+	moveSpeedMultiply_ = ALWAYS_SPEED * (INITIAL_RADIUS / effectiveRadius_);
 
 	// 移動方向をもとに速度を出す
 	moveSpeed_.x = moveDirection_.x * moveSpeedMultiply_;
@@ -133,6 +133,7 @@ void Sphere::Move()
 	//transform_.m_localPosition = charaCon_.Execute(moveSpeed_, 1.0f / 60.0f);
 	
 	transform_.m_localPosition += (moveSpeed_ * g_gameTime->GetFrameDeltaTime());
+	transform_.m_localPosition.y = radius_;
 
 	// TransformをUpdate　→　移動先を更新
 	transform_.UpdateTransform();
@@ -171,7 +172,7 @@ void Sphere::Rotation()
 	vertical_ = Cross(Vector3::AxisY, move);
 	// 外積ベクトルをもとに回転量を求める
 	Quaternion rot;
-	rot.SetRotationDeg(vertical_, length * rotationSpeed / 20);
+	rot.SetRotationDeg(vertical_, length * rotationSpeed / 200);
 
 	//求めたクォータニオンを乗算する
 	transform_.m_localRotation.Multiply(transform_.m_localRotation, rot);
@@ -197,8 +198,7 @@ void Sphere::SetGravity()
 		//moveSpeed_.y -= 10.0f;
 	}
 
-	// キャラクターコントローラーを使って座標を移動させる。
-	//transform_.m_localPosition = charaCon_.Execute(moveSpeed_, 1.0f / 60.0f);
+
 	// トランスフォームの更新
 	//transform_.UpdateTransform();
 

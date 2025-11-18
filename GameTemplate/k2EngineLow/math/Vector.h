@@ -330,10 +330,10 @@ namespace nsK2EngineLow {
 		/// ベクトルをスカラーで除算。
 		/// </summary>
 		/// <remarks>
-		///		下記のような処理が行われています。
-		///		this->x /= d;
-		///		this->y /= d;
-		///		this->z /= d;
+		///	下記のような処理が行われています。
+		/// this->x /= d;
+		/// this->y /= d;
+		/// this->z /= d;
 		/// </remarks>
 		void Div(float d)
 		{

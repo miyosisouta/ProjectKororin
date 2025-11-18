@@ -77,20 +77,50 @@ void ::InGameManager::LateUpdate()
 				}
 
 
-				// くっついた！
-				sphere->AddCurrentLevelUpNum();
+				sphere->AddCurrentLevelUpNum(); // 引っ付いたオブジェクトの数を増加
+				sphere->GrowByRadius(attachableObject->GetGrowAmount()); // オブジェクトの半径を増加・移動速度の制限
+
+
 				//オブジェクトを塊につけ、一緒に動くようにする
 				sphere->SetParent(attachableObject); // transformの親子関係を設定
-				attachableObject->GetTransform()->ResetLocalPosition(); // ローカルポジションの初期化
-				attachableObject->GetTransform()->ResetLocalRotation(); // ローカルローテーションの初期化
 				attachableObject->DeletePhysicsStatics();
 
 
-				// 塊の半径を広げる
-				sphere->GrowByRadius(attachableObject->GetGrowAmount());
+				// オブジェクトがどのあたりにくっつくかを処理してみる
+				Vector3 direction = attachableObject->GetTransform()->m_position - sphere->GetTransform()->m_position;
+				direction.Normalize();
 
+				// 現在の半径を取得
+				const float sphereSize = sphere->GetEffectiveRadius();
 
-				/***************** ここから先は通知についての処理 ********************/
+				// 塊のワールド行列を取得・逆行列にする
+				Matrix sphereWorldMatrix = sphere->GetTransform()->GetWorldMatrix(); 
+				sphereWorldMatrix.Inverse();
+
+				// トランスフォームの取得
+				const Transform* attachableObjectTransform = attachableObject->GetTransform();
+
+				Matrix mWorld; // 吸着オブジェクトがワールド空間内のどこにあるかを示す行列
+				Matrix mTrans, mRot, mScale; // 行列の変数を定義
+				mTrans.MakeTranslation(attachableObjectTransform->m_position); // 平行移動行列の作成
+				mRot.MakeRotationFromQuaternion(attachableObjectTransform->m_rotation); // 回転行列の作成
+				mScale.MakeScaling(attachableObjectTransform->m_scale); // 拡大行列を取得
+				mWorld = mScale * mRot * mTrans;
+
+				Matrix computeMatrix = sphereWorldMatrix * mWorld; // 塊のローカル行列を取得
+
+				Vector3& localPos = attachableObject->GetTransform()->m_localPosition; // オブジェクトのローカル座標を取得
+				Quaternion& localRot = attachableObject->GetTransform()->m_localRotation; // オブジェクトのローカル回転を取得
+				localPos.x = computeMatrix.m[3][0] * 1.0f;
+				localPos.y = computeMatrix.m[3][1] * 1.0f;
+				localPos.z = computeMatrix.m[3][2] * 1.0f;
+
+				localPos.Normalize();
+				localPos.Scale(sphereSize);
+
+				localRot.SetRotation(computeMatrix);
+
+				/***************** ここから先は吸着時に飛ばす通知についての処理 ********************/
 
 
 				// 飛ばしたい情報を持つ構造体の型を作成

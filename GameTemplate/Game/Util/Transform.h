@@ -60,4 +60,6 @@ public:
 
 	void ResetLocalPosition();
 	void ResetLocalRotation();
+
+	const Matrix& GetWorldMatrix() const { return m_worldMatrix_; }
 };

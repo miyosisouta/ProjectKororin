@@ -31,9 +31,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{eb62131d-937a-4b8a-bcd1-713e8e40a3c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Camera">
-      <UniqueIdentifier>{d36df258-52c9-4c20-ab99-af77e4bf02be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{8e7c5978-108f-4d15-ada8-7e87159043dd}</UniqueIdentifier>
     </Filter>
@@ -89,15 +86,6 @@
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Camera\SphereCamera.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera\UICamera.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera\CameraBase.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Core\InGameManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -125,6 +113,7 @@
     <ClCompile Include="Core\GameUIManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="SphereCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -179,15 +168,6 @@
     <ClInclude Include="Core\LateStageObjectUpdateManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Camera\SphereCamera.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera\UICamera.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera\CameraBase.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Core\InGameManager.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -222,5 +202,6 @@
     <ClInclude Include="Core\GameUIManager.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="SphereCamera.h" />
   </ItemGroup>
 </Project>

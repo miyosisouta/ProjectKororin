@@ -2,15 +2,15 @@
 [
     {
         "Level": 0,
-        "LevelUpNum": 5
-    },
-    {
-        "Level": 1,
         "LevelUpNum": 10
     },
     {
+        "Level": 1,
+        "LevelUpNum": 15
+    },
+    {
         "Level": 2,
-        "LevelUpNum": 5
+        "LevelUpNum": 10
     },
     {
         "Level": 3,

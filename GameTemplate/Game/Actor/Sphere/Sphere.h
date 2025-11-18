@@ -89,6 +89,12 @@ public:
 	inline const float GetRadius() { return radius_; }
 
 	/**
+	 * @brief 他の昨日に影響を与える半径を取得
+	 * @return 
+	 */
+	inline const float GetEffectiveRadius() { return effectiveRadius_; }
+
+	/**
 	 * @brief 球体のサイズレベルを設定します。
 	 * @return 設定された球体のサイズレベルを表す整数値。
 	 */
@@ -113,7 +119,7 @@ public:
 	 */
 	inline int GrowByRadius(int grouthAmount) 
 	{
-		movementRadius_ += grouthAmount / 5.0f;
+		effectiveRadius_ += grouthAmount / 5.0f;
 		radius_ += grouthAmount;
 		return 0;
 	}
@@ -168,8 +174,8 @@ private: // Sphere関係の変数
 	Vector3 vertical_ = Vector3::Zero; // 外積
 	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ		// @todo for たぶんいらない
 	float moveSpeedMultiply_ = 0.0f; //!< 移動速度乗算
-	float movementRadius_ = 30.0f; //!< 動くときに反映する半径
-	float radius_ = 1.0f; //!< 半径
+	float effectiveRadius_ = 30.0f; //!< 動くときに反映する半径
+	float radius_ = 13.0f; //!< 半径
 
 
 	//CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト

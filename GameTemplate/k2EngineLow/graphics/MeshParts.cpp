@@ -198,13 +198,14 @@ namespace nsK2EngineLow {
 			}
 		}
 		//3. マテリアルを作成。
+		static constexpr int MAX_PATH_B = 512;	// @todo for バッファ不足のため一時的に作る
 		auto& materialBank = GetMaterialBank();
 		mesh->m_materials.reserve(tkmMesh.materials.size());
 		for (auto& tkmMat : tkmMesh.materials) {
-			char materiayKey[MAX_PATH];
+			char materiayKey[MAX_PATH_B];
 			sprintf_s(
 				materiayKey,
-				MAX_PATH,
+				MAX_PATH_B,
 				"%s, %s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s",
 				fxFilePath,
 				vsEntryPointFunc,
