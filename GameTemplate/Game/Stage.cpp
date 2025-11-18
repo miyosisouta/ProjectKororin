@@ -11,7 +11,7 @@ namespace
 	// 判定したいオブジェクト名のリスト
 	// (1)や(2)入れず、オブジェクトの名前だけを入れる
 	// array<型,データの数>
-	const std::array<std::string, 31> objectNamePatterns = {
+	const std::array<std::string, 35> objectNamePatterns = {
 		"BHouse_01_color01",
 		"BHouse_02_color01",
 		"BHouse_02_color02",
@@ -43,6 +43,10 @@ namespace
 		"VSUV_color01",
 		"VSUV_color02",
 		"VTaxi",
+		"Donut",
+		"ChessBoard",
+		"Burger",
+		"Wine",
 	};
 
 

@@ -1,6 +1,1819 @@
 {
   "objects": [
     {
+      "name": "Burger",
+      "Transform": {
+        "position": {
+          "x": 1270.47852,
+          "y": 0.05,
+          "z": 116.9543
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (4)",
+      "Transform": {
+        "position": {
+          "x": 675.45,
+          "y": 0.5,
+          "z": -185.65
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (5)",
+      "Transform": {
+        "position": {
+          "x": 659.65,
+          "y": 0.5,
+          "z": 782.1
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (6)",
+      "Transform": {
+        "position": {
+          "x": 331.8,
+          "y": 0.05,
+          "z": 797.9
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (7)",
+      "Transform": {
+        "position": {
+          "x": -2129.05,
+          "y": 0.05,
+          "z": 114.55
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (1)",
+      "Transform": {
+        "position": {
+          "x": 509.945,
+          "y": 0.05,
+          "z": 87.295
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (10)",
+      "Transform": {
+        "position": {
+          "x": -300.2,
+          "y": 0.05,
+          "z": -1580.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (7)",
+      "Transform": {
+        "position": {
+          "x": 1074.4,
+          "y": 0.5,
+          "z": -651.75
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (6)",
+      "Transform": {
+        "position": {
+          "x": -1358.8,
+          "y": 0.05,
+          "z": 801.85
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (9)",
+      "Transform": {
+        "position": {
+          "x": 1935.5,
+          "y": 0.05,
+          "z": 963.8
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (2)",
+      "Transform": {
+        "position": {
+          "x": -1319.3,
+          "y": 0.05,
+          "z": -126.4
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (18)",
+      "Transform": {
+        "position": {
+          "x": -1011.2,
+          "y": 0.05,
+          "z": -225.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (8)",
+      "Transform": {
+        "position": {
+          "x": -225.15,
+          "y": 0.05,
+          "z": 327.85
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (6)",
+      "Transform": {
+        "position": {
+          "x": 714.95,
+          "y": 0.5,
+          "z": 746.55
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (8)",
+      "Transform": {
+        "position": {
+          "x": -1133.65,
+          "y": 0.05,
+          "z": -1216.6
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (3)",
+      "Transform": {
+        "position": {
+          "x": 1449.65,
+          "y": 0.05,
+          "z": -63.2
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (1)",
+      "Transform": {
+        "position": {
+          "x": -134.3,
+          "y": 0.05,
+          "z": 758.4
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (19)",
+      "Transform": {
+        "position": {
+          "x": -343.65,
+          "y": 0.05,
+          "z": -240.95
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (9)",
+      "Transform": {
+        "position": {
+          "x": -1844.65,
+          "y": 0.05,
+          "z": -896.65
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (9)",
+      "Transform": {
+        "position": {
+          "x": 1066.5,
+          "y": 0.05,
+          "z": 699.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (11)",
+      "Transform": {
+        "position": {
+          "x": -252.8,
+          "y": 0.05,
+          "z": 837.4
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (21)",
+      "Transform": {
+        "position": {
+          "x": -292.3,
+          "y": 0.05,
+          "z": -177.75
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (2)",
+      "Transform": {
+        "position": {
+          "x": 624.1,
+          "y": 0.05,
+          "z": 1177.1
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (12)",
+      "Transform": {
+        "position": {
+          "x": -1749.85,
+          "y": 0.05,
+          "z": 110.6
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (17)",
+      "Transform": {
+        "position": {
+          "x": -1125.75,
+          "y": 0.05,
+          "z": 742.6
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (13)",
+      "Transform": {
+        "position": {
+          "x": -549.05,
+          "y": 0.05,
+          "z": 1378.55
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (20)",
+      "Transform": {
+        "position": {
+          "x": -1038.85,
+          "y": 0.05,
+          "z": -146.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (7)",
+      "Transform": {
+        "position": {
+          "x": -2235.7,
+          "y": 0.05,
+          "z": 284.4
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (23)",
+      "Transform": {
+        "position": {
+          "x": -367.35,
+          "y": 0.05,
+          "z": -173.8
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (7)",
+      "Transform": {
+        "position": {
+          "x": 81.37,
+          "y": 0.05,
+          "z": 116.13
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (6)",
+      "Transform": {
+        "position": {
+          "x": -556.95,
+          "y": 0.05,
+          "z": 517.45
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (8)",
+      "Transform": {
+        "position": {
+          "x": -632.0,
+          "y": 0.05,
+          "z": -383.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (8)",
+      "Transform": {
+        "position": {
+          "x": 1030.95007,
+          "y": 0.5,
+          "z": -699.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (15)",
+      "Transform": {
+        "position": {
+          "x": -880.85,
+          "y": 0.05,
+          "z": 525.35
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (3)",
+      "Transform": {
+        "position": {
+          "x": 1447.675,
+          "y": 0.05,
+          "z": 818.835
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (11)",
+      "Transform": {
+        "position": {
+          "x": 1738.0,
+          "y": 0.05,
+          "z": -1433.85
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (5)",
+      "Transform": {
+        "position": {
+          "x": 1454.39,
+          "y": 0.05,
+          "z": 91.245
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (10)",
+      "Transform": {
+        "position": {
+          "x": -63.2,
+          "y": 0.05,
+          "z": 185.65
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (22)",
+      "Transform": {
+        "position": {
+          "x": -1082.29993,
+          "y": 0.05,
+          "z": -209.35
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (4)",
+      "Transform": {
+        "position": {
+          "x": 1512.85,
+          "y": 0.05,
+          "z": 1102.04993
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (16)",
+      "Transform": {
+        "position": {
+          "x": -1939.45,
+          "y": 0.05,
+          "z": 369.72
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (11)",
+      "Transform": {
+        "position": {
+          "x": -1836.75,
+          "y": 0.05,
+          "z": -1603.7
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard",
+      "Transform": {
+        "position": {
+          "x": 743.7274,
+          "y": 0.05,
+          "z": 91.757
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (10)",
+      "Transform": {
+        "position": {
+          "x": -1303.5,
+          "y": 0.5,
+          "z": 7.9
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (10)",
+      "Transform": {
+        "position": {
+          "x": 2196.2,
+          "y": 0.05,
+          "z": -699.15
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Donut (14)",
+      "Transform": {
+        "position": {
+          "x": -1386.45,
+          "y": 0.05,
+          "z": 138.25
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Donut",
+        "objectRadius": 3,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "ChessBoard (5)",
+      "Transform": {
+        "position": {
+          "x": -588.55,
+          "y": 0.05,
+          "z": -71.1
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "ChessBoard",
+        "objectRadius": 8,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Burger (4)",
+      "Transform": {
+        "position": {
+          "x": 1082.695,
+          "y": 0.05,
+          "z": 543.915
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Burger",
+        "objectRadius": 4,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "Wine (9)",
+      "Transform": {
+        "position": {
+          "x": -1204.75,
+          "y": 0.5,
+          "z": 521.4
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 3.0,
+          "y": 3.0,
+          "z": 3.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 1,
+        "objectAssetName": "Wine",
+        "objectRadius": 5,
+        "colliderCenter": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "colliderSize": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
       "name": "NGrassFence(1)",
       "Transform": {
         "position": {
@@ -98,7 +1911,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color01",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -121,9 +1934,9 @@
         },
         "rotation": {
           "x": 0.0,
-          "y": 0.0,
+          "y": 1.0,
           "z": 0.0,
-          "w": 1.0
+          "w": 0.0
         },
         "scale": {
           "x": 1.0,
@@ -135,7 +1948,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -320,7 +2133,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color02",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -482,6 +2295,43 @@
       }
     },
     {
+      "name": "VSUV_color01(2) (1)",
+      "Transform": {
+        "position": {
+          "x": -446.35,
+          "y": 0.2,
+          "z": -1418.05
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VSUV_Color01",
+        "objectRadius": 30,
+        "colliderCenter": {
+          "x": -0.0907,
+          "y": 1.1288,
+          "z": 0.0919
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 5.7
+        }
+      }
+    },
+    {
       "name": "VSUV_color01(2)",
       "Transform": {
         "position": {
@@ -505,7 +2355,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color01",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -947,7 +2797,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -968,7 +2818,7 @@
         "position": {
           "x": -1851.15137,
           "y": 0.0,
-          "z": 295.5822
+          "z": 300.2
         },
         "rotation": {
           "x": 0.0,
@@ -1023,7 +2873,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse03_color02",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": -0.077,
           "y": 4.7429,
@@ -1097,7 +2947,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse04_color03",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": 0.7986,
           "y": 3.7148,
@@ -1132,9 +2982,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1208,7 +3058,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color02",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -1218,6 +3068,80 @@
           "x": 3.1,
           "y": 2.3,
           "z": 5.7
+        }
+      }
+    },
+    {
+      "name": "VPickUpTruck_color01(1) (1)",
+      "Transform": {
+        "position": {
+          "x": 1437.8,
+          "y": 0.2,
+          "z": -1414.1
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VPickupTruck_Color01",
+        "objectRadius": 30,
+        "colliderCenter": {
+          "x": -0.0009,
+          "y": 1.1323,
+          "z": 0.134
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 6.0
+        }
+      }
+    },
+    {
+      "name": "VTaxi(2) (1)",
+      "Transform": {
+        "position": {
+          "x": 304.15,
+          "y": 0.2,
+          "z": -1145.5
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VTaxi",
+        "objectRadius": 30,
+        "colliderCenter": {
+          "x": -0.0064,
+          "y": 1.2162,
+          "z": -0.1932
+        },
+        "colliderSize": {
+          "x": 3.0,
+          "y": 2.4,
+          "z": 6.3
         }
       }
     },
@@ -1243,7 +3167,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -1280,9 +3204,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1576,9 +3500,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -1835,7 +3759,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -1948,7 +3872,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -1983,9 +3907,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -2059,7 +3983,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VTaxi",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0064,
           "y": 1.2162,
@@ -2170,7 +4094,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VContainer_color03",
-        "objectRadius": 70,
+        "objectRadius": 50,
         "colliderCenter": {
           "x": -0.0047,
           "y": 2.0722,
@@ -2217,6 +4141,43 @@
           "x": 0.5,
           "y": 6.5,
           "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "VSUV_color02 (1)",
+      "Transform": {
+        "position": {
+          "x": -1508.9,
+          "y": 0.2,
+          "z": -1149.45007
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Attribute": {
+        "attachableValue": 0,
+        "requiredSphereSize": 3,
+        "objectAssetName": "VSUV_Color02",
+        "objectRadius": 30,
+        "colliderCenter": {
+          "x": -0.0907,
+          "y": 1.1288,
+          "z": 0.0919
+        },
+        "colliderSize": {
+          "x": 3.1,
+          "y": 2.3,
+          "z": 5.7
         }
       }
     },
@@ -2279,9 +4240,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -2316,7 +4277,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2355,7 +4316,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VBus_color01",
-        "objectRadius": 70,
+        "objectRadius": 50,
         "colliderCenter": {
           "x": -0.0014,
           "y": 1.7842,
@@ -2429,7 +4390,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse02_color03",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": -0.4235,
           "y": 4.5219,
@@ -2503,7 +4464,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse04_color02",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": 0.7986,
           "y": 3.7148,
@@ -2577,7 +4538,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 3,
         "objectAssetName": "VSUV_Color01",
-        "objectRadius": 55,
+        "objectRadius": 30,
         "colliderCenter": {
           "x": -0.0907,
           "y": 1.1288,
@@ -2834,7 +4795,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2873,7 +4834,7 @@
         "attachableValue": 0,
         "requiredSphereSize": 4,
         "objectAssetName": "BHouse01_color01",
-        "objectRadius": 0,
+        "objectRadius": 100,
         "colliderCenter": {
           "x": -0.5606,
           "y": 4.526,
@@ -2908,7 +4869,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -2982,9 +4943,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,
@@ -3204,7 +5165,7 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 1,
+        "requiredSphereSize": 2,
         "objectAssetName": "NCubeTree",
         "objectRadius": 10,
         "colliderCenter": {
@@ -3241,9 +5202,9 @@
       },
       "Attribute": {
         "attachableValue": 0,
-        "requiredSphereSize": 2,
+        "requiredSphereSize": 3,
         "objectAssetName": "NFirTree",
-        "objectRadius": 15,
+        "objectRadius": 20,
         "colliderCenter": {
           "x": 0.0,
           "y": 3.6744,

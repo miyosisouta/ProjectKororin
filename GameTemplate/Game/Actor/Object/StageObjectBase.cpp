@@ -11,9 +11,6 @@ namespace
 }
 bool StageObjectBase:: Start() 
 {
-
-	 
-
 	// モデルの初期化
 	// アセットの名前は文字列の連結をしないといけない
 	std::string modelName = "Assets/modelData/stage/" + assetName_ + ".tkm";

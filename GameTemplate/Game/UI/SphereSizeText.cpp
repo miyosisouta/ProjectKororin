@@ -11,8 +11,9 @@ namespace
 	const Vector3 TEXT_BACKRAY_SCALE = Vector3(10.0f, 10.0f, 0.0f); // 黒の背景の大きさ
 
 	const float ALWAYS_SPEED = 100.0f; // 丸い画像の回転の基準速度
-	const float OBJECTIVESIZE = 1000.0f; // 塊の大きさの指標
+	const float OBJECTIVESIZE = 500.0f; // 塊の大きさの指標
 	const float DEFAULTSIZE = 1.0f; // 画像のデフォルトの大きさ倍率
+	const float SPHERESIZETEXT_DRAWLIMMIT = 300.0f; // 塊の目標サイズのテキスト表示を制限する
 
 	// 変数作成
 	// SPRITE_RENDER_INFO_LIST[0] = SpriteRenderInfoType()
@@ -22,7 +23,9 @@ namespace
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Green.DDS"		, 200, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Blue.DDS"			, 200, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Pink.DDS"			, 240, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-		SpriteConstans::SpriteRenderInfo("indicatorSizeSprite_.DDS"	, 190, Vector3(-700.0f, 270.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
+		SpriteConstans::SpriteRenderInfo("indicatorSizeSprite_.DDS"	, 190, Vector3(-700.0f, 270.0f, 0.0f), Vector3(1.0f, 0.9f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
+		SpriteConstans::SpriteRenderInfo("GoalSize_OverLay.DDS"		, 190, Vector3(-525.0f, 415.0f, 0.0f), Vector3(0.6f, 0.5f, 0.5f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
+		SpriteConstans::SpriteRenderInfo("GoalSprite_ColorCorn.DDS"	, 190, Vector3(-565.0f, 415.0f, 0.0f), Vector3(0.25f, 0.25f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 	};
 
 
@@ -34,7 +37,9 @@ namespace
 			SizeOrb_Green,
 			SizeOrb_Blue,
 			SizeOrb_Pink,
-			indicatorSizeSprite
+			indicatorSizeSprite,
+			GoalSizeOverRaySprite,
+			GoalSizeColorCornSprite,
 		};
 	};
 
@@ -55,9 +60,34 @@ SphereSizeText::~SphereSizeText()
 
 bool SphereSizeText::Start()
 {
-	/*** タイマーをみやすくするための黒の背景 ***/
+	/*** UIをみやすくするための黒の背景 ***/
 	RenderDarkOverlay(&textBackSprite_, TEXT_BACKRAY_POS, TEXT_BACKRAY_SCALE); // ファイルパス・初期化
 	textBackSprite_.Update(); // ポジションなどの更新
+
+	/*** 塊の目標サイズのデコレーションの背景 ***/
+	const auto& GoalSizeColorCornInfo = SPRITE_RENDER_INFO_LIST[SpriteRenderInfoSphereSizeType::GoalSizeColorCornSprite];
+	Initialize
+	(
+		&GoalSizeColorCornSprite_,
+		GoalSizeColorCornInfo.filePath,
+		GoalSizeColorCornInfo.size,
+		GoalSizeColorCornInfo.pos,
+		GoalSizeColorCornInfo.scale,
+		GoalSizeColorCornInfo.color
+	);
+
+
+	/*** 目標サイズを見やすくするための背景 ***/
+	const auto& GoalSizeOverLayInfo = SPRITE_RENDER_INFO_LIST[SpriteRenderInfoSphereSizeType::GoalSizeOverRaySprite];
+	Initialize
+	(
+		&GoalSizeOverRaySprite_,
+		GoalSizeOverLayInfo.filePath,
+		GoalSizeOverLayInfo.size,
+		GoalSizeOverLayInfo.pos,
+		GoalSizeOverLayInfo.scale,
+		GoalSizeOverLayInfo.color
+	);
 
 
 	/*** 緑色の回転する玉の背景 ***/
@@ -120,7 +150,7 @@ void SphereSizeText::Update()
 	Rotation(); // 画像の回転
 	AdjustOrbScaleByRadius(); // 画像の大きさ
 	ApplyScaleToUIElement(); // Sphereの現在の大きさを表示
-
+	SphereGoalSizeText();
 	textGreenOrbSprite_.Update();
 	textBlueOrbSprite_.Update();
 	textPinkOrbSprite_.Update();
@@ -129,11 +159,19 @@ void SphereSizeText::Update()
 void SphereSizeText::Render(RenderContext& rc)
 {
 	textBackSprite_.Draw(rc);
+
+	if (sphereRadius_ <= SPHERESIZETEXT_DRAWLIMMIT)
+	{
+		GoalSizeOverRaySprite_.Draw(rc);
+		GoalSizeColorCornSprite_.Draw(rc);
+		sphereGoalSizeText_.Draw(rc);
+	}
+	
 	textGreenOrbSprite_.Draw(rc);
 	textBlueOrbSprite_.Draw(rc);
 	textPinkOrbSprite_.Draw(rc);
 	indicatorSizeSprite_.Draw(rc);
-	sphereSizeText_.Draw(rc);
+	sphereCurrentSizeText_.Draw(rc);
 }
 
 
@@ -169,11 +207,23 @@ void SphereSizeText::ApplyScaleToUIElement()
 	const int radiusCentimeters = (int)sphereRadius_ % METERS_TO_CENTIMETERS; // センチメートルを算出
 
 	//塊の大きさを定義・表示
-	wchar_t text[256];
-	swprintf_s(text, 256, L"%02dm %02dcm", radiusMeters, radiusCentimeters);
-	sphereSizeText_.SetText(text);
-	sphereSizeText_.SetPosition(-780.0f, 340.0f, 0.0f);
-	sphereSizeText_.SetScale(1.0f);
-	sphereSizeText_.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	wchar_t currentSize[256];
+	swprintf_s(currentSize, 256, L"%02dm %02dcm", radiusMeters, radiusCentimeters);
+	sphereCurrentSizeText_.SetText(currentSize);
+	sphereCurrentSizeText_.SetPosition(-780.0f, 340.0f, 0.0f);
+	sphereCurrentSizeText_.SetScale(1.0f);
+	sphereCurrentSizeText_.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void SphereSizeText::SphereGoalSizeText()
+{
+
+	//塊の大きさを定義・表示
+	wchar_t goalSize[256];
+	swprintf_s(goalSize, 256, L"3m");
+	sphereGoalSizeText_.SetText(goalSize);
+	sphereGoalSizeText_.SetPosition(-545.0f, 430.0f, 0.0f);
+	sphereGoalSizeText_.SetScale(0.9f);
+	sphereGoalSizeText_.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 

@@ -85,7 +85,8 @@ struct CollisionType
 class ICollision
 {
 protected:
-	CollisionType::Enum type_ = CollisionType::Box;
+   
+    CollisionType::Enum type_ = CollisionType::Box;
 	Vector3 position_ = Vector3::Zero;
 
 
@@ -136,3 +137,21 @@ public:
 
     Vector3 GetSize() const { return size_; }
 };
+
+
+// T: ˆø”‚ÌŒ^ifloat, int‚È‚Çj
+template <typename T>
+T ClampValue(const T& value, const T& min_val, const T& max_val)
+{
+    // value < min_val ‚È‚ç min_val ‚ğ•Ô‚·
+    if (value < min_val) {
+        return min_val;
+    }
+    // value > max_val ‚È‚ç max_val ‚ğ•Ô‚·
+    if (value > max_val) {
+        return max_val;
+    }
+
+    // ”ÍˆÍ“à‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü value ‚ğ•Ô‚·
+    return value;
+}

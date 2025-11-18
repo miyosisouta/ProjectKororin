@@ -230,9 +230,6 @@
     <ClCompile Include="Actor\Object\StaticObject.cpp" />
     <ClCompile Include="Actor\Sphere\Player.cpp" />
     <ClCompile Include="Actor\Sphere\Sphere.cpp" />
-    <ClCompile Include="Camera\CameraBase.cpp" />
-    <ClCompile Include="Camera\SphereCamera.cpp" />
-    <ClCompile Include="Camera\UICamera.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
     <ClCompile Include="Core\GameUIManager.cpp" />
@@ -247,6 +244,7 @@
     <ClCompile Include="SceneLoader\SceneLoader.cpp" />
     <ClCompile Include="SceneLoader\TransformHelper.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
+    <ClCompile Include="SphereCamera.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -270,9 +268,6 @@
     <ClInclude Include="Actor\Object\StaticObject.h" />
     <ClInclude Include="Actor\Sphere\Player.h" />
     <ClInclude Include="Actor\Sphere\Sphere.h" />
-    <ClInclude Include="Camera\CameraBase.h" />
-    <ClInclude Include="Camera\SphereCamera.h" />
-    <ClInclude Include="Camera\UICamera.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
     <ClInclude Include="Core\GameUIManager.h" />
@@ -288,6 +283,7 @@
     <ClInclude Include="SceneLoader\TransformHelper.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\Types.h" />
+    <ClInclude Include="SphereCamera.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
