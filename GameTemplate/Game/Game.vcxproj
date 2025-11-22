@@ -232,6 +232,8 @@
     <ClCompile Include="Actor\Sphere\Sphere.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
+    <ClCompile Include="Core\Fade.cpp" />
+    <ClCompile Include="Core\GameTimer.cpp" />
     <ClCompile Include="Core\GameUIManager.cpp" />
     <ClCompile Include="Core\InGameManager.cpp" />
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp" />
@@ -270,6 +272,8 @@
     <ClInclude Include="Actor\Sphere\Sphere.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
+    <ClInclude Include="Core\Fade.h" />
+    <ClInclude Include="Core\GameTimer.h" />
     <ClInclude Include="Core\GameUIManager.h" />
     <ClInclude Include="Core\InGameManager.h" />
     <ClInclude Include="Core\LateStageObjectUpdateManager.h" />

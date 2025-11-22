@@ -39,7 +39,6 @@ InGameManager::~InGameManager()
 
 void InGameManager::Update()
 {
-
 }
 
 

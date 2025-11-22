@@ -12,7 +12,6 @@ class Sphere;
 class SphereCamera;
 class Stage;
 class Canvas;
-
 class Game : public IGameObject
 {
 public:
@@ -38,7 +37,8 @@ public:
 	/**
 	 * @brief 描画処理
 	 */
-	void Render(RenderContext& rc)override;
+	void Render(RenderContext& rc)override {};
+
 
 public:
 	Player* m_player = nullptr; //!< プレイヤーキャラクタ
@@ -46,7 +46,7 @@ public:
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
 	Stage* stage_ = nullptr; //!< ステージ
 	Canvas* canvas_ = nullptr; //!< キャンバス
-
+	//FadeObject* fadeObject_ = nullptr; //!< フェード
 
 private:
 	/**

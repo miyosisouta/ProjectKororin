@@ -23,7 +23,7 @@ namespace
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Green.DDS"		, 200, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Blue.DDS"			, 200, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Pink.DDS"			, 240, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-		SpriteConstans::SpriteRenderInfo("indicatorSizeSprite_.DDS"	, 190, Vector3(-700.0f, 270.0f, 0.0f), Vector3(1.0f, 0.9f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
+		SpriteConstans::SpriteRenderInfo("IndicatorSizeSprite_.DDS"	, 190, Vector3(-700.0f, 270.0f, 0.0f), Vector3(1.0f, 0.9f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("GoalSize_OverLay.DDS"		, 190, Vector3(-525.0f, 415.0f, 0.0f), Vector3(0.6f, 0.5f, 0.5f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 		SpriteConstans::SpriteRenderInfo("GoalSprite_ColorCorn.DDS"	, 190, Vector3(-565.0f, 415.0f, 0.0f), Vector3(0.25f, 0.25f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 	};
@@ -37,7 +37,7 @@ namespace
 			SizeOrb_Green,
 			SizeOrb_Blue,
 			SizeOrb_Pink,
-			indicatorSizeSprite,
+			IndicatorSizeSprite,
 			GoalSizeOverRaySprite,
 			GoalSizeColorCornSprite,
 		};
@@ -130,7 +130,7 @@ bool SphereSizeText::Start()
 
 
 	/*** ÉsÉìÉNêFÇÃâÒì]Ç∑ÇÈã ÇÃîwåi ***/
-	const auto& indicatorSizeInfo = SPRITE_RENDER_INFO_LIST[SpriteRenderInfoSphereSizeType::indicatorSizeSprite];
+	const auto& indicatorSizeInfo = SPRITE_RENDER_INFO_LIST[SpriteRenderInfoSphereSizeType::IndicatorSizeSprite];
 	Initialize
 	(
 		&indicatorSizeSprite_,
