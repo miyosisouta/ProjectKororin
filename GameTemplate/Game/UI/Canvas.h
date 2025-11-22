@@ -18,10 +18,15 @@ public:
 	void Render(RenderContext& rc)override;
 
 
+public:
+	void SetTimer(const float timer);
+	void SetLimitTimer(const float timer);
+
 private:
 	BlackOverRay* blackOverRay_ = nullptr;
 	ObjectView* objectView_ = nullptr;
 	SphereSizeText* sphereSizeText_ = nullptr;
 	Timer* timer_ = nullptr;
+
 };
 

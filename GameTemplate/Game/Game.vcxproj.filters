@@ -114,6 +114,12 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="SphereCamera.cpp" />
+    <ClCompile Include="Core\GameTimer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Fade.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -203,5 +209,11 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="SphereCamera.h" />
+    <ClInclude Include="Core\GameTimer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Fade.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

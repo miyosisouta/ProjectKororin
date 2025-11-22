@@ -12,5 +12,8 @@ public:
 
 public:
 	
+private:
+	SpriteRender AttachObjectBackSprite;
+	SpriteRender PlaceHolderSprite;
 };
 

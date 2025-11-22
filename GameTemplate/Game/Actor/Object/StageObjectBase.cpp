@@ -9,6 +9,8 @@ namespace
 	const float COLLISION_POSITIONADJUSTMENT = 35.0f;	// コリジョンの起点の座標を調整する
 	const float COLLISION_CORRECTION = 40.0f;			// コリジョンの大きさを調整する
 }
+
+
 bool StageObjectBase:: Start() 
 {
 	// モデルの初期化
@@ -23,7 +25,7 @@ bool StageObjectBase:: Start()
 	// コライダーの変更
 	Vector3 collisionCorrection = ApplyCollisionSizeDelta(transform_.m_localScale) * COLLISION_CORRECTION; // スケールの調整
 	position_ = transform_.m_position + colliderPivot_* COLLISION_POSITIONADJUSTMENT;	// 起点
-	size_ = Multply(collisionCorrection, colliderSize_);							// サイズ
+	size_ = Multply(collisionCorrection, colliderSize_); // サイズ
 	//当たり判定に実態を持たせる
 	physicsStaticObject_ = new PhysicsStaticObject;
 	// boxcolliderの当たり判定
