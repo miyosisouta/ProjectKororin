@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Game.h"
+#include "Scene/GameScene.h"
 #include "Canvas.h"
 #include "Core/GameUIManager.h"
 #include "Core/GameTimer.h"
@@ -54,10 +54,14 @@ void Canvas::Render(RenderContext& rc)
 
 void Canvas::SetTimer(const float timer)
 {
-    timer_->SetTimer(timer);
+    if (timer_) {
+        timer_->SetTimer(timer);
+    }
 }
 
 void Canvas::SetLimitTimer(const float timer)
 {
-    timer_->SetGameTimerLimit(timer);
+    if (timer_) {
+        timer_->SetGameTimerLimit(timer);
+    }
 }

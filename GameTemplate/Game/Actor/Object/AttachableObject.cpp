@@ -59,7 +59,9 @@ void AttachableObject::Update()
 
 void AttachableObject::Render(RenderContext& rc) 
 {
-	modelRender_.Draw(rc);
+	if (isVisible_) {
+		modelRender_.Draw(rc);
+	}
 }
 
 

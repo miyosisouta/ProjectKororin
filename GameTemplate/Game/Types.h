@@ -39,3 +39,7 @@ struct GameObjectPriority
 		UI
 	};
 };
+
+
+constexpr float MAX_SPRITE_WIDTH = 1920.0f;
+constexpr float MAX_SPRITE_HIGHT = 1080.0f;

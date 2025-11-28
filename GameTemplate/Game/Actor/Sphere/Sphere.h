@@ -112,7 +112,22 @@ public:
 	 */
 	inline const Vector3 GetPosition() { return transform_.m_position; }
 
+	/**
+	 * @brief 球体のポジションを設定
+	 * @param pos 
+	 * @return 
+	 */
+	inline const void SetPosition(const Vector3 pos) { transform_.m_localPosition = pos; }
 
+	inline const void SetIsDraw(const bool isDrawed) { isDraw_ = isDrawed; }
+	inline const bool GetIsDraw() { return isDraw_; }
+	/**
+	 * @brief 球体のY座標を増加させる
+	 * @param posY 
+	 * @return 
+	 */
+	inline const void AddPositionY(const float posY){ transform_.m_localPosition.y = posY; }
+	
 	/**
 	 * @brief 塊のサイズを成長させる
 	 * @param grouthAmount オブジェクトの大きさ
@@ -138,6 +153,17 @@ public:
 
 	/* 吸着したオブジェクトの数を増やす */
 	void AddCurrentLevelUpNum() { ++currentLevelUpNum_; }
+
+	/* オブジェクトが引っ付いた合計数を増やす */
+	void AddTotalNum() { ++totalNum_; }
+
+	/* 引っ付いたオブジェクトの数を取得 */
+	int GetTotalNum() { return totalNum_; }
+
+	/**
+	 * @brief ゴールサイズに達したか
+	 */
+	bool CheakGoalSize();
 
 
 private:
@@ -172,17 +198,19 @@ private: // Sphere関係の変数
 	Vector3 moveDirection_ = Vector3::Zero; //!< 移動方向
 	Vector3 beforePosition_ = Vector3::Zero; //!< 前の座標を保存
 	Vector3 vertical_ = Vector3::Zero; // 外積
-	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ		// @todo for たぶんいらない
+	int sizeLevel_ = 1; //!< 塊のサイズ : 吸着可能なオブジェクトのサイズ
+	int currentLevelUpNum_;	//!< レベルアップに必要な巻き込んだ数
+	int totalNum_ = 0.0f; //!< 塊に引っ付いたオブジェクトの数
 	float moveSpeedMultiply_ = 0.0f; //!< 移動速度乗算
 	float effectiveRadius_ = 30.0f; //!< 動くときに反映する半径
 	float radius_ = 13.0f; //!< 半径
-
+	bool isDraw_ = true;
 
 	//CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト
 	//SphereCollision* sphereCollision_ = nullptr; // 衝突判定ゴーストオブジェクト
 
 	std::unique_ptr<SphereStatus> status_;	//!< ステータス
 	std::unique_ptr<SphereCollision> collider_;	//!< 抽象化された衝突オブジェクトを所有・管理するための器
-	int currentLevelUpNum_;	//!< レベルアップに必要な巻き込んだ数
+
 };
 

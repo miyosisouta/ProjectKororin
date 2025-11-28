@@ -4,7 +4,8 @@
 #include<InitGUID.h>
 #include<dxgidebug.h>
 
-#include "GameManager.h"
+#include "Scene/SceneManager.h"
+#include "Core/Fade.h"
 
 
 void ReportLiveObjects()
@@ -34,10 +35,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	// レイトレーシングを使用しないようにする
 	g_renderingEngine->DisableRaytracing();
+	g_renderingEngine->DisableTonemap();
 
 	//GameManagerクラスのインスタンスを作成
-	GameManager::CreateInstance();
-	GameManager::Get().Start();
+	auto* SceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
+	auto* fadeObject = NewGO<FadeObject>(0, "fadeObject");
 
 	ParameterManager::CreateInstance();
 
@@ -50,9 +52,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	while (DispatchWindowMessage())
 	{
 		//  GameManagerのUpdate処理を最初に実行 
-		if (GameManager::IsAvailable()) 
+		if (SceneManager::IsAvailable()) 
 		{
-			GameManager::Get().Update();
+			SceneManager::Get().Update();
 		}
 
 		if (g_pad[0]->IsTrigger(enButtonA) ){
@@ -61,10 +63,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		K2Engine::GetInstance()->Execute();
 	}
 
+	DeleteGO(SceneManager);
 	ParameterManager::DestroyInstance();
 
 	// GameManagerのインスタンスを破棄
-	GameManager::DeleteInstance();
+	SceneManager::DeleteInstance();
+
+	DeleteGO(fadeObject);
 
 	K2Engine::DeleteInstance();
 

@@ -14,5 +14,7 @@ void StaticObject::Update()
 
 void StaticObject::Render(RenderContext& rc)
 {
-	modelRender_.Draw(rc);
+	if (isVisible_) {
+		modelRender_.Draw(rc);
+	}
 }

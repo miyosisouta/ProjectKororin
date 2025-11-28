@@ -52,3 +52,26 @@ Vector3 InputSystem::GetStickL()
 
 	return direction;
 }
+
+
+
+
+bool TitleInputSyste::Start()
+{
+	return true;
+}
+
+
+void TitleInputSyste::Update()
+{
+	// 操作ターゲットがいない場合処理を返す
+	if (target_ == nullptr) {
+		return;
+	}
+
+	if (moveDirection_.LengthSq() > 0.01f) {
+		target_->SetMoveDirection(moveDirection_);
+	} else {
+		target_->SetMoveDirection(Vector3::Zero);
+	}
+}

@@ -8,7 +8,7 @@
 class Sphere;
 class InputSystem : public IGameObject
 {
-private:
+protected:
 	Sphere* target_ = nullptr;
 	int inputNo_ = 0;
 
@@ -67,8 +67,38 @@ private:
 	 * @return 左スティックの移動速度を表す。
 	 */
 	Vector3 GetStickL();
+};
 
 
+
+
+class TitleInputSyste : public InputSystem
+{
 private:
-	
+	/** 移動方向 */
+	Vector3 moveDirection_;
+
+
+public:
+	TitleInputSyste() {}
+	~TitleInputSyste() {}
+
+	/**
+	 * @brief オブジェクトの開始処理を実行します。
+	 * @return 開始処理が成功した場合は true、失敗した場合は false を返します。
+	 */
+	bool Start() override;
+	/**
+	 * @brief オブジェクトの状態を更新します。基底クラスのUpdateメソッドをオーバーライドしています。
+	 */
+	void Update() override;
+	/**
+	 * @brief 描画処理を実行します
+	 * @param rc
+	 */
+	void Render(RenderContext& rc) override {}
+
+
+public:
+	void SetMoveDirection(const Vector3& direction) { moveDirection_ = direction; }
 };

@@ -16,6 +16,9 @@ private:
 	std::vector<StaticObject*> staticObjectList_; // 吸着不可オブジェクトのデータを格納
 	std::vector<MovableObject*> movableObjectList_; // 動的オブジェクトのデータを格納
 
+	bool isVisibleAttackObject_ = true;	// くっついたオブジェクトの表示
+	bool isVisibleAll_ = true;			// 全部のオブジェクト表示(ただ、個別表示フラグが優先される)
+
 
 public:
 	
@@ -35,7 +38,7 @@ public:
 	 * @return 成功した場合は true。
 	 */
 	bool Start()override;
-	void Update() override {}
+	void Update() override;
 	void Render(RenderContext& rc) override {}
 
 
@@ -43,5 +46,9 @@ public:
 	const std::vector<StaticObject*>& const GetStaticObjectList(){	return staticObjectList_;	}
 	const std::vector<MovableObject*>& const GetMovableObjectList(){	return movableObjectList_;	}
 
+
+public:
+	void SetVisibleAttackObject(const bool flg) { isVisibleAttackObject_ = flg; }
+	void SetAllVisible(const bool flg) { isVisibleAll_ = flg; }
 };
 

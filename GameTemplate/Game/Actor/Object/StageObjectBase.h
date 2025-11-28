@@ -23,6 +23,8 @@ protected:
 	// ICollisionインターフェース型を指すユニークポインタ
 	std::unique_ptr<BoxCollision> collider_;
 
+	bool isVisible_ = true;
+
 
 public:
 	/**
@@ -71,6 +73,8 @@ public:
 	{
 		return objectSize_;
 	}
+
+	void SetVisible(const bool flg) { isVisible_ = flg; }
 
 
 private:

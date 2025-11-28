@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "Sphere.h"
 #include <iostream>
-#include "Collision/CollisionManager.h"
 #include "Actor/Object/AttachableObject.h"
+#include "Collision/CollisionManager.h"
+#include "Scene/SceneManager.h"
+
+
 namespace 
 {
 	const float ALWAYS_SPEED = 500.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
+	const float GOAL_RADIUS = 300.0f; // 目標サイズ
 }
 
 
@@ -38,7 +42,9 @@ void SphereStatus::Setup(const MasterSphereStatusParameter& parameter)
 
 Sphere::~Sphere()
 {
-	CollisionHitManager::Get().UnregisterCollisionObject(this);
+	if (CollisionHitManager::IsAvailable()) {
+		CollisionHitManager::Get().UnregisterCollisionObject(this);
+	}
 }
 
 bool Sphere::Start()
@@ -114,9 +120,22 @@ void Sphere::Update()
 	collider_->SetPosition(transform_.m_position);
 }
 
-void Sphere::Render(RenderContext& rc) 
+void Sphere::Render(RenderContext& rc)
 {
-	sphereRender_.Draw(rc);
+	if (GetIsDraw())
+	{
+		sphereRender_.Draw(rc);
+
+	}
+}
+
+
+bool Sphere::CheakGoalSize()
+{
+	if (radius_ >= GOAL_RADIUS) {
+		return true;
+	}
+	return false;
 }
 
 
@@ -127,13 +146,12 @@ void Sphere::Move()
 
 	// 移動方向をもとに速度を出す
 	moveSpeed_.x = moveDirection_.x * moveSpeedMultiply_;
+	moveSpeed_.y = moveDirection_.y * moveSpeedMultiply_;
 	moveSpeed_.z = moveDirection_.z * moveSpeedMultiply_;
 
 	// 移動先
-	//transform_.m_localPosition = charaCon_.Execute(moveSpeed_, 1.0f / 60.0f);
-	
 	transform_.m_localPosition += (moveSpeed_ * g_gameTime->GetFrameDeltaTime());
-	transform_.m_localPosition.y = radius_;
+	//transform_.m_localPosition.y = radius_;
 
 	// TransformをUpdate　→　移動先を更新
 	transform_.UpdateTransform();

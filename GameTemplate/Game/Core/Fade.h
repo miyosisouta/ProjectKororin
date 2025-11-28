@@ -7,8 +7,9 @@
 class Fade
 {
 private:
-    SpriteRender whiteOutSprite_;
-    float whiteOutAlpha_;
+    SpriteRender fadeOutSprite_;
+    float fadeColor_ = 1.0f;    // 最初は白に
+    float fadeOutAlpha_ = 0.0f; // 最初は透明に
 
 
 private:
@@ -21,8 +22,8 @@ public:
     void Render(RenderContext& rc);
 
 
-    inline void SetAlpha(const float alpha) { whiteOutAlpha_ = alpha; }
-
+    inline void SetAlpha(const float alpha) { fadeOutAlpha_ = alpha; } // α値の設定
+    inline void SetColor(const float color) { fadeColor_ = color; } // 色の設定　0.0f : 黒 1.0f : 白
 
 
 /******* シングルトン用 **********/

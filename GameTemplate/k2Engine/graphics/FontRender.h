@@ -161,6 +161,17 @@ namespace nsK2Engine {
 		{
 			m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
 		}
+
+		/// <summary>
+		/// 座標、大きさ、色の設定
+		/// </summary>
+		void SetPSC(Vector3 pos, float scal, Vector4 color)
+		{
+			m_position = pos;
+			m_scale = scal;
+			m_color = color;
+		}
+
 	private:
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。

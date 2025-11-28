@@ -18,7 +18,7 @@ bool SphereCamera::Start()
 	g_camera3D->SetFar(1000000.0f);
 
 	// Lerp先を設定
-	nextPosition = transform_.m_localPosition;
+	nextPosition_ = transform_.m_localPosition;
 
 	// トランスフォームを更新
 	transform_.UpdateTransform();
@@ -40,24 +40,26 @@ void SphereCamera::Update()
 	target.y += TARGETHEIGHT; 	// 塊の中心の少し上を注視点とする。
 	Vector3 toCameraPosOld = transform_.m_localPosition; // 現在のポジションを保存
 
-	// パッドの入力を使ってカメラを回す
-	float x = g_pad[0]->GetRStickXF();
-	float y = g_pad[0]->GetRStickYF();
+
+	if (IsActiveCamera())
+	{
+		// パッドの入力を使ってカメラを回す
+		float x = g_pad[0]->GetRStickXF();
+		float y = g_pad[0]->GetRStickYF();
 
 
+		// Y軸の回転
+		Quaternion qRot;
+		qRot.SetRotationDeg(Vector3::AxisY, 2.0f * x);
+		qRot.Apply(transform_.m_localPosition);
+		// X軸の回転
+		Vector3 axisX;
+		axisX.Cross(Vector3::AxisY, transform_.m_localPosition);
+		axisX.Normalize();
+		qRot.SetRotationDeg(axisX, 2.0f * y);
+		qRot.Apply(transform_.m_localPosition);
 
-	// Y軸の回転
-	Quaternion qRot;
-	qRot.SetRotationDeg(Vector3::AxisY, 2.0f * x);
-	qRot.Apply(transform_.m_localPosition);
-	// X軸の回転
-	Vector3 axisX;
-	axisX.Cross(Vector3::AxisY, transform_.m_localPosition);
-	axisX.Normalize();
-	qRot.SetRotationDeg(axisX, 2.0f * y);
-	qRot.Apply(transform_.m_localPosition);
-
-
+	}
 
 	// 注視点から視点までのベクトルを正規化
 	Vector3 toPosDir = transform_.m_localPosition;
@@ -83,25 +85,37 @@ void SphereCamera::Update()
 
 void SphereCamera::InitZoomOut()
 {
-	nextPosition = CAMERA_LEVEL_UP_OFFSET * nextNeedLevel; // 移動先の設定
-	nextNeedLevel++; // 移動先を設定したら
+	nextPosition_ = CAMERA_LEVEL_UP_OFFSET * nextNeedLevel_; // 移動先の設定
+	nextNeedLevel_++; // 移動先を設定したら
 	lerpCurrentMovement_ = Vector3::Zero; // Lerp時の移動量を初期化
 	beforeFrameMovement_ = Vector3::Zero; // Lerp時の1フレームの移動量を初期化
 }
 
 void SphereCamera::CalcZoomOut()
 {
-	Vector3 hoge = nextPosition - lerpCurrentMovement_; // Lerpにて動かした移動量と動かしたい座標の差
+	Vector3 hoge = nextPosition_ - lerpCurrentMovement_; // Lerpにて動かした移動量と動かしたい座標の差
 	hoge.Normalize(); // 正規化
 
 	if (hoge.y < 0.01f || hoge.z < 0.01f)
 	{
 		// nextPositionの設定がされたとき、処理がされる
-		lerpCurrentMovement_.Lerp(0.08f, INIT_POSITION, nextPosition); // 計算を始めてからの移動量を計算
+		lerpCurrentMovement_.Lerp(0.08f, INIT_POSITION, nextPosition_); // 計算を始めてからの移動量を計算
 		lerpCurrentMovement_ -= beforeFrameMovement_; // 前フレームの移動量を減算
 		beforeFrameMovement_ = lerpCurrentMovement_; // 今のフレームの移動量を保管
 	}
 
 	// 1フレームごとのズームアウト量をローカル座標に加算
 	transform_.m_localPosition += lerpCurrentMovement_;
+}
+
+bool ResultCamera::Start()
+{
+	//近平面・遠平面の設定
+	g_camera3D->SetNear(1.0f);
+	g_camera3D->SetFar(1000000.0f);
+
+	// トランスフォームを更新
+	transform_.UpdateTransform();
+
+	return true;
 }

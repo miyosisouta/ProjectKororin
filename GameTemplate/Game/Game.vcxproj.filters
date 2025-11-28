@@ -34,6 +34,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{8e7c5978-108f-4d15-ada8-7e87159043dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{385892fe-5ce3-438e-9b68-81477667323b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -41,11 +44,7 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Result.cpp" />
     <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -120,15 +119,27 @@
     <ClCompile Include="Core\Fade.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\IScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ResultScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Result.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Actor\Actor.h">
       <Filter>Actor</Filter>
@@ -167,7 +178,6 @@
     <ClInclude Include="Sound\SoundManager.h">
       <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Actor\Sphere\Player.h">
       <Filter>Actor\Sphere</Filter>
     </ClInclude>
@@ -214,6 +224,21 @@
     </ClInclude>
     <ClInclude Include="Core\Fade.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ResultScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
