@@ -51,7 +51,7 @@ protected:
 	/**
 	 * @brief コンパイル時にUIのファイルパスを定数化
 	 */
-	static constexpr const char* UIAseetsFilePath = "Assets/Sprite/UI/";
+	static constexpr const char* UIAseetsFilePath = "Assets/Sprite/Game/";
 
 
 protected:

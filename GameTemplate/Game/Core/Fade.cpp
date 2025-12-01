@@ -12,7 +12,7 @@ Fade* Fade::instance_ = nullptr; //初期化
 Fade::Fade()
 {
 	/** 画面全体をホワイトアウトさせる画像 **/
-	fadeOutSprite_.Init("Assets/Sprite/UI/TimeUp.DDS", 1920, 1080);
+	fadeOutSprite_.Init("Assets/Sprite/Game/TimeUp.DDS", 1920, 1080);
 	fadeOutSprite_.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f)); // 最初は透明
 }
 

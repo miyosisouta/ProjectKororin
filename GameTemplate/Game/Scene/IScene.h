@@ -25,4 +25,6 @@ public:
 
 	/**	次のシーンを要求する。idは次のシーンのIDを返す。trueならば要求成功、falseならば失敗 */
 	virtual bool RequestID(uint32_t& id) = 0;
+
+	void ButtonUI(SpriteRender& spritePath, FontRender& font, Vector3 spritePos, Vector3 fontPos);
 };

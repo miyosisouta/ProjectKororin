@@ -119,6 +119,11 @@ void TitleScene::Update()
 
 		Fade::Get().SetAlpha(fadeAlphaValue);
 		
+		// GameSceneを作る前にフェードの画像のα値を1.0に設定する
+		if (fadeAlphaValue >= 1.0f) 
+		{
+			Fade::Get().Update();
+		}
 
 		// 指定した時間を超えた
 		if (NEXT_SCENE_ANIMATION_TIME <= elapsedTime_) {
@@ -138,14 +143,14 @@ void TitleScene::Update()
 
 void TitleScene::Render(RenderContext& rc) 
 {
-	// ステージオブジェクト
-	for (int i = 0; i < EnTitleGroundKind_Max; i++) 
-	{
-		titleGround_[i].Draw(rc); // タイトルステージの更新
-	}
-
 	if (!isNextScene_)
 	{
+		// ステージオブジェクト
+		for (int i = 0; i < EnTitleGroundKind_Max; i++)
+		{
+			titleGround_[i].Draw(rc); // タイトルステージの更新
+		}
+
 		// ゲーム名
 		titleGameNameSprite_.Draw(rc);
 	}

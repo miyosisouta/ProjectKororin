@@ -7,11 +7,10 @@
 
 namespace
 {
-
-	const Vector2 TIMELINESPRITE_PIVOT = Vector2(0.5f, 0.25f); // タイマーの針の基点の座標
+	const Vector2 TIMELINESPRITE_PIVOT = Vector2(0.5f, 0.25f);		// タイマーの針の基点の座標
 	const Vector3 TIME_BACKRAY_POS = Vector3(750.0f, 400.0f, 0.0f); // 黒の背景の座標
-	const Vector3 TIME_BACKRAY_SCALE = Vector3(3.5f, 3.5f, 1.0f); // 黒の背景の大きさ
-	const float ONE_LAP = 360.0f;
+	const Vector3 TIME_BACKRAY_SCALE = Vector3(3.5f, 3.5f, 1.0f);	// 黒の背景の大きさ
+	const float ONE_LAP = 360.0f;									// 1周
 
 
 	// 変数作成

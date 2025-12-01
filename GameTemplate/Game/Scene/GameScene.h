@@ -100,6 +100,7 @@ private:
 
 	ModelRender blackOutObject_;				// 失敗時の背景用オブジェクト
 	
+	bool isLerp_ = false;				// リープ処理をするかどうか
 	bool isResultTextRender_ = false;	// リザルトテキストを表示するか	
 	int goalMinuteTime_ = 0.0f;		// クリアタイム : 分
 	int goalSecondTime_ = 0.0f;		// クリアタイム : 秒

@@ -9,6 +9,7 @@ class Sphere;
 class SphereCamera : public IGameObject
 {
 protected:
+	ModelRender* model_;
 	Sphere* sphere_ = nullptr; //!< 追従対象の球体
 	Transform transform_; //!< トランスフォーム
 
@@ -48,6 +49,7 @@ public:
 	inline Vector3 GetPosition() { return transform_.m_position; }
 	/* Sphereの情報をCameraにSetする */
 	inline void SetTarget(Sphere* sphere) { sphere_ = sphere; }
+	void SetResultTarget(ModelRender* target) { model_ = target; }
 	/* カメラを動かしてよいかの設定 */
 	inline void SetCameraActive(bool isActived) { isActive_ = isActived; }
 	/* カメラがアクティブ状態かの確認用関数 */

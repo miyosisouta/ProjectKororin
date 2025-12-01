@@ -169,6 +169,8 @@ namespace nsK2Engine {
 		{
 			SetPosition({ x, y, z });
 		}
+
+		inline Vector3 GetPosition() { return m_position; }
 		/// <summary>
 		/// ‰ñ“]‚ğİ’èB
 		/// </summary>
