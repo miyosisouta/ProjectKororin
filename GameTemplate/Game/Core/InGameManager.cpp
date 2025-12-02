@@ -77,6 +77,7 @@ void ::InGameManager::LateUpdate()
 
 
 				sphere->AddCurrentLevelUpNum(); // 引っ付いたオブジェクトの数を増加
+				sphere->AddTotalNum(); // 引っ付いたオブジェクトの合計の数を増加
 				sphere->GrowByRadius(attachableObject->GetGrowAmount()); // オブジェクトの半径を増加・移動速度の制限
 
 

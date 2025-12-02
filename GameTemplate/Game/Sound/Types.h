@@ -12,15 +12,16 @@ enum enSoundKind
 	enSoundKind_SE = 0,
 	enSoundKind_AttachSuccess = enSoundKind_SE, // 吸着成功時
 	/* ここからSEを追加 */
-	enSoundKind_AttachFailure, // 吸着失敗時
-	enSoundKind_SE_Max,	// SEの最大数
+	enSoundKind_AttachFailure,				// 吸着失敗時
+	enSoundKind_Decision,					// 決定時の音
+	enSoundKind_SE_Max,						// SEの最大数
 	enSoundKind_BGM = enSoundKind_SE_Max,
 	enSoundKind_Title = enSoundKind_BGM,
 	/* ここからBGMを追加 */
 	enSoundKind_Game,
-	enSoundKind_ResultSuccess,
-	enSoundKind_ResultFailureSound,
-	enSoundKind_Max, // サウンドの最大数
+	enSoundKind_ResultSuccess,				// 目標のサイズを達成しているとき
+	enSoundKind_ResultFailureSound,			// 目標のサイズを達成していないとき
+	enSoundKind_Max,						// サウンドの最大数
 	enSoundKind_None = enSoundKind_Max,
 };
 
@@ -43,6 +44,7 @@ static SoundInformation soundInformation[enSoundKind_SE_Max] =
 	// SE
 	SoundInformation("Assets/Audio/SE/AttachSuccess.wav"),
 	SoundInformation("Assets/Audio/SE/AttachFailure.wav"),
+	SoundInformation("Assets/Audio/SE/decision.wav")
 
 	////BGM
 	//SoundInformation("Assets/Audio/BGM/TitleSound.wav"),

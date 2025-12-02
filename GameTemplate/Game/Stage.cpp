@@ -188,3 +188,28 @@ bool Stage::Start()
 	return true;
 }
 
+
+void Stage::Update()
+{
+	// 吸着可能オブジェクトに対しての処理
+	{
+		const bool isVisible = isVisibleAll_ || isVisibleAttackObject_;	// どちらかtrueじゃないと表示されない
+		for (auto* obj : attachableObjectList_) {
+			obj->SetVisible(isVisible);
+		}
+	}
+	// 吸着不可オブジェクト
+	{
+		const bool isVisible = isVisibleAll_;
+		for (auto* obj : staticObjectList_) {
+			obj->SetVisible(isVisible);
+		}
+	}
+	// // 動的オブジェクト
+	{
+		const bool isVisible = isVisibleAll_;
+		for (auto* obj : movableObjectList_) {
+			obj->SetVisible(isVisible);
+		}
+	}
+}

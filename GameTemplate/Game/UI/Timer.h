@@ -16,11 +16,6 @@ public:
 	 */
 	void UpdateLineValue();
 
-	/**
-	 * 残り時間によってα値を計算、Fadeクラスにて設定
-	 */
-	void CalculateFadeAlphaByTime();
-
 
 public:
 	void SetTimer(const float timer) { gameTimer_ = timer; }
@@ -35,6 +30,5 @@ private:
 
 	float gameTimer_ = 0.0f;
 	float gameTimeLimit = 0.0f;
-	float whiteOutAlpha = 0.0f;
 };
 
