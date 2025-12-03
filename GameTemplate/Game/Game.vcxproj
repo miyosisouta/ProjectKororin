@@ -263,6 +263,7 @@
     <ClCompile Include="UI\Timer.cpp" />
     <ClCompile Include="UI\Util.cpp" />
     <ClCompile Include="Util\Transform.cpp" />
+    <ClCompile Include="Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -304,6 +305,7 @@
     <ClInclude Include="UI\Util.h" />
     <ClInclude Include="Util\Crc32.h" />
     <ClInclude Include="Util\Transform.h" />
+    <ClInclude Include="Util\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,6 +12,7 @@ using namespace nsK2Engine;
 #include "Types.h"
 
 #include "Util/Crc32.h"
+#include "Util/Util.h"
 #include "Core/ParameterManager.h"
 
 #include "Collision/Collision.h"

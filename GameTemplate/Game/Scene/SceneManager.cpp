@@ -4,9 +4,17 @@
 #include "Scene/GameScene.h"
 #include "Scene/ResultScene.h"
 #include "Sound/SoundManager.h"
+#include "Core/Fade.h"
 
 
 SceneManager* SceneManager::instance_ = nullptr;
+
+
+SceneManager::SceneManager()
+{
+	// 初期化
+	_internal::Result::Initialize();
+}
 
 
 SceneManager::~SceneManager()
@@ -33,10 +41,18 @@ void SceneManager::Update()
 		currentScene_->Update(); // 現在のシーンを更新する
 		uint32_t nextId = -1;
 
-		if (currentScene_->RequestID(nextId)) { // 引数で次に遷移するシーンのIDをもらう
-			delete currentScene_; // 現在のシーンを削除
-			currentScene_ = NextScene(nextId); // 次のシーンを作成
-			currentScene_->Start(); // 初期化処理を行う
+		// 引数で次に遷移するシーンのIDをもらう
+		if (currentScene_->RequestID(nextId, waitTime_)) 
+		{ 
+			elapsedTime_ += g_gameTime->GetFrameDeltaTime();
+			Fade::Get().SetLoading(true);
+			if (elapsedTime_ >= waitTime_) 
+			{
+				delete currentScene_; // 現在のシーンを削除
+				currentScene_ = NextScene(nextId); // 次のシーンを作成
+				currentScene_->Start(); // 初期化処理を行う
+				Fade::Get().SetLoading(false);
+			}
 		}
 	}
 

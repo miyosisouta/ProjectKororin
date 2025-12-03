@@ -29,7 +29,7 @@ void ResultScene::Render(RenderContext& rc)
 	//resultSprite_.Draw(rc);
 }
 
-bool ResultScene::RequestID(uint32_t& id)
+bool ResultScene::RequestID(uint32_t& id, float& waitTime)
 {
 	if (isNextScene_) {
 		id = TitleScene::ID();

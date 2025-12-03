@@ -111,7 +111,7 @@ void SphereCamera::CalcZoomOut()
 
 bool ResultCamera::Start()
 {
-	Vector3 target = model_->GetPosition();
+	Vector3 target = model_ != nullptr ? model_->GetPosition() : Vector3::Zero;
 
 	Vector3 pos = target + Vector3(0.0f, 0.0f, TARGET_DISTANCE);
 
