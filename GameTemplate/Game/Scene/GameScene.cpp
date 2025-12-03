@@ -20,7 +20,7 @@ namespace
 {
 	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
 	constexpr const float FLIGHT_START_DELAY = 2.5f;			// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 20.0f;				// ゲーム時間
+	constexpr const float GAME_TIMER_LIMIT = 300.0f;				// ゲーム時間
 	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
 	static const Vector3 SPRITE_BUTTON_POS = Vector3(-300.0f, -300.0f, 0.0f); // ボタンの画像の座標
 	static const Vector3 FONT_BUTTON_POS = Vector3(-100.0f, -300.0f, 0.0f); // ボタンテキストの画像の座標

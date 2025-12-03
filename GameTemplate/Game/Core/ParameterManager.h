@@ -27,6 +27,15 @@ struct MasterSphereStatusParameter : public IMasterParameter
     int levelUpNum;		// レベルアップに必要な数(吸着したオブジェクトの数)
 };
 
+/** インゲーム中固有のパラメーター */
+struct MasterInGameParameter : public IMasterParameter
+{
+    appParameter(MasterInGameParameter);
+    //
+    float BouncePower[5];
+    float limitTime;
+};
+
 
 /** defineの使用終了 */
 #undef appParameter

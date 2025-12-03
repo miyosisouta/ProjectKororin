@@ -1,0 +1,11 @@
+[
+    {
+        "Comment": "インゲーム中に存在するパラメーター",
+        "BouncePower1": 300,
+        "BouncePower2": 100,
+        "BouncePower3": 400,
+        "BouncePower4": 900,
+        "BouncePowerMax": 1500,
+        "LimitTime": 300
+    }
+]
