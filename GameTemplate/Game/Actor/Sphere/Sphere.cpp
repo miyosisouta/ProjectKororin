@@ -149,6 +149,13 @@ void Sphere::Move()
 	moveSpeed_.y = moveDirection_.y * moveSpeedMultiply_;
 	moveSpeed_.z = moveDirection_.z * moveSpeedMultiply_;
 
+	if (m_addForce.Length() > 0.1f) {
+		moveSpeed_ = m_addForce;
+		m_addForce *= 0.8f;
+	} else {
+		m_addForce = Vector3::Zero;
+	}
+
 	// ˆÚ“®æ
 	transform_.m_localPosition += (moveSpeed_ * g_gameTime->GetFrameDeltaTime());
 	//transform_.m_localPosition.y = radius_;

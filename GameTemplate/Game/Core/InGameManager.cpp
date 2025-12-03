@@ -28,12 +28,25 @@ InGameManager* InGameManager::instance_ = nullptr;
 InGameManager::InGameManager()
 {
 	notifyList_.clear();
+
+	// インゲーム固有のパラメーターを読み込みます
+	ParameterManager::Get().LoadParameter<MasterInGameParameter>("Assets/Parameter/InGameParameter.json", [](const nlohmann::json& json, MasterInGameParameter& p)
+		{
+			p.BouncePower[0] = json["BouncePower1"].get<float>();
+			p.BouncePower[1] = json["BouncePower2"].get<float>();
+			p.BouncePower[2] = json["BouncePower3"].get<float>();
+			p.BouncePower[3] = json["BouncePower4"].get<float>();
+			p.BouncePower[4] = json["BouncePowerMax"].get<float>();
+			p.limitTime = json["LimitTime"].get<float>();
+		});
 }
 
 
 InGameManager::~InGameManager()
 {
 	ClearNotify();
+	// パラメーター破棄
+	ParameterManager::Get().UnloadParameter<MasterInGameParameter>();
 }
 
 
@@ -60,6 +73,23 @@ void ::InGameManager::LateUpdate()
 				// Sphereのレベルが吸着可能レベルに達しているか判定
 				if (!CanAttach(*attachableObject, *sphere))
 				{
+					// レベルに達していないので飛ばす
+					Vector3 vec = sphere->GetTransform()->m_position - attachableObject->GetTransform()->m_position;
+					vec.y = 0.0f;
+					vec.Normalize();
+
+					// TODO:あとではじけ飛ぶ数値を調整可能にする
+					float bouncePower = 0.0f;
+					{
+						const auto* param = ParameterManager::Get().GetParameter<MasterInGameParameter>();
+						int objectSize = attachableObject->GetObjectSize();
+						if (objectSize >= ARRAYSIZE(param->BouncePower)) {
+							objectSize = ARRAYSIZE(param->BouncePower) - 1;
+						}
+						bouncePower = param->BouncePower[objectSize];
+					}
+					sphere->AddForce(vec * bouncePower);
+
 					continue;
 				}
 

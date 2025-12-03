@@ -7,7 +7,7 @@
 namespace 
 {
 	const float COLLISION_POSITIONADJUSTMENT = 35.0f;	// コリジョンの起点の座標を調整する
-	const float COLLISION_CORRECTION = 40.0f;			// コリジョンの大きさを調整する
+	const float COLLISION_CORRECTION = 20.0f;			// コリジョンの大きさを調整する
 }
 
 

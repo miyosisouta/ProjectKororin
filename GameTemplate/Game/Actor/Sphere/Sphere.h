@@ -139,6 +139,12 @@ public:
 		return 0;
 	}
 
+	/**
+	 * @brief 外部から力を与える
+	 * @param force 
+	 */
+	inline void AddForce(Vector3 force) { m_addForce = force; }
+
 public:
 	/**
 	 * @brief コライダーを取得します。
@@ -212,5 +218,7 @@ private: // Sphere関係の変数
 	std::unique_ptr<SphereStatus> status_;	//!< ステータス
 	std::unique_ptr<SphereCollision> collider_;	//!< 抽象化された衝突オブジェクトを所有・管理するための器
 
+
+	Vector3 m_addForce;							//!< 外部からもらう力
 };
 
