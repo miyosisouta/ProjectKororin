@@ -79,7 +79,6 @@ bool TitleScene::Start()
 	// 初期設定
 	inputSystem_->SetTarget(sphere_);
 	sphere_->SetPosition(Vector3(0.0f,1.0f,-50.0f));
-	//Fade::Get().SetColor(1.0f);
 
 	skyCube_->SetType(enSkyCubeType_DayToon);
 	skyCube_->SetScale(150.0f);
@@ -110,26 +109,15 @@ void TitleScene::Update()
 
 			// ころりん動かすぞ！
 			inputSystem_->SetMoveDirection(Vector3::Up);
-		}
-	} else {
-		elapsedTime_ += deltaTime;
 
-		// minをつかって最大値を1.0にする
-		const float fadeAlphaValue = min(elapsedTime_ / NEXT_SCENE_ANIMATION_TIME, 1.0f);
-
-		Fade::Get().SetAlpha(fadeAlphaValue);
-		
-		// GameSceneを作る前にフェードの画像のα値を1.0に設定する
-		if (fadeAlphaValue >= 1.0f) 
-		{
-			Fade::Get().Update();
+			// フェード開始
+			Fade::Get().PlayFade(FadeMode::FadeOut, NEXT_SCENE_ANIMATION_TIME, Vector3::One);
 		}
-
-		// 指定した時間を超えた
-		if (NEXT_SCENE_ANIMATION_TIME <= elapsedTime_) {
-			// 次のシーンへ遷移OKにする
-			isNextScene_ = true;
-		}
+	}
+	else 
+	{
+		// 次のシーンへ遷移OKにする
+		isNextScene_ = true;
 	}
 
 	// タイトルステージの更新
@@ -156,10 +144,11 @@ void TitleScene::Render(RenderContext& rc)
 	}
 }
 
-bool TitleScene::RequestID(uint32_t& nextID)
+bool TitleScene::RequestID(uint32_t& nextID, float& waitTime)
 {
 	if (isNextScene_) {
 		nextID = GameScene::ID();
+		waitTime = 5.0f;
 		return true;
 	}
 	return false;

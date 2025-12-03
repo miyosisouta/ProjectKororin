@@ -137,6 +137,9 @@
     <ClCompile Include="UI\Util.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Util\Util.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -245,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="UI\Util.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Util.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

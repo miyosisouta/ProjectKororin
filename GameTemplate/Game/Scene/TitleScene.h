@@ -43,7 +43,7 @@ public:
 	/** 描画処理 */
 	virtual void Render(RenderContext& rc)override;
 
-	virtual bool RequestID(uint32_t& nextID) override;
+	virtual bool RequestID(uint32_t& nextID, float& waitTime) override;
 
 
 private:

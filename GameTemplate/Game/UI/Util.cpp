@@ -5,7 +5,7 @@
 void UIUtil::SetAButtonUI(SpriteRender* spritePath, FontRender* font, Vector3 spritePos, Vector3 fontPos)
 {
 	// Aƒ{ƒ^ƒ“‚Ì‰æ‘œ
-	spritePath->Init("Aseets/Sprite/UI/Button_A.DDS", 256, 256);
+	spritePath->Init("Assets/sprite/UI/Button_A.DDS", 256, 256);
 	spritePath->SetPSM(
 		spritePos,
 		Vector3::One,

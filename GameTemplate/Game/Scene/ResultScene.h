@@ -29,7 +29,7 @@ public:
 	virtual void Render(RenderContext& rc)override;
 
 	/** 次のシーンを要求する。idは次のシーンのIDを返す。trueならば要求成功、falseならば失敗 */
-	virtual bool RequestID(uint32_t& id) override;
+	virtual bool RequestID(uint32_t& id, float& waitTime) override;
 
 
 private:

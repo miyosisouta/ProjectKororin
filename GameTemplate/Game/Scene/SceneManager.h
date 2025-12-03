@@ -12,13 +12,14 @@ class SceneManager
 {
 private:
 	IScene* currentScene_ = nullptr;
-
+	float elapsedTime_ = 0.0f;
+	float waitTime_ = 0.0f;
 
 private:
 	/**
 	 * @brief コンストラクタ。
 	 */
-	SceneManager() {}
+	SceneManager();
 	/**
 	 * @brief デストラクタ。
 	 */
