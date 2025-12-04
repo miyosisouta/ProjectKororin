@@ -7,6 +7,9 @@
 
 class Sphere; // 塊
 class StageObjectBase; // オブジェクト管理
+class AABBBox;
+
+
 
 
 struct CollisionInfo
@@ -36,6 +39,33 @@ struct CollisionPair
 
 
 
+class SplitSpace : public Noncopyable
+{
+	friend class CollisionHitManager;
+
+private:
+	static const int X_NUM = 4;
+	static const int Z_NUM = 4;
+
+private:
+	Vector3 worldHalfSize_ = Vector3(500.0f, 0.0f, 500.0f);
+
+	std::vector<const CollisionInfo*> colisionSpacialList[X_NUM][Z_NUM];
+
+
+
+public:
+	SplitSpace(const Vector3 worldSize)
+		: worldHalfSize_(worldSize)
+	{
+	}
+
+	void Update();
+};
+
+
+
+
 /**
  * 当たり判定処理を一括で行うクラス
  * NOTE:シングルトンでインスタンスを一つにしてアクセスポイントを提供する
@@ -43,11 +73,17 @@ struct CollisionPair
 class CollisionHitManager
 {
 private:
+	friend class SplitSpace;
+
+
+private:
 	/** 当たり判定オブジェクトのリスト */
 	std::vector<CollisionInfo> m_collisionInfoList;
 	/** 当たり判定のペア */
 	std::vector<CollisionPair> m_collisionPairList;
 	
+	std::unique_ptr<SplitSpace> splitSpace_;
+
 
 private:
 	CollisionHitManager();
@@ -69,6 +105,7 @@ private:
 	/* Sphereと吸着可能なオブジェクトが接触したときの処理 */
 	bool UpdateHitAttatchableObject(CollisionPair& pair);
 
+
 private:
 	/**
 	 * 指定したクラスを取得する
@@ -88,7 +125,23 @@ private:
 		return nullptr;
 	}
 
+	/* ここから空間分割関係 */
 
+private: 
+	///* 検索範囲にあるオブジェクトのデータが入ったListを削除 */
+	//void Clear();
+
+	///* ステージ上の吸着可能なオブジェクトの登録 */
+	//void Register();
+	//
+	///* 塊の近くにあるオブジェクトを探して登録 */
+	//void RigisterNearObjects();
+
+private:
+
+
+
+	/************************* ここからシングルトン **************************/
 private:
 	static CollisionHitManager* instance_;
 

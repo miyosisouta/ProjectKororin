@@ -85,14 +85,16 @@ struct CollisionType
 class ICollision
 {
 protected:
-   
     CollisionType::Enum type_ = CollisionType::Box;
 	Vector3 position_ = Vector3::Zero;
+    AABBBox aabb_;
 
 
 public:
 	ICollision() {}
 	virtual ~ICollision() {}
+
+    virtual void Update() = 0;
 
     /* è’ìÀîªíË */
 	virtual bool IsHit(ICollision* other) = 0;
@@ -100,6 +102,8 @@ public:
 	CollisionType::Enum GetCollisionType() { return type_; }
 	void SetPosition(const Vector3& pos) { position_ = pos; }
 	const Vector3& GetPosition() const { return position_; }
+
+    const AABBBox& GetAABB() const { return aabb_; }
 };
 
 
@@ -115,7 +119,8 @@ public:
 
 
 	void Init(const Vector3 pos, const float radius);
-	bool IsHit(ICollision* other) override;
+    void Update() override;
+    bool IsHit(ICollision* other) override;
 
 
 	float GetRadius() const { return radius_; }
@@ -133,6 +138,7 @@ public:
     ~BoxCollision() {};
 
     void Init(const Vector3 pos, const Vector3 size);
+    void Update() override;
     bool IsHit(ICollision* other)override;
 
     Vector3 GetSize() const { return size_; }

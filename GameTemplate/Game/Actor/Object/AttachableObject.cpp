@@ -26,7 +26,7 @@ bool AttachableObject::Start()
 	// BoxCollisionのユニークポインタの作成と初期化
 	auto boxCollider = std::make_unique<BoxCollision>();
 	boxCollider->Init(GetPosition(), GetSize());
-
+	boxCollider->Update();
 	// ICollisionに所有権を移動
 	collider_ = std::move(boxCollider);
 	// 当たり判定を登録

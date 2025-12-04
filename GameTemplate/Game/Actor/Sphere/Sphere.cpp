@@ -8,7 +8,7 @@
 
 namespace 
 {
-	const float ALWAYS_SPEED = 500.0f;	// 固定移動速度
+	const float ALWAYS_SPEED = 5000.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
 	const float GOAL_RADIUS = 300.0f; // 目標サイズ
 }
@@ -118,6 +118,7 @@ void Sphere::Update()
 	sphereRender_.Update();
 
 	collider_->SetPosition(transform_.m_position);
+	collider_->Update();
 }
 
 void Sphere::Render(RenderContext& rc)
@@ -158,6 +159,23 @@ void Sphere::Move()
 
 	// 移動先
 	transform_.m_localPosition += (moveSpeed_ * g_gameTime->GetFrameDeltaTime());
+	
+	// 引っ付いたオブジェクトによって地面との距離が変わるようにしてみる（疑似）
+	// 本当はレイキャストとか使いたい
+	{
+		if (transform_.HasChild()) {
+			float posY = transform_.m_position.y;
+			const auto& children = transform_.GetChildren();
+			for (const auto* child : children) {
+				if (child->m_position.y < posY)
+				{
+					posY = child->m_position.y;
+				}
+			}
+			const float disntace = fabs(transform_.m_position.y - posY);
+			transform_.m_localPosition.y = disntace;
+		}
+	}
 	//transform_.m_localPosition.y = radius_;
 
 	// TransformをUpdate　→　移動先を更新

@@ -98,9 +98,6 @@ void TitleScene::Update()
 		// Aボタンが押された場合
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
-			// 塊を動かす
-			inputSystem_->SetMoveDirection(Vector3::Right);
-			
 			// 音を鳴らす
 			SoundManager::Get().PlaySE(enSoundKind_Decision);
 
@@ -108,7 +105,7 @@ void TitleScene::Update()
 			isPlayAnimation = true;
 
 			// ころりん動かすぞ！
-			inputSystem_->SetMoveDirection(Vector3::Up);
+			inputSystem_->SetMoveDirection(Vector3::Front);
 
 			// フェード開始
 			Fade::Get().PlayFade(FadeMode::FadeOut, NEXT_SCENE_ANIMATION_TIME, Vector3::One);
