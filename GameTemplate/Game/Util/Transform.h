@@ -62,4 +62,8 @@ public:
 	void ResetLocalRotation();
 
 	const Matrix& GetWorldMatrix() const { return m_worldMatrix_; }
+
+
+	const std::vector<Transform*>& GetChildren() { return m_children_; }
+	bool HasChild() { return m_children_.size() > 0; }
 };

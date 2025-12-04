@@ -88,7 +88,8 @@ void ::InGameManager::LateUpdate()
 						}
 						bouncePower = param->BouncePower[objectSize];
 					}
-					sphere->AddForce(vec * bouncePower);
+					// @todo for test
+					//sphere->AddForce(vec * bouncePower);
 
 					continue;
 				}

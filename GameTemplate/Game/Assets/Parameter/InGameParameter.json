@@ -4,8 +4,8 @@
         "BouncePower1": 300,
         "BouncePower2": 100,
         "BouncePower3": 400,
-        "BouncePower4": 900,
-        "BouncePowerMax": 1500,
+        "BouncePower4": 800,
+        "BouncePowerMax": 1200,
         "LimitTime": 300
     }
 ]

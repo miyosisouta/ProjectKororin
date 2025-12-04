@@ -56,7 +56,7 @@ public:
 	{
 		transform_.m_localPosition = position; // 座標
 		transform_.m_localScale = scale; // 大きさ
-		transform_.m_rotation = rotation; // 回転
+		transform_.m_localRotation = rotation; // 回転
 
 		attachableValue_ = attachValue_; // 吸着可能かどうか
 		objectSize_ = size; // オブジェクトの吸着可能サイズ

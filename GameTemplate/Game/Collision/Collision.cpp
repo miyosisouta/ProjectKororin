@@ -9,6 +9,12 @@ void SphereCollision::Init(const Vector3 pos, const float radius)
 }
 
 
+void SphereCollision::Update()
+{
+	aabb_ = AABBBox(position_, Vector3(radius_));
+}
+
+
 bool SphereCollision::IsHit(ICollision* other)
 {
 	if (other->GetCollisionType() == CollisionType::Sphere) // ‘Šè‚ªSphere‚¾‚Á‚½ê‡
@@ -45,6 +51,13 @@ void BoxCollision::Init(const Vector3 pos, const Vector3 size)
 	position_ = pos;
 	size_ = size;
 }
+
+
+void BoxCollision::Update()
+{
+	aabb_ = AABBBox(GetPosition(), size_);
+}
+
 
 bool BoxCollision::IsHit(ICollision* other)
 {
