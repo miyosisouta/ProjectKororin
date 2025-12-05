@@ -12,7 +12,7 @@ class AABBBox;
 
 
 
-struct CollisionInfo
+struct CollisionInfo : public Noncopyable
 {
 	int type;	// オブジェクトの種類(プレイヤーと壁がヒットしたみたいな処理をするために必要。自分がだれかの判断)
 	IGameObject* object;	// 当たり判定を持つオブジェクトのポインタ
@@ -27,7 +27,7 @@ struct CollisionInfo
 
 
 
-struct CollisionPair
+struct CollisionPair : public Noncopyable
 {
 	CollisionInfo* left;	// 当たり判定A
 	CollisionInfo* right;	// 当たり判定B
@@ -44,23 +44,63 @@ class SplitSpace : public Noncopyable
 	friend class CollisionHitManager;
 
 private:
-	static const int X_NUM = 4;
-	static const int Z_NUM = 4;
+	// AABBboxを作る個数
+	static const int X_NUM_ = 4;
+	static const int Z_NUM_ = 4;
+
+	/* 空間分割時に使う変数 */
+	float worldSizeX_ = 0.0f; //!< ステージの大きさx座標
+	float worldSizeZ_ = 0.0f; //!< ステージの大きさz座標
+
+	float worldSpaceSizeX_ = 0.0f; //!< 1個の空間のサイズx座標
+	float worldSpaceSizeZ_ = 0.0f; //!< 1個の空間のサイズz座標
+
+	float worldSpaceHalfSizeX_ = 0.0f; //!< 1個の空間のサイズの半分のサイズx座標
+	float worldSpaceHalfSizeZ_ = 0.0f; //!< 1個の空間のサイズの半分のサイズz座標
+
+	float baseX_ = 0.0f; //!< 基準開始地点x座標
+	float baseZ_ = 0.0f; //!< 基準開始地点z座標
+
 
 private:
-	Vector3 worldHalfSize_ = Vector3(500.0f, 0.0f, 500.0f);
+	/* ステージのサイズの半分を設定 */
+	Vector3 worldHalfSize_ = Vector3(500.0f, 0.0f, 500.0f); 
 
-	std::vector<const CollisionInfo*> colisionSpacialList[X_NUM][Z_NUM];
+	/* 空間分割時の情報 */
+	std::vector<CollisionInfo*> colisionSpacialList[X_NUM_][Z_NUM_];
 
 
 
 public:
+	/* 空間分割時の初期設定 */
 	SplitSpace(const Vector3 worldSize)
-		: worldHalfSize_(worldSize)
+		: worldHalfSize_(worldSize)		//!<ステージのサイズの設定
 	{
+		/* ステージ全体のサイズ */
+		worldSizeX_ = worldHalfSize_.x * 2.0f;
+		worldSizeZ_ = worldHalfSize_.z * 2.0f;
+
+		/* 1個の空間のサイズ */
+		worldSpaceSizeX_ = worldSizeX_ / static_cast<float>(X_NUM_);
+		worldSpaceSizeZ_ = worldSizeZ_ / static_cast<float>(Z_NUM_);
+
+		/* 1個の空間の半分のサイズ : AABBboxの真ん中の座標を求める */
+		worldSpaceHalfSizeX_ = worldSpaceSizeX_ / 2.0f;
+		worldSpaceHalfSizeZ_ = worldSpaceSizeZ_ / 2.0f;
+
+		/**
+		 * グリッドの左上（または左下）の基準開始位置
+		 * worldSpaceHalfSizeX : 作ったAABBboxの中心地に座標を調整
+		 * ※ AABBの中心座標として扱いやすいように調整
+		 */
+		baseX_ = -worldHalfSize_.x + worldSpaceHalfSizeX_;
+		baseZ_ = -worldHalfSize_.z + worldSpaceHalfSizeZ_;
 	}
 
 	void Update();
+
+	/* 複数ある空間を検索し、その空間にAABBboxを作成する */
+	void ForEach(const AABBBox& aabb, const std::function<void(int, int)>& hitFunc);
 };
 
 
@@ -77,13 +117,18 @@ private:
 
 
 private:
-	/** 当たり判定オブジェクトのリスト */
-	std::vector<CollisionInfo> m_collisionInfoList;
+	/** 当たり判定を持つ全オブジェクトのリスト */
+	std::vector<CollisionInfo*> m_collisionInfoList;
 	/** 当たり判定のペア */
-	std::vector<CollisionPair> m_collisionPairList;
-	
+	std::vector<std::unique_ptr<CollisionPair>> m_collisionPairList;
+	/** 空間分裂のユニークポインタ */
 	std::unique_ptr<SplitSpace> splitSpace_;
 
+
+private:
+	// 空間配列用変数 : Sphereがどの空間にいるかを保存する変数
+	int sphereGridX_ = 0;
+	int sphereGridZ_ = 0;
 
 private:
 	CollisionHitManager();

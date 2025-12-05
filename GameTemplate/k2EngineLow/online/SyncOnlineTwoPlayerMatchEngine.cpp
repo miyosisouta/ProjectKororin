@@ -7,7 +7,7 @@ namespace nsK2EngineLow {
 	namespace
 	{
 		const ExitGames::Common::JString PLAYER_NAME = L"user";
-		const float MAX_FPS = 30.0f;	// オンライン対戦時の最大FPS
+		const float MAX_FPS = 120.0f;	// オンライン対戦時の最大FPS
 	}
 
 	SyncOnlineTwoPlayerMatchEngine::~SyncOnlineTwoPlayerMatchEngine()
@@ -66,7 +66,7 @@ namespace nsK2EngineLow {
 		// 固定フレームの最大FPS30に設定する。
 		m_frameRateInfoBackup = g_engine->GetFrameRateInfo();
 		//フレームレートモードを設定する。
-		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, MAX_FPS);
+		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, MAX_FPS);
 	}
 
 	//他プレイヤーを初期化するための情報を送る関数

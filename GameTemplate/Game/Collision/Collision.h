@@ -63,8 +63,8 @@ public:
     {
         if (min_.x > other.max_.x) return false;
         if (max_.x < other.min_.x) return false;
-        if (min_.y > other.max_.y) return false;
-        if (max_.y < other.min_.y) return false;
+        //if (min_.y > other.max_.y) return false;
+        //if (max_.y < other.min_.y) return false;
         if (min_.z > other.max_.z) return false;
         if (max_.z < other.min_.z) return false;
         return true;
