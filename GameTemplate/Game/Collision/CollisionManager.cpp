@@ -6,51 +6,48 @@
 #include "Core/LateStageObjectUpdateManager.h"
 #include "Core/InGameManager.h"
 
-namespace 
-{
-	constexpr const float PANEL_WIDTH = 200.0f; // パネルの幅
-	constexpr const float PANEL_HEIGHT = 200.0f; // パネルの高さ
-}
-
 
 void SplitSpace::Update()
 {
-	const auto& collisionInfoList = CollisionHitManager::Get().m_collisionInfoList;
-	
-	// 全体のサイズ
-	const float worldSizeX = worldHalfSize_.x * 2.0f;	
-	const float worldSizeZ = worldHalfSize_.z * 2.0f;
-	// 1個の空間のサイズ
-	const float worldSpaceSizeX = worldSizeX / static_cast<float>(X_NUM);
-	const float worldSpaceSizeZ = worldSizeZ / static_cast<float>(Z_NUM);
-	// 1個の空間の半分のサイズ
-	const float worldSpaceHalfSizeX = worldSpaceSizeX / 2.0f;
-	const float worldSpaceHalfSizeZ = worldSpaceSizeZ / 2.0f;
-	
+	// collisionHitManagerのオブジェクトの当たり判定が登録されているリストを入手
+	auto& collisionInfoList = CollisionHitManager::Get().m_collisionInfoList;
 
-	// グリッドの左上（または左下）の基準開始位置
-	// ※ AABBの中心座標として扱いやすいように調整
-	const float baseX = -worldHalfSize_.x + worldSpaceHalfSizeX;
-	const float baseZ = -worldHalfSize_.z + worldSpaceHalfSizeZ;
-	for (auto& collisionInfo : collisionInfoList) {
-		// オブジェクトごとに判定
-		const auto& collisionAABB = collisionInfo.collision->GetAABB();
-		for (int x = 0; x < X_NUM; ++x) {
-			for (int z = 0; z < Z_NUM; ++z) {
+	// オブジェクトと当たり判定を見ていく
+	for (auto* collisionInfo : collisionInfoList) {
+		// オブジェクトごとの当たり判定を入手
+		const auto& collisionAABB = collisionInfo->collision->GetAABB();
+		ForEach(collisionAABB, [&](int x, int z)
+			{
+				colisionSpacialList[x][z].push_back(collisionInfo);
+			});
+	}
 
-				Vector3 centerPosition;
-				centerPosition.x = baseX + (x * worldSpaceSizeX);
-				centerPosition.y = 0.0f;
-				centerPosition.z = baseZ + (z * worldSpaceSizeZ);
-				// 空間のAABB生成
-				AABBBox aabb = AABBBox(centerPosition, Vector3(worldSpaceHalfSizeX, 1.0f, worldSpaceHalfSizeZ));
-				if (aabb.IsHit(collisionAABB)) {
-					colisionSpacialList[x][z].push_back(&collisionInfo);
-				}
+}
+
+
+void SplitSpace::ForEach(const AABBBox& aabb, const std::function<void(int, int)>& hitFunc)
+{
+	// 分割した空間の左下から見ていく
+	for (int x = 0; x < X_NUM_; ++x)
+	{
+		for (int z = 0; z < Z_NUM_; ++z)
+		{
+			// 分割したAABBBoxの中心座標の設定
+			Vector3 centerPosition;
+			centerPosition.x = baseX_ + (x * worldSpaceSizeX_);
+			centerPosition.y = 0.0f;
+			centerPosition.z = baseZ_ + (z * worldSpaceSizeZ_);
+
+			// 空間のAABB生成
+			AABBBox spaceAABB = AABBBox(centerPosition, Vector3(worldSpaceHalfSizeX_, 1.0f, worldSpaceHalfSizeZ_));
+			if (spaceAABB.IsHit(aabb)) {
+				hitFunc(x, z);
 			}
 		}
 	}
+
 }
+
 
 
 /********************************************************/
@@ -78,47 +75,100 @@ CollisionHitManager::~CollisionHitManager()
 
 void CollisionHitManager::Update()
 {
-	// 今回のゲームだと一回だけ更新して空間分割を処理したらいいはず
-	// なのでnullptrチェックでnullptrの時生成＋更新で空間に所属するオブジェクトを決める
-	if (splitSpace_ == nullptr) {
-		splitSpace_ = std::make_unique<SplitSpace>(Vector3(3000.0f, 1.0f, 6000.0f));
+	// 1回だけ更新するためnullptrチェックを行う
+	if (splitSpace_ == nullptr) 
+	{
+		// 空間分割をするための範囲の生成と設定
+		splitSpace_ = std::make_unique<SplitSpace>(Vector3(3000.0f, 100.0f, 6000.0f));
+		// 1度だけ更新
 		splitSpace_->Update();
 	}
 
-	// ヒットするオブジェクトのペアを作る
-	const uint32_t colSize = static_cast<uint32_t>(m_collisionInfoList.size());
-	for (uint32_t i = 0; i < colSize - 1; ++i) 
+	// 1.sphereがいる空間の位置をゲット
+	CollisionInfo* sphereInfo = nullptr;
+	for (auto* info : m_collisionInfoList) // 当たり判定のリストからSphereを探す
 	{
-		for (uint32_t j = i + 1; j < colSize; ++j) 
+		if (info->type == GameObjectType::Sphere) 
 		{
-			CollisionInfo* infoA = &m_collisionInfoList[i];
-			CollisionInfo* infoB = &m_collisionInfoList[j];
+			// objectがIGameObject型なので型をSpehreに変更
+			sphereInfo = info;
+			// 見つかったらループを抜ける
+			break;
+		}
+	}
 
-			if (infoA->collision->IsHit(infoB->collision) || infoB->collision->IsHit(infoA->collision))
-			{
-				// CollisionPairの中に同じ組み合わせがないかチェック
-				bool exists = false;
-				for (const auto& pair : m_collisionPairList) {
-					if ((pair.left == infoA && pair.right == infoB) || (pair.left == infoB && pair.right == infoA)) {
-						exists = true;
-						break;
+	// 2.sphereがいる空間を見つける
+	std::vector<int> xList;
+	std::vector<int> zList;
+	auto* sphere = static_cast<Sphere*>(sphereInfo->object);
+	splitSpace_->ForEach(sphereInfo->collision->GetAABB(), [&](int x, int z)
+		{
+			auto xIt = std::find(xList.begin(), xList.end(), x);
+			if (xIt == xList.end()) {
+				xList.push_back(x);
+			}
+			auto zIt = std::find(zList.begin(), zList.end(), z);
+			if (zIt == zList.end()) {
+				zList.push_back(z);
+			}
+		});
+	// 3.sphereと空間のオブジェクトが当たっているかどうか判定
+	// 4.ヒットするオブジェクトのペアを作る
+	for (const int x : xList) {
+		for (const int z : zList) {
+			const auto& splitSpaceList = splitSpace_->colisionSpacialList[x][z];
+			for (auto* collisionInfo : splitSpaceList) {
+				if (sphereInfo->collision->IsHit(collisionInfo->collision)) {
+					// CollisionPairの中に同じ組み合わせがないかチェック
+					bool exists = false;
+					for (const auto& pair : m_collisionPairList) {
+						if ((pair->left == sphereInfo && pair->right == collisionInfo) || (pair->left == collisionInfo && pair->right == sphereInfo)) {
+							exists = true;
+							break;
+						}
 					}
-				}
-				// すでに登録済みではないなら追加する
-				if (!exists) {
-					m_collisionPairList.push_back(CollisionPair(infoA, infoB));
-					
-
+					if (!exists) {
+						m_collisionPairList.push_back(std::make_unique<CollisionPair>(sphereInfo, collisionInfo));
+					}
 				}
 			}
 		}
 	}
 
+	//const uint32_t colSize = static_cast<uint32_t>(m_collisionInfoList.size()); // 当たり判定を持つ全オブジェクトのリストを入手
+
+	//for (uint32_t i = 0; i < colSize - 1; ++i)  // リストの中にあるデータの最後から2番目までをはかる : 最後の一つはペアを作れないため
+	//{
+	//	for (uint32_t j = i + 1; j < colSize; ++j) 
+	//	{
+	//		// オブジェクト情報を格納
+	//		CollisionInfo* infoA = &m_collisionInfoList[i];
+	//		CollisionInfo* infoB = &m_collisionInfoList[j];
+
+	//		// 当たった場合
+	//		if (infoA->collision->IsHit(infoB->collision) || infoB->collision->IsHit(infoA->collision))
+	//		{
+	//			// CollisionPairの中に同じ組み合わせがないかチェック
+	//			bool exists = false;
+	//			for (const auto& pair : m_collisionPairList) {
+	//				if ((pair.left == infoA && pair.right == infoB) || (pair.left == infoB && pair.right == infoA)) {
+	//					exists = true;
+	//					break;
+	//				}
+	//			}
+	//			// すでに登録済みではないなら追加する
+	//			if (!exists) {
+	//				m_collisionPairList.push_back(CollisionPair(infoA, infoB));
+	//			}
+	//		}
+	//	}
+	//}
+
 	// ヒットしたペアで衝突した時の処理をする
 	for (auto& pair : m_collisionPairList)
 	{
 		// 吸着可能な場合処理を続行
-		if (UpdateHitAttatchableObject(pair)) 
+		if (UpdateHitAttatchableObject(*pair.get())) 
 		{
 			continue;
 		}
@@ -132,20 +182,35 @@ void CollisionHitManager::Update()
 //void CollisionHitManager::RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision)
 void CollisionHitManager::RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, ICollision* collision)
 {
-	CollisionInfo info(type, object, collision);
-	m_collisionInfoList.push_back(std::move(info));
+	CollisionInfo* info = new CollisionInfo(type, object, collision);
+	m_collisionInfoList.push_back(info);
 }
 
 
 void CollisionHitManager::UnregisterCollisionObject(IGameObject* object)
 {
+	std::vector<CollisionInfo*> deleteList;
 	for (auto it = m_collisionInfoList.begin(); it != m_collisionInfoList.end(); ++it)
 	{
-		if (it->object == object)
+		if ((*it)->object == object)
 		{
+			// 空間分割からも消す
+			splitSpace_->ForEach((*it)->collision->GetAABB(), [&](int x, int z)
+				{
+					auto& list = splitSpace_->colisionSpacialList[x][z];
+					auto* collisionInfo = *it;
+					auto itr = std::find(list.begin(), list.end(), collisionInfo);
+					if (itr != list.end()) {
+						list.erase(itr);
+					}
+				});
+			deleteList.push_back(*it);
 			m_collisionInfoList.erase(it);
 			break;
 		}
+	}
+	for (auto* target : deleteList) {
+		delete target;
 	}
 }
 
