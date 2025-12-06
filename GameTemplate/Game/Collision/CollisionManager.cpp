@@ -79,7 +79,7 @@ void CollisionHitManager::Update()
 	if (splitSpace_ == nullptr) 
 	{
 		// ‹óŠÔ•ªŠ„‚ğ‚·‚é‚½‚ß‚Ì”ÍˆÍ‚Ì¶¬‚Æİ’è
-		splitSpace_ = std::make_unique<SplitSpace>(Vector3(3000.0f, 100.0f, 6000.0f));
+		splitSpace_ = std::make_unique<SplitSpace>(Vector3(3000.0f, 500.0f, 6000.0f));
 		// 1“x‚¾‚¯XV
 		splitSpace_->Update();
 	}

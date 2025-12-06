@@ -74,10 +74,12 @@ namespace _internal
 		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			// 塊の大きさのテキスト
 		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					// 塊の目標サイズ達成時の時間のテキスト
 		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		// 吸着したオブジェクトの個数のテキスト
-		std::unique_ptr<FontRender> failureText_ = nullptr;					// 失敗時のテキスト
+		std::unique_ptr<FontRender> failureTexts_[5];							// 失敗時のテキスト
 		std::unique_ptr<FontRender> buttonText_ = nullptr;						// ボタンをおしてね！のテキスト
 
-		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					// Aボタンのイラスト
+		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					// Aボタンの画像
+		std::unique_ptr<SpriteRender> instructionButtonSprite_ = nullptr;		// 指示ボタンの画像
+		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				// テキストウィンドウの画像
 
 		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;				// 失敗時の背景用オブジェクト
 
@@ -86,8 +88,9 @@ namespace _internal
 		bool isMoveBlackOutObject_ = false; // 黒いオブジェクトが移動しているかどうか
 		bool isResultTextRender_ = false;	// リザルトテキストを表示するか	
 		float elapsedTime_ = 0.0f;		// 経過時間
-		int goalMinuteTime_ = 0.0f;		// クリアタイム : 分
-		int goalSecondTime_ = 0.0f;		// クリアタイム : 秒
+		uint8_t currentSentenceCount = 0;		// 文の数
+		int goalMinuteTime_ = 0.0f;				// クリアタイム : 分
+		int goalSecondTime_ = 0.0f;				// クリアタイム : 秒
 		
 		
 
@@ -102,7 +105,6 @@ namespace _internal
 
 
 		void SetInformation(const ResultInformation info) { information_ = info; }
-
 
 	private:
 		static std::array<State, Step::Max> stepList_;

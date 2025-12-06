@@ -50,6 +50,8 @@ public:
 
 	/* Sphereの情報をCameraにSetする */
 	inline void SetTarget(Sphere* sphere) { sphere_ = sphere; }
+	/* カメラの視点をモデルに設定 */
+	inline void SetResultTarget(ModelRender* target) { model_ = target; }
 	
 	/* カメラを動かしてよいかの設定 */
 	inline void SetCameraActive(bool isActived) { isActive_ = isActived; }

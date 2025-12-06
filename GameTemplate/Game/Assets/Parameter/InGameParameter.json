@@ -3,9 +3,9 @@
         "Comment": "インゲーム中に存在するパラメーター",
         "BouncePower1": 300,
         "BouncePower2": 100,
-        "BouncePower3": 400,
-        "BouncePower4": 800,
-        "BouncePowerMax": 1200,
+        "BouncePower3": 600,
+        "BouncePower4": 1000,
+        "BouncePowerMax": 1800,
         "LimitTime": 300
     }
 ]
