@@ -81,12 +81,18 @@ void ::InGameManager::LateUpdate()
 					// TODO:あとではじけ飛ぶ数値を調整可能にする
 					float bouncePower = 0.0f;
 					{
+						// はじめとぶ強さ
 						const auto* param = ParameterManager::Get().GetParameter<MasterInGameParameter>();
 						int objectSize = attachableObject->GetObjectSize();
-						if (objectSize >= ARRAYSIZE(param->BouncePower)) {
-							objectSize = ARRAYSIZE(param->BouncePower) - 1;
+						const int bouncePowerSize = ARRAYSIZE(param->BouncePower);
+						if (objectSize >= bouncePowerSize) {
+							objectSize = bouncePowerSize - 1;
 						}
 						bouncePower = param->BouncePower[objectSize];
+						// コントローラー振動
+						const float vibrationPower = objectSize / static_cast<float>(bouncePowerSize);
+						const float vibrationDurationSec = objectSize / static_cast<float>(bouncePowerSize) * 0.8f;
+						g_pad[0]->SetVibration(vibrationDurationSec, vibrationPower);
 					}
 					sphere->AddForce(vec * bouncePower);
 

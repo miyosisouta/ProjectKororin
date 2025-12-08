@@ -20,12 +20,17 @@ namespace
 {
 	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
 	constexpr const float FLIGHT_START_DELAY = 2.5f;			// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 300.0f;				// ゲーム時間
+	constexpr const float GAME_TIMER_LIMIT = 30.0f;				// ゲーム時間
 	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
-	static const Vector3 SPRITE_BUTTON_POS = Vector3(-300.0f, -300.0f, 0.0f); // ボタンの画像の座標
-	static const Vector3 FONT_BUTTON_POS = Vector3(-100.0f, -300.0f, 0.0f); // ボタンテキストの画像の座標
-	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 700.0f, 0.0f); // 黒い背景用オブジェクトの最初の位置
+	constexpr const uint8_t SET_CAN_NUMBER_CHARACTERS = 256;	// 設定可能な文字数
+	static const Vector3 SPRITE_BUTTON_POS = Vector3(-250.0f, -300.0f, 0.0f); // ボタンの画像の座標
+	static const Vector3 FONT_BUTTON_POS = Vector3(-80.0f, -300.0f, 0.0f); // ボタンテキストの画像の座標
+	static const Vector3 FONT_FAILER_TEXTS_POS = Vector3(150.0f, 300.0f, 0.0f); // クリア失敗時のリザルトでのテキスト位置
+	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 600.0f, -100.0f); // 黒い背景用オブジェクトの最初の位置
 	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, 0.0f); // 黒い背景用オブジェクトの最終的な位置
+	static const Vector3 SPHERE_RESULT_CLEAR_POS = Vector3(0.0f, 3000.0f, 0.0f); // クリアしているときの塊の座標
+	static const Vector3 SPHERE_RESULT_FAILER_MIN_POS = Vector3(0.0f, 50.0f, 80.0f); // クリアしていないときの塊が一番下にいる座標
+	static const Vector3 SPHERE_RESULT_FAILER_MAX_POS = Vector3(0.0f, 150.0f, 80.0f); // クリアしていないときの塊が一番上にいる座標
 
 	// フェードの境界時間を定数として定義
 	constexpr const float FADE_START_TIME = 20.0f; // フェード開始 (α = 0.0f)
@@ -114,15 +119,18 @@ namespace _internal
 		}
 		// クリアできなかったとき
 		{
-			if (failureText_) {
-				failureText_->Draw(rc);
+			if (textWindowSprite_) {
+				textWindowSprite_->Draw(rc);
 			}
-			if (buttonSprite_) {
-				buttonSprite_->Draw(rc);
+			if (failureTexts_) {
+				failureTexts_[currentSentenceCount]->Draw(rc);
 			}
-			if (buttonText_) {
+			if (instructionButtonSprite_) {
+				instructionButtonSprite_->Draw(rc);
+			}
+			/*if (buttonText_) {
 				buttonText_->Draw(rc);
-			}
+			}*/
 		}
 	}
 
@@ -169,11 +177,12 @@ namespace _internal
 			result->blackOutObject_ = std::make_unique<ModelRender>();
 			result->blackOutObject_->Init("Assets/modelData/stage/result/blackOutObject_second.tkm");
 			result->blackOutObject_->SetPosition(BLACK_OBJECT_INIT_POS);
-			result->blackOutObject_->SetScale(10.0f);
+			result->blackOutObject_->SetScale(5.0f);
 			result->blackOutObject_->Update();
 
-			// 塊は描画しない
+			// 塊の設定
 			result->owner_->sphere_->SetIsDraw(false);
+			result->owner_->sphere_->SetPosition(SPHERE_RESULT_FAILER_MIN_POS);
 
 			// オブジェクト非表示
 			result->owner_->stage_->SetAllVisible(false);
@@ -233,16 +242,16 @@ namespace _internal
 
 	void Result::EnterStep3(Result* result)
 	{
+		/******** クリアのとき ******/
+
 		if (result->owner_->sphere_->CheakGoalSize())
 		{
-			// クリアのとき
-
 			// 大きさを表示
 			{
 				result->resultGuidanceSizeText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->resultGuidanceSizeText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"大きさ");
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"大きさ");
 					});
 				result->resultGuidanceSizeText_->SetPSC(Vector3(300.0f, 350.0f, 0.0f), 1.0f, Vector4(180.0f / 255.0f, 241.0f / 255.0f, 249.0f / 255.0f, 1.0f));
 			}
@@ -255,7 +264,7 @@ namespace _internal
 				result->resultSphereSizeText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->resultSphereSizeText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"%02d m %02d cm", radiusMetersText, radiusCentimeters);
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d m %02d cm", radiusMetersText, radiusCentimeters);
 					});
 				result->resultSphereSizeText_->SetPSC(Vector3(300.0f, 300.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
@@ -266,7 +275,7 @@ namespace _internal
 				result->resultGuidanceGoalTime_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->resultGuidanceGoalTime_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"達成時間");
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"達成時間");
 					});
 				result->resultGuidanceGoalTime_->SetPSC(Vector3(300.0f, 200.0f, 0.0f), 1.0f, Vector4(65.0f / 255.0f, 130.0f / 255.0f, 250.0f / 255.0f, 1.0f));
 			}
@@ -278,7 +287,7 @@ namespace _internal
 				result->goalTimeText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->goalTimeText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"%02d m %02d cm", result->goalMinuteTime_, result->goalSecondTime_);
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d m %02d cm", result->goalMinuteTime_, result->goalSecondTime_);
 					});
 				result->goalTimeText_->SetPSC(Vector3(300.0f, 150.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
@@ -289,7 +298,7 @@ namespace _internal
 				result->resultGuidanceAttachCountText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->resultGuidanceAttachCountText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"モノ");
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"モノ");
 					});
 				result->resultGuidanceAttachCountText_->SetPSC(Vector3(300.0f, 50.0f, 0.0f), 1.0f, Vector4(142.0f / 255.0f, 206.0f / 255.0f, 217.0f / 255.0f, 1.0f));
 			}
@@ -299,43 +308,147 @@ namespace _internal
 				result->attachableObjectCountText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->attachableObjectCountText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, 256, L"%02d 個", result->information_.count);
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 個", result->information_.count);
 					});
 				result->attachableObjectCountText_->SetPSC(Vector3(300.0f, 0.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
+
+
+		/************** クリアしてないとき *********/
+
 		else 
 		{
-			// クリアしてないとき
+			// todo for test
+			
+			// リープで使用する時間の設定
+			result->calclerpValue_.SetTargetTime(1.5f);
+			// 塊を描画
+			result->owner_->sphere_->SetIsDraw(true);
 
-			// ボタンの画像とテキストの設定
-			result->buttonSprite_ = std::make_unique<SpriteRender>();
-			result->buttonText_ = std::make_unique<FontRender>();
-			UIUtil::SetAButtonUI(
-				result->buttonSprite_.get(),
-				result->buttonText_.get(),
-				SPRITE_BUTTON_POS,
-				FONT_BUTTON_POS
+			// 文字の設定
+			for (int i = 0; i < 5; ++i) 
+			{
+				UIUtil::SetText(result->failureTexts_[i].get(), [&](wchar_t* text)
+					{
+						result->failureTexts_[i] = std::make_unique<FontRender>();
+						const wchar_t* textMessage;
+						switch (i)
+						{
+						case 0:
+							textMessage = L"ナ、ナンデスカ、コノチンケナカタマリハ…\nオウサマノエニハホコリニシカミエマセンヨ。";
+							break;
+						case 1:
+							textMessage = L"コンナヒンソウナモノ、\nヨゾラニウカベタラホシクズタチガ、\nワライシンデシマイマス。";
+							break;
+						case 2:
+							textMessage = L"オウサマ、アナタノアマリノフガイナサニ、\nハートガキリキリイタミダシテキマシタ。";
+							break;
+						case 3:
+							textMessage = L"カオモミタクアリマセン。ハンセイベヤデ、\nソノマメツブノヨウナカタマリトイッショニ、\nオシクラマンジュウデモシテナサイ。";
+							break;
+						case 4:
+							textMessage = L"サッサトイッテ、ツギハモットデッカイユメトキボウヲ\nマキコンデクルンデスヨ！…喝ッ！！";
+							break;
+						default:
+							break;
+						}
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, textMessage);
+					});
+
+				// テキストの初期設定
+				result->failureTexts_->get()->SetPSC(
+					FONT_FAILER_TEXTS_POS,
+					1.0f,
+					Vector4::White
+				);
+
+			}
+
+
+			// ボタンを押してねの画像の設定
+			result->instructionButtonSprite_ = std::make_unique<SpriteRender>();
+			result->instructionButtonSprite_->Init("Assets/sprite/Result/instructionButton.DDS", 128, 128);
+			result->instructionButtonSprite_->SetPSM(
+				Vector3(0.0f, 0.0f, 0.0f),
+				1.0f,
+				Vector4::White
 			);
-			result->buttonSprite_->Update();
+
+			// テキストウィンドウの画像の設定
+			result->textWindowSprite_ = std::make_unique<SpriteRender>();
+			result->textWindowSprite_->Init("Assets/sprite/Result/textWindowSprite.DDS", 128, 128);
+			result->textWindowSprite_->SetPSM(
+				Vector3(0.0f, 0.0f, 0.0f),
+				1.0f,
+				Vector4(0.0f, 0.0f, 0.0f, 0.6f)
+			);
+
+			// 画像の更新
+			result->instructionButtonSprite_->Update();
+
+			//result->buttonText_ = std::make_unique<FontRender>();
+			
+			//UIUtil::SetAButtonUI(
+			//	result->buttonSprite_.get(),
+			//	result->buttonText_.get(),
+			//	SPRITE_BUTTON_POS,
+			//	FONT_BUTTON_POS
+			//);
 
 			// テキストの設定
-			result->failureText_ = std::make_unique<FontRender>();
-			UIUtil::SetText(result->failureText_.get(), [&](wchar_t* text)
-				{
-					swprintf_s(text, 256, L"なにやってんだおまえ!!!");
-				});
-			result->failureText_->SetPSC(Vector3(-780.0f, 0.0f, 0.0f), 3.0f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+			//result->failureTexts_ = std::make_unique<FontRender>();
+			//UIUtil::SetText(result->failureTexts_.get(), [&](wchar_t* text)
+			//	{
+			//		swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"なにやってんだおまえ!!!");
+			//	});
+			//result->failureTexts_->SetPSC(Vector3(-780.0f, 80.0f, 0.0f), 3.0f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
 	void Result::UpdateStep3(Result* result)
 	{
-		// Jボタンを押したら
+		// Sphereを上下に線形補間
+		if (result->owner_->sphere_) 
+		{
+			Vector3 goalPos = SPHERE_RESULT_FAILER_MAX_POS;
+			Vector3 deltaPos = goalPos - result->owner_->sphere_->GetPosition(); // 移動先と今の座標の差
+			if (deltaPos.Length() >= 0.5f)  // まだ移動させたい場合
+			{
+				const float lerpValue = result->calclerpValue_.CalcUpdate();
+
+				Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
+				currentPos.Lerp(lerpValue, BLACK_OBJECT_INIT_POS, BLACK_OBJECT_LAST_POS); // 移動先の座標を線形補完
+				result->blackOutObject_->SetPosition(currentPos); // 移動先のポジションを設定
+				result->blackOutObject_->Update();
+
+				return;
+			}
+		}
+		// 指示画像の点滅
+
+		// Jボタンを押したら、次の文への変更
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
-			// 次の処理へ
-			result->nextStep_ = Step::Step4;
+			// 次の文への移行
+			result->currentSentenceCount++;
+			if (result->currentSentenceCount >= 5) 
+			{
+				// テキストデータの削除
+				for(int i = 0; i < 5; ++i)
+				{
+					result->failureTexts_[i] = nullptr;
+				}
+
+				// 
+				result->currentSentenceCount = 4;
+
+				// 次の処理へ
+				result->nextStep_ = Step::Step4;
+
+			}
 		}
+
+		
 	}
 	void Result::ExitStep3(Result* result)
 	{
@@ -491,12 +604,11 @@ void GameScene::Update()
 			sphereCamera_ = NewGO<ResultCamera>(0, "resultCamera"); // リザルト用のカメラを作成
 			sphereCamera_->SetCameraActive(false); // カメラを操作不能にする
 			sphereCamera_->Update(); // カメラの最終座標を更新
-			Vector3 sphereCameraPos = sphereCamera_->GetPosition(); // カメラの座標を保存
-
-
-			//if (sphere_->CheakGoalSize()) // クリアしているなら
+			
+			if (sphere_->CheakGoalSize()) // クリアしているなら 
 			{
-				sphere_->SetPosition(Vector3(0.0f, 3000.0f, 0.0f)); // 塊を上空に移動
+				Vector3 sphereCameraPos = sphereCamera_->GetPosition(); // カメラの座標を保存		
+				sphere_->SetPosition(SPHERE_RESULT_CLEAR_POS); // 塊を上空に移動
 				sphereCamera_->SetPosition(sphereCameraPos); // リザルト用のカメラの設定
 			}
 

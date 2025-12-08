@@ -35,7 +35,7 @@
       <UniqueIdentifier>{8e7c5978-108f-4d15-ada8-7e87159043dd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene">
-      <UniqueIdentifier>{385892fe-5ce3-438e-9b68-81477667323b}</UniqueIdentifier>
+      <UniqueIdentifier>{b02ea780-1f91-4e97-bf0f-5b8c464c5cf2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,26 +119,26 @@
     <ClCompile Include="Core\Fade.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\IScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\SceneManager.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\ResultScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\GameScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Util.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Util\Util.cpp">
       <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\IScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ResultScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,26 +231,26 @@
     <ClInclude Include="Core\Fade.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\IScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneManager.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\ResultScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\GameScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="UI\Util.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Util\Util.h">
       <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ResultScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
