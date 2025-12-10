@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "TitleScene.h"
 #include "GameScene.h"
-#include "InputSystem.h"
+#include "SphereInputSystem.h"
 #include "Actor/Sphere/Sphere.h"
 #include "Core/Fade.h"
 #include "Collision/CollisionManager.h"
 #include "Sound/SoundManager.h"
+
+// @todo for test
+#include "UI/UIBase.h"
 
 
 namespace
@@ -37,6 +40,11 @@ namespace
 	};
 
 	constexpr float NEXT_SCENE_ANIMATION_TIME = 2.0f;
+
+
+	// @todo for test
+	static UICanvas* canvas_ = nullptr;
+
 }
 TitleScene::TitleScene()
 {
@@ -85,6 +93,18 @@ bool TitleScene::Start()
 	g_renderingEngine->SetAmbientByIBLTexture(skyCube_->GetTextureFilePath(), 0.5f);
 	g_renderingEngine->SetCascadeNearAreaRates(0.01f, 0.1f, 0.5f);
 	
+	// @todo for test
+	canvas_ = new UICanvas;
+	static auto* icon = canvas_->CreateUI<UIIcon>();
+	icon->Initialize("Assets/sprite/title/1.DDS", 1920.0f, 1080.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	auto* scaleAnimation = new UIVector2Animation();
+	scaleAnimation->SetParameter(Vector2(0.0f, 0.0f), Vector2(1.0f, 1.0f), 10.0f, EasingType::EaseInOut, LoopMode::PingPong);
+	scaleAnimation->SetFunc([&](Vector2 v)
+		{
+			icon->m_transform.m_localScale = Vector3(v.x, v.y, 0.0f);
+		});
+	icon->SetUIAnimation(scaleAnimation);
+
 	return true;
 }
 
@@ -124,6 +144,10 @@ void TitleScene::Update()
 
 	// ƒQ[ƒ€–¼‰æ‘œ‚ÌXV
 	titleGameNameSprite_.Update(); 
+
+
+	// @todo for test
+	canvas_->Update();
 }
 
 void TitleScene::Render(RenderContext& rc) 
@@ -139,6 +163,9 @@ void TitleScene::Render(RenderContext& rc)
 		// ƒQ[ƒ€–¼
 		titleGameNameSprite_.Draw(rc);
 	}
+
+	// @todo for test
+	canvas_->Render(rc);
 }
 
 bool TitleScene::RequestID(uint32_t& nextID, float& waitTime)

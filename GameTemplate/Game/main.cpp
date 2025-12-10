@@ -4,8 +4,9 @@
 #include<InitGUID.h>
 #include<dxgidebug.h>
 
-#include "Scene/SceneManager.h"
 #include "Core/Fade.h"
+#include "Effect/GameEffectManager.h"
+#include "Scene/SceneManager.h"
 
 
 void ReportLiveObjects()
@@ -37,9 +38,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	g_renderingEngine->DisableRaytracing();
 	g_renderingEngine->DisableTonemap();
 
-	//GameManagerクラスのインスタンスを作成
+	// GameManagerクラスのインスタンスを作成
 	auto* SceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
+	// fadeクラスのインスタンすを作成
 	auto* fadeObject = NewGO<FadeObject>(0, "fadeObject");
+	// Effectクラスのインスタンスを作成
+	auto* effectObject = NewGO<GameEffectObject>(0, "gameEffectObject");
 
 	ParameterManager::CreateInstance();
 
@@ -64,12 +68,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 
 	DeleteGO(SceneManager);
-	ParameterManager::DestroyInstance();
-
-	// GameManagerのインスタンスを破棄
-	SceneManager::DeleteInstance();
-
 	DeleteGO(fadeObject);
+	DeleteGO(effectObject);
+
+	ParameterManager::DestroyInstance();
 
 	K2Engine::DeleteInstance();
 

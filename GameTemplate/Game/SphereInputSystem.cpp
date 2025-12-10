@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "InputSystem.h"
+#include "SphereInputSystem.h"
 #include "Actor/Sphere/Sphere.h"
 
 
-bool InputSystem::Start()
+bool SphereInputSystem::Start()
 {
 	return true;
 }
 
 
-void InputSystem::Update()
+void SphereInputSystem::Update()
 {
 	// 操作ターゲットがいない場合処理を返す
 	if (target_ == nullptr) {
@@ -20,13 +20,13 @@ void InputSystem::Update()
 }
 
 
-void InputSystem::Render(RenderContext& rc)
+void SphereInputSystem::Render(RenderContext& rc)
 {
 
 }
 
 
-Vector3 InputSystem::GetStickL()
+Vector3 SphereInputSystem::GetStickL()
 {
 	Vector3 stickL;
 	/* スティックの入力量を保存*/

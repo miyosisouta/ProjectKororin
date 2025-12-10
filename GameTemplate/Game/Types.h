@@ -32,7 +32,7 @@ struct GameObjectPriority
 {
 	enum Enum
 	{
-		Defulat,
+		Default,
 		InGameManager,
 		Collision,
 		InGameManagerLate,

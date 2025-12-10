@@ -78,10 +78,10 @@ void ::InGameManager::LateUpdate()
 					vec.y = 0.0f;
 					vec.Normalize();
 
-					// TODO:‚ ‚Æ‚Å‚Í‚¶‚¯”ò‚Ô”’l‚ğ’²®‰Â”\‚É‚·‚é
-					float bouncePower = 0.0f;
+
+					float bouncePower = 0.0f; // ‚Í‚¶‚¯”ò‚Ô”’l‚ğŠi”[
 					{
-						// ‚Í‚¶‚ß‚Æ‚Ô‹­‚³
+						// ‚Í‚¶‚¯‚Æ‚Ô‹­‚³
 						const auto* param = ParameterManager::Get().GetParameter<MasterInGameParameter>();
 						int objectSize = attachableObject->GetObjectSize();
 						const int bouncePowerSize = ARRAYSIZE(param->BouncePower);

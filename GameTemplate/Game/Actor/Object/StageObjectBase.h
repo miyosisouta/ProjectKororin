@@ -14,7 +14,7 @@ protected:
 	std::string assetName_; // アセットの名前
 	uint8_t attachableValue_; // 吸着可能かどうか
 	uint8_t objectSize_; // 吸着可能サイズ
-	uint8_t grouthAmount_; // 塊のサイズの増加量
+	int grouthAmount_; // 塊のサイズの増加量
 
 	// 静的な当たり判定(物理的に当たったということをしたい用)
 	PhysicsStaticObject* physicsStaticObject_ = nullptr;
@@ -43,8 +43,8 @@ public:
 	
 public:
 	inline PhysicsStaticObject* GetPhysicsStaticObject() { return physicsStaticObject_; }
-	inline const Vector3 GetSize() { return size_; }
-	inline const Vector3 GetPosition() { return position_; }
+	inline const Vector3& GetSize() { return size_; }
+	inline const Vector3& GetPosition() { return position_; }
 
 
 public:
