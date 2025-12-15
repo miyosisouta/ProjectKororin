@@ -14,8 +14,15 @@ private:
 
 
 public:
-	void SetTargetTime(const float time) { targetTime_ = time; }
+	/* 時間の初期化 */
+	/* 初期は1.0f */
+	void InitCalcTime(const float time = 1.0f) 
+	{
+		targetTime_ = time;
+		elapsedTime_ = 0.0f;
+	}
 
+	/* 目標時間になるまで毎フレーム時間を計算、最大1.0f*/
 	float CalcUpdate()
 	{
 		elapsedTime_ += g_gameTime->GetFrameDeltaTime();

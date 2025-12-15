@@ -110,7 +110,7 @@ public:
 	 * @brief 球体のポジションを取得
 	 * @return 
 	 */
-	inline const Vector3 GetPosition() { return transform_.m_position; }
+	inline const Vector3& GetPosition() { return transform_.m_position; }
 
 	/**
 	 * @brief 球体のポジションを設定

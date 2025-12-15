@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "SphereInputSystem.h"
 #include "Scene/SceneManager.h"
 #include "Scene/TitleScene.h"
 #include "Scene/GameScene.h"

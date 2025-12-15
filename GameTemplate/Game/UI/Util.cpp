@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Util.h"
-#include "Util.h"
+
 
 
 void UIUtil::SetAButtonUI(SpriteRender* spritePath, FontRender* font, Vector3 spritePos, Vector3 fontPos)
@@ -25,7 +25,7 @@ void UIUtil::SetAButtonUI(SpriteRender* spritePath, FontRender* font, Vector3 sp
 }
 
 
-void UIUtil::SetText(FontRender* fontRender, const std::function<void(wchar_t*)>& func)
+void UIUtil::SetText(nsK2Engine::FontRender* fontRender, const std::function<void(wchar_t*)>& func)
 {
 	wchar_t text[256];
 	func(text);

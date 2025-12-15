@@ -9,9 +9,9 @@ class Player;
 class Sphere;
 class SphereCamera;
 class Stage;
-class Canvas;
-class InputSystem;
-
+class Canvas; 
+class SphereInputSystem;
+class InputDetection;
 
 
 /**
@@ -85,10 +85,14 @@ namespace _internal
 
 		CalcLerpValue calclerpValue_;
 
+		Vector3 sphereResultGoalPos = Vector3::Zero;		// リザルト時の塊が移動する座標を格納
+		Vector3 sphereResultInitPos = Vector3::Zero;		// リザルト時の塊の移動前の座標を格納
 		bool isMoveBlackOutObject_ = false; // 黒いオブジェクトが移動しているかどうか
-		bool isResultTextRender_ = false;	// リザルトテキストを表示するか	
+		bool isResultTextRender_ = false;	// リザルトテキストを表示するか
+		bool isSphereMoveUp_ = true;		// リザルト時塊を上に動かすかどうかのフラグ
+		bool isGoNextText_ = true;			// 次のテキストを映してよいか
 		float elapsedTime_ = 0.0f;		// 経過時間
-		uint8_t currentSentenceCount = 0;		// 文の数
+		uint8_t currentSentenceIndex = 0;		// 文の数
 		int goalMinuteTime_ = 0.0f;				// クリアタイム : 分
 		int goalSecondTime_ = 0.0f;				// クリアタイム : 秒
 		
@@ -106,13 +110,12 @@ namespace _internal
 
 		void SetInformation(const ResultInformation info) { information_ = info; }
 
-	private:
-		static std::array<State, Step::Max> stepList_;
-
-
 	public:
 		static void Initialize();
 
+
+	private:
+		static std::array<State, Step::Max> stepList_;
 
 	private:
 		/** Step1 */
@@ -208,7 +211,8 @@ private:
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
 	Stage* stage_ = nullptr; //!< ステージ
 	Canvas* canvas_ = nullptr; //!< キャンバス
-	InputSystem* inputSystem_ = nullptr;
+	SphereInputSystem* sphereInputSystem_ = nullptr; // 塊用インプットシステム
+	InputDetection* inputDetection_ = nullptr; // 入力判定用インプットシステム
 
 	_internal::Result* result_ = nullptr;		// リザルト表示用
 

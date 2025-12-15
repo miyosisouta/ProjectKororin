@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameScene.h"
-#include "InputSystem.h"
+#include "SphereInputSystem.h"
 #include "SphereCamera.h"
 #include "Stage.h"
 #include "Actor/Sphere/Player.h"
@@ -14,23 +14,28 @@
 #include "Scene/ResultScene.h"
 #include "UI/Canvas.h"
 #include "UI/Util.h"
+#include "Util/MessageText.h"
+#include "Util/InputDetection.h"
 
 
 namespace
 {
-	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
-	constexpr const float FLIGHT_START_DELAY = 2.5f;			// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 30.0f;				// ゲーム時間
+	constexpr const float FADE_OUT_START_TIME = 2.0f;		// フェードアウトが始まるまでの時間
+	constexpr const float FLIGHT_START_DELAY = 2.5f;		// オブジェクトが空へ飛ぶまでの時間
+	constexpr const float GAME_TIMER_LIMIT = 20.0f;			// ゲーム時間
+	constexpr const float SPHERE_RESULT_LERP_UP_TIME = 2.0f;			// リザルト時塊がふわふわと線形補間により行う上昇にかける時間
+	constexpr const float SPHERE_RESULT_LERP_DOWN_TIME = 3.0f;			// リザルト時塊がふわふわと線形補間により行う下降にかける時間
 	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
 	constexpr const uint8_t SET_CAN_NUMBER_CHARACTERS = 256;	// 設定可能な文字数
-	static const Vector3 SPRITE_BUTTON_POS = Vector3(-250.0f, -300.0f, 0.0f); // ボタンの画像の座標
-	static const Vector3 FONT_BUTTON_POS = Vector3(-80.0f, -300.0f, 0.0f); // ボタンテキストの画像の座標
-	static const Vector3 FONT_FAILER_TEXTS_POS = Vector3(150.0f, 300.0f, 0.0f); // クリア失敗時のリザルトでのテキスト位置
-	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 600.0f, -100.0f); // 黒い背景用オブジェクトの最初の位置
-	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, 0.0f); // 黒い背景用オブジェクトの最終的な位置
-	static const Vector3 SPHERE_RESULT_CLEAR_POS = Vector3(0.0f, 3000.0f, 0.0f); // クリアしているときの塊の座標
-	static const Vector3 SPHERE_RESULT_FAILER_MIN_POS = Vector3(0.0f, 50.0f, 80.0f); // クリアしていないときの塊が一番下にいる座標
-	static const Vector3 SPHERE_RESULT_FAILER_MAX_POS = Vector3(0.0f, 150.0f, 80.0f); // クリアしていないときの塊が一番上にいる座標
+	static const Vector3 SPRITE_BUTTON_POS = Vector3(-250.0f, -300.0f, 0.0f);			// ボタンの画像の座標
+	static const Vector3 FONT_BUTTON_POS = Vector3(-80.0f, -300.0f, 0.0f);				// ボタンテキストの画像の座標
+	static const Vector3 FONT_FAILER_TEXTS_POS = Vector3(150.0f, 300.0f, 0.0f);			// クリア失敗時のリザルトでのテキスト位置
+	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 1500.0f, -1000.0f);		// 黒い背景用オブジェクトの最初の位置
+	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, -1000.0f);			// 黒い背景用オブジェクトの最終的な位置
+	static const Vector3 SPHERE_RESULT_CLEAR_POS = Vector3(0.0f, 3000.0f, 0.0f);		// クリアしているときの塊の座標
+	static const Vector3 SPHERE_RESULT_FAILER_MIN_POS = Vector3(0.0f, 100.0f, -200.0f);	// クリアしていないときの塊が一番下にいる座標
+	static const Vector3 SPHERE_RESULT_FAILER_MAX_POS = Vector3(0.0f, 200.0f, -200.0f);	// クリアしていないときの塊が一番上にいる座標
+	static const Vector3 SPHERE_RESULT_FAILER_LAST_POS = Vector3(0.0f, 0.0f, 0.0f);	// クリアしていないときの塊が最終的にいる位置座標
 
 	// フェードの境界時間を定数として定義
 	constexpr const float FADE_START_TIME = 20.0f; // フェード開始 (α = 0.0f)
@@ -87,6 +92,9 @@ namespace _internal
 			currentState.enter(this);
 		}
 		currentState.update(this);
+
+		// 入力判定の状態を更新
+		owner_->inputDetection_->UpdateTriggerState();
 	}
 
 
@@ -122,8 +130,8 @@ namespace _internal
 			if (textWindowSprite_) {
 				textWindowSprite_->Draw(rc);
 			}
-			if (failureTexts_) {
-				failureTexts_[currentSentenceCount]->Draw(rc);
+			if (failureTexts_[currentSentenceIndex]) {
+				failureTexts_[currentSentenceIndex]->Draw(rc);
 			}
 			if (instructionButtonSprite_) {
 				instructionButtonSprite_->Draw(rc);
@@ -166,9 +174,9 @@ namespace _internal
 	void Result::EnterStep1(Result* result)
 	{
 		// 今のInputSystemを削除し、タイトル用のInputSystemを作成
-		DeleteGO(result->owner_->inputSystem_);
-		result->owner_->inputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
-		result->owner_->inputSystem_->SetTarget(result->owner_->sphere_);
+		DeleteGO(result->owner_->sphereInputSystem_);
+		result->owner_->sphereInputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
+		result->owner_->sphereInputSystem_->SetTarget(result->owner_->sphere_);
 
 		// クリアしていない場合
 		if (!result->owner_->sphere_->CheakGoalSize())
@@ -177,12 +185,13 @@ namespace _internal
 			result->blackOutObject_ = std::make_unique<ModelRender>();
 			result->blackOutObject_->Init("Assets/modelData/stage/result/blackOutObject_second.tkm");
 			result->blackOutObject_->SetPosition(BLACK_OBJECT_INIT_POS);
-			result->blackOutObject_->SetScale(5.0f);
+			result->blackOutObject_->SetScale(Vector3(25.0f, 15.0f, 0.5f));
 			result->blackOutObject_->Update();
 
 			// 塊の設定
 			result->owner_->sphere_->SetIsDraw(false);
 			result->owner_->sphere_->SetPosition(SPHERE_RESULT_FAILER_MIN_POS);
+			result->owner_->sphere_->Update();
 
 			// オブジェクト非表示
 			result->owner_->stage_->SetAllVisible(false);
@@ -212,8 +221,10 @@ namespace _internal
 	void Result::EnterStep2(Result* result)
 	{
 		// リープで使用する時間の設定
-		result->calclerpValue_.SetTargetTime(7.0f);
+		result->calclerpValue_.InitCalcTime(5.0f);
 	}
+
+
 	void Result::UpdateStep2(Result* result)
 	{
 		// オブジェクトのリープ
@@ -321,48 +332,31 @@ namespace _internal
 		{
 			// todo for test
 			
+			// リープ先の設定
+			result->sphereResultInitPos = SPHERE_RESULT_FAILER_MIN_POS;	// 初期地点
+			result->sphereResultGoalPos = SPHERE_RESULT_FAILER_MAX_POS; // 目標地点
+
 			// リープで使用する時間の設定
-			result->calclerpValue_.SetTargetTime(1.5f);
+			result->calclerpValue_.InitCalcTime(1.5f);
+
 			// 塊を描画
 			result->owner_->sphere_->SetIsDraw(true);
 
 			// 文字の設定
 			for (int i = 0; i < 5; ++i) 
 			{
-				UIUtil::SetText(result->failureTexts_[i].get(), [&](wchar_t* text)
-					{
-						result->failureTexts_[i] = std::make_unique<FontRender>();
-						const wchar_t* textMessage;
-						switch (i)
-						{
-						case 0:
-							textMessage = L"ナ、ナンデスカ、コノチンケナカタマリハ…\nオウサマノエニハホコリニシカミエマセンヨ。";
-							break;
-						case 1:
-							textMessage = L"コンナヒンソウナモノ、\nヨゾラニウカベタラホシクズタチガ、\nワライシンデシマイマス。";
-							break;
-						case 2:
-							textMessage = L"オウサマ、アナタノアマリノフガイナサニ、\nハートガキリキリイタミダシテキマシタ。";
-							break;
-						case 3:
-							textMessage = L"カオモミタクアリマセン。ハンセイベヤデ、\nソノマメツブノヨウナカタマリトイッショニ、\nオシクラマンジュウデモシテナサイ。";
-							break;
-						case 4:
-							textMessage = L"サッサトイッテ、ツギハモットデッカイユメトキボウヲ\nマキコンデクルンデスヨ！…喝ッ！！";
-							break;
-						default:
-							break;
-						}
-						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, textMessage);
-					});
+				// フォントレンダーのユニークポインタの作成
+				result->failureTexts_[i] = std::make_unique<FontRender>();
+
+				// MessageTextからテキストをセット、タイプをEnglishに設定
+				result->failureTexts_[i]->SetText(GetMessageText(i, MessageLanguageType::ja));
 
 				// テキストの初期設定
-				result->failureTexts_->get()->SetPSC(
+				result->failureTexts_[i]->SetPSC(
 					FONT_FAILER_TEXTS_POS,
 					1.0f,
 					Vector4::White
 				);
-
 			}
 
 
@@ -377,12 +371,13 @@ namespace _internal
 
 			// テキストウィンドウの画像の設定
 			result->textWindowSprite_ = std::make_unique<SpriteRender>();
-			result->textWindowSprite_->Init("Assets/sprite/Result/textWindowSprite.DDS", 128, 128);
+			result->textWindowSprite_->Init("Assets/sprite/Result/textWindow.DDS", 256, 256);
 			result->textWindowSprite_->SetPSM(
-				Vector3(0.0f, 0.0f, 0.0f),
-				1.0f,
-				Vector4(0.0f, 0.0f, 0.0f, 0.6f)
+				Vector3(500.0f, 250.0f, 0.0f),
+				3.0f,
+				Vector4(1.0f, 1.0f, 1.0f, 1.0f)
 			);
+			result->textWindowSprite_->Update();
 
 			// 画像の更新
 			result->instructionButtonSprite_->Update();
@@ -407,47 +402,43 @@ namespace _internal
 	}
 	void Result::UpdateStep3(Result* result)
 	{
-		// Sphereを上下に線形補間
-		if (result->owner_->sphere_) 
+		// 塊を上下にふよふよさせる
 		{
-			Vector3 goalPos = SPHERE_RESULT_FAILER_MAX_POS;
-			Vector3 deltaPos = goalPos - result->owner_->sphere_->GetPosition(); // 移動先と今の座標の差
-			if (deltaPos.Length() >= 0.5f)  // まだ移動させたい場合
-			{
-				const float lerpValue = result->calclerpValue_.CalcUpdate();
+			result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
+			// リープ処理
+			//  初期位置を0.5とし0.0～1.0を何度も増減する、
+			const float lerpValue = (sinf(result->elapsedTime_) + 1.0f) * 0.5f;
 
-				Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
-				currentPos.Lerp(lerpValue, BLACK_OBJECT_INIT_POS, BLACK_OBJECT_LAST_POS); // 移動先の座標を線形補完
-				result->blackOutObject_->SetPosition(currentPos); // 移動先のポジションを設定
-				result->blackOutObject_->Update();
-
-				return;
-			}
+			Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
+			currentPos.Lerp(lerpValue, SPHERE_RESULT_FAILER_MAX_POS, SPHERE_RESULT_FAILER_MIN_POS); // 移動先の座標を線形補完
+			result->owner_->sphere_->SetPosition(currentPos); // 移動先のポジションを設定
+			result->owner_->sphere_->Update();
 		}
+
+
 		// 指示画像の点滅
+		{
+
+		}
+
 
 		// Jボタンを押したら、次の文への変更
-		if (g_pad[0]->IsTrigger(enButtonA))
 		{
-			// 次の文への移行
-			result->currentSentenceCount++;
-			if (result->currentSentenceCount >= 5) 
+			if (result->owner_->inputDetection_->IsTriggerButtonA())
 			{
-				// テキストデータの削除
-				for(int i = 0; i < 5; ++i)
+				// 次の文への移行
+				result->currentSentenceIndex++;
+				if (result->currentSentenceIndex >= 5)
 				{
-					result->failureTexts_[i] = nullptr;
+					// 
+					result->currentSentenceIndex = 4;
+
+					// 次の処理へ
+					result->nextStep_ = Step::Step4;
+
 				}
-
-				// 
-				result->currentSentenceCount = 4;
-
-				// 次の処理へ
-				result->nextStep_ = Step::Step4;
-
 			}
 		}
-
 		
 	}
 	void Result::ExitStep3(Result* result)
@@ -458,20 +449,38 @@ namespace _internal
 		result->goalTimeText_.reset();
 		result->resultGuidanceAttachCountText_.reset();
 		result->attachableObjectCountText_.reset();
+		result->buttonText_.reset();
+		for (int i = 0; i <= 4; ++i){ result->failureTexts_[i].reset();	}
+
+		result->instructionButtonSprite_.reset();
+		result->textWindowSprite_.reset();
+		result->buttonSprite_.reset();
 	}
 
 
 	void Result::EnterStep4(Result* result)
 	{
+		// リープで使用する時間の設定
+		result->calclerpValue_.InitCalcTime(FLIGHT_START_DELAY);
 	}
 
 	void Result::UpdateStep4(Result* result)
 	{
-		//文字が消えてから2秒たったら
-		result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
-		if (result->elapsedTime_ >= FLIGHT_START_DELAY) {
-			dynamic_cast<TitleInputSyste*>(result->owner_->inputSystem_)->SetMoveDirection(Vector3(0.0f, 1.0f, 0.5f));	// 斜め奥に行かせたい
-			result->nextStep_ = Step::Step5; // 次の処理へ
+		// クリアしている場合
+		if (result->owner_->sphere_->CheakGoalSize()) 
+		{
+			//文字が消えてから2秒たったら
+			const float hoge = result->calclerpValue_.CalcUpdate();
+			if (hoge >= FLIGHT_START_DELAY) {
+				dynamic_cast<TitleInputSyste*>(result->owner_->sphereInputSystem_)->SetMoveDirection(Vector3(0.0f, 1.0f, 0.5f));	// 斜め奥に行かせたい
+				result->nextStep_ = Step::Step5; // 次の処理へ
+			}
+		}
+
+		// クリア失敗している場合
+		else 
+		{
+
 		}
 	}
 	void Result::ExitStep4(Result* result)
@@ -513,7 +522,7 @@ GameScene::~GameScene()
 	DeleteGO(sphereCamera_);
 	DeleteGO(stage_);
 	DeleteGO(canvas_);
-	DeleteGO(inputSystem_);
+	DeleteGO(sphereInputSystem_);
 
 	CollisionHitManager::Delete();
 	LateStageObjectUpdateManager::Get().UnRegisterSphere();
@@ -531,8 +540,8 @@ bool GameScene::Start()
 	sphereCamera_ = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
 	stage_ = NewGO<Stage>(0,"stage"); // ステージ
 	canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
-	inputSystem_ = NewGO<InputSystem>(0, "inputSystem"); // 操作用クラスの作成と操作する物の設定
-
+	sphereInputSystem_ = NewGO<SphereInputSystem>(0, "inputSystem"); // 操作用クラスの作成と操作する物の設定
+	inputDetection_ = new InputDetection; // 入力判定用クラス
 
 	/* アップデートの処理順番を設定 */
 	// NewGO<クラス名>(数字：実行する順番を設定できる)
@@ -551,7 +560,7 @@ bool GameScene::Start()
 
 
 	/* セッター */
-	inputSystem_->SetTarget(sphere_); // 操作ターゲットの指定
+	sphereInputSystem_->SetTarget(sphere_); // 操作ターゲットの指定
 	sphereCamera_->SetTarget(sphere_); // カメラのターゲットの指定
 	GameTimer::Get().SetGameTime(GAME_TIMER_LIMIT); // 時間用クラスにゲームの制限時間を伝える
 	GameTimer::Get().Init();

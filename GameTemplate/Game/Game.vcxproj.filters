@@ -37,6 +37,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{b02ea780-1f91-4e97-bf0f-5b8c464c5cf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{b701630f-582f-4a55-9507-4df0ec553829}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -51,7 +54,7 @@
     <ClCompile Include="Util\Transform.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="SphereInputSystem.cpp" />
     <ClCompile Include="SceneLoader\SceneLoader.cpp">
       <Filter>SceneLoader</Filter>
     </ClCompile>
@@ -140,6 +143,24 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Util\MessageText.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\GameEffectManager.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\InputDetection.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIBase.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIAnimation.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Curve.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -153,7 +174,7 @@
     <ClInclude Include="Util\Transform.h">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="SphereInputSystem.h" />
     <ClInclude Include="Json\json.hpp">
       <Filter>Json</Filter>
     </ClInclude>
@@ -251,6 +272,27 @@
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\MessageText.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\Types.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\GameEffectManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\InputDetection.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIBase.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIAnimation.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Curve.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

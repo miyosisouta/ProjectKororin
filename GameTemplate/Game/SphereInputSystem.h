@@ -6,7 +6,7 @@
 
 
 class Sphere;
-class InputSystem : public IGameObject
+class SphereInputSystem : public IGameObject
 {
 protected:
 	Sphere* target_ = nullptr;
@@ -17,11 +17,11 @@ public:
 	/**
 	 * @brief コンストラクタ
 	 */
-	InputSystem() {}
+	SphereInputSystem() {}
 	/**
 	 * @brief デストラクタ
 	 */
-	~InputSystem() {}
+	~SphereInputSystem() {}
 
 	/**
 	 * @brief オブジェクトの開始処理を実行します。
@@ -72,7 +72,7 @@ private:
 
 
 
-class TitleInputSyste : public InputSystem
+class TitleInputSyste : public SphereInputSystem
 {
 private:
 	/** 移動方向 */

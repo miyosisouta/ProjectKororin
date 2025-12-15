@@ -46,7 +46,7 @@ public:
 	/* 座標の設定 */
 	inline void SetPosition(Vector3 pos) { transform_.m_localPosition = pos; }
 	/* 位置情報を取得 */
-	inline Vector3 GetPosition() { return transform_.m_position; }
+	inline Vector3& GetPosition() { return transform_.m_position; }
 
 	/* Sphereの情報をCameraにSetする */
 	inline void SetTarget(Sphere* sphere) { sphere_ = sphere; }

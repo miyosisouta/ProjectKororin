@@ -96,6 +96,9 @@ void CollisionHitManager::Update()
 			break;
 		}
 	}
+	if (sphereInfo == nullptr) {
+		return;
+	}
 
 	// 2.sphere‚ª‚¢‚é‹óŠÔ‚ðŒ©‚Â‚¯‚é
 	std::vector<int> xList;
