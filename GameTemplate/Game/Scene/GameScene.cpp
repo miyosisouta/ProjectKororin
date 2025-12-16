@@ -13,6 +13,7 @@
 #include "Core/LateStageObjectUpdateManager.h"
 #include "Scene/ResultScene.h"
 #include "UI/Canvas.h"
+#include "UI/UIBase.h"
 #include "UI/Util.h"
 #include "Util/MessageText.h"
 #include "Util/InputDetection.h"
@@ -22,7 +23,7 @@ namespace
 {
 	constexpr const float FADE_OUT_START_TIME = 2.0f;		// フェードアウトが始まるまでの時間
 	constexpr const float FLIGHT_START_DELAY = 2.5f;		// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 20.0f;			// ゲーム時間
+	constexpr const float GAME_TIMER_LIMIT = 150.0f;			// ゲーム時間
 	constexpr const float SPHERE_RESULT_LERP_UP_TIME = 2.0f;			// リザルト時塊がふわふわと線形補間により行う上昇にかける時間
 	constexpr const float SPHERE_RESULT_LERP_DOWN_TIME = 3.0f;			// リザルト時塊がふわふわと線形補間により行う下降にかける時間
 	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
@@ -93,6 +94,11 @@ namespace _internal
 		}
 		currentState.update(this);
 
+		// Canvasの更新
+		if (instructionButtonSprite_)
+		{
+			instructionButtonSprite_->Update();
+		}
 		// 入力判定の状態を更新
 		owner_->inputDetection_->UpdateTriggerState();
 	}
@@ -134,11 +140,8 @@ namespace _internal
 				failureTexts_[currentSentenceIndex]->Draw(rc);
 			}
 			if (instructionButtonSprite_) {
-				instructionButtonSprite_->Draw(rc);
+				instructionButtonSprite_->Render(rc);
 			}
-			/*if (buttonText_) {
-				buttonText_->Draw(rc);
-			}*/
 		}
 	}
 
@@ -177,6 +180,7 @@ namespace _internal
 		DeleteGO(result->owner_->sphereInputSystem_);
 		result->owner_->sphereInputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
 		result->owner_->sphereInputSystem_->SetTarget(result->owner_->sphere_);
+		result->owner_->sphere_->SetPlayable(false);
 
 		// クリアしていない場合
 		if (!result->owner_->sphere_->CheakGoalSize())
@@ -349,25 +353,40 @@ namespace _internal
 				result->failureTexts_[i] = std::make_unique<FontRender>();
 
 				// MessageTextからテキストをセット、タイプをEnglishに設定
-				result->failureTexts_[i]->SetText(GetMessageText(i, MessageLanguageType::ja));
+				result->failureTexts_[i]->SetText(GetMessageText(i, MessageType::MessageScene::GameFailure));
 
 				// テキストの初期設定
 				result->failureTexts_[i]->SetPSC(
 					FONT_FAILER_TEXTS_POS,
-					1.0f,
+					0.7f,
 					Vector4::White
 				);
 			}
 
 
-			// ボタンを押してねの画像の設定
-			result->instructionButtonSprite_ = std::make_unique<SpriteRender>();
-			result->instructionButtonSprite_->Init("Assets/sprite/Result/instructionButton.DDS", 128, 128);
-			result->instructionButtonSprite_->SetPSM(
-				Vector3(0.0f, 0.0f, 0.0f),
-				1.0f,
-				Vector4::White
-			);
+			//// ボタンを押してねの画像の設定
+			//result->instructionButtonSprite_ = std::make_unique<SpriteRender>();
+			//result->instructionButtonSprite_->Init("Assets/sprite/Result/instructionButton.DDS", 128, 128);
+			//result->instructionButtonSprite_->SetPSM(
+			//	Vector3(800.0f, 180.0f, 0.0f),
+			//	0.3f,
+			//	Vector4::White
+			//);
+
+			// 画像の表示
+			result->instructionButtonSprite_ = new UICanvas;
+			result->icon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
+			result->icon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(800.0f, 180.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
+			// ここからイージング設定
+			auto* scaleAnimation = new UIColorAnimation();
+			scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 2.0f, EasingType::EaseInOut, LoopMode::PingPong);
+			/*scaleAnimation->SetFunc([&](Vector4 v)
+				{
+					result->icon_->color_ = Vector4(v.x, v.y, v.z, v.w);
+				});*/
+			result->icon_->SetUIAnimation(scaleAnimation);
+			result->icon_->PlayAnimation();
+
 
 			// テキストウィンドウの画像の設定
 			result->textWindowSprite_ = std::make_unique<SpriteRender>();
@@ -382,22 +401,6 @@ namespace _internal
 			// 画像の更新
 			result->instructionButtonSprite_->Update();
 
-			//result->buttonText_ = std::make_unique<FontRender>();
-			
-			//UIUtil::SetAButtonUI(
-			//	result->buttonSprite_.get(),
-			//	result->buttonText_.get(),
-			//	SPRITE_BUTTON_POS,
-			//	FONT_BUTTON_POS
-			//);
-
-			// テキストの設定
-			//result->failureTexts_ = std::make_unique<FontRender>();
-			//UIUtil::SetText(result->failureTexts_.get(), [&](wchar_t* text)
-			//	{
-			//		swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"なにやってんだおまえ!!!");
-			//	});
-			//result->failureTexts_->SetPSC(Vector3(-780.0f, 80.0f, 0.0f), 3.0f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
 	void Result::UpdateStep3(Result* result)
@@ -418,7 +421,7 @@ namespace _internal
 
 		// 指示画像の点滅
 		{
-
+			result->instructionButtonSprite_->Update();
 		}
 
 
@@ -452,7 +455,7 @@ namespace _internal
 		result->buttonText_.reset();
 		for (int i = 0; i <= 4; ++i){ result->failureTexts_[i].reset();	}
 
-		result->instructionButtonSprite_.reset();
+		//result->instructionButtonSprite_.reset();
 		result->textWindowSprite_.reset();
 		result->buttonSprite_.reset();
 	}
@@ -567,6 +570,9 @@ bool GameScene::Start()
 	
 	Fade::Get().Stop();
 
+	g_sceneLight->SetDirectionLight(0, Vector3(1.0f, -1.0f, -1.0f), Vector3(0.8f));
+	g_sceneLight->SetAmbinet(Vector3(0.8f));
+
 	return true;
 }
 
@@ -632,6 +638,14 @@ void GameScene::Update()
 			break;
 		}
 	}
+
+	// スカイキューブをプレイヤー追従にする
+	// 例外でFindGOする
+	auto* skyCube = FindGO<SkyCube>("skyCube");
+	Vector3 skyCubePosition = sphere_->GetPosition();
+	skyCubePosition.y = 0.0f;
+	skyCube->SetPosition(skyCubePosition);
+
 	CollisionHitManager::Get().Update();
 	LateStageObjectUpdateManager::Get().Update();
 	GameTimer::Get().Update();

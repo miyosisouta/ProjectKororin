@@ -508,7 +508,7 @@ namespace nsK2Engine {
             return m_raytracingLightData;
         }
 
-        void SetModel(ModelRender& model);
+        void SetModel(ModelRender& model,float size = 1);
 
     private:
         /// <summary>

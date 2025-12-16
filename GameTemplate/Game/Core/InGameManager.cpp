@@ -119,6 +119,7 @@ void ::InGameManager::LateUpdate()
 
 				//オブジェクトを塊につけ、一緒に動くようにする
 				sphere->SetParent(attachableObject); // transformの親子関係を設定
+				sphere->AddAttachableObject(attachableObject);
 				attachableObject->DeletePhysicsStatics();
 
 
@@ -156,7 +157,7 @@ void ::InGameManager::LateUpdate()
 
 				localRot.SetRotation(computeMatrix);
 
-				g_renderingEngine->SetModel(attachableObject->GetModelRender());
+				g_renderingEngine->SetModel(attachableObject->GetModelRender(), attachableObject->GetUIScale());
 
 				/***************** ここから先は吸着時に飛ばす通知についての処理 ********************/
 

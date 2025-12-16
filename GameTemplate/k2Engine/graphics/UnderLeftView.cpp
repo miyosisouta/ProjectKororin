@@ -2,7 +2,7 @@
 #include "UnderLeftView.h"
 
 namespace {
-	static const Vector3 DEFAULT_CAMERA_POSITION = { 0.0f,20.0f,50.0f };
+	static const Vector3 DEFAULT_CAMERA_POSITION = { 0.0f,20.0f,80.0f };
 }
 
 namespace nsK2Engine {
@@ -61,10 +61,10 @@ namespace nsK2Engine {
 		}
 	}
 
-	void UnderLeftView::SetModel(ModelRender& model)
+	void UnderLeftView::SetModel(ModelRender& model, float size)
 	{
 		if (m_modelList.find(model.GetFilePath()) == m_modelList.end()) {
-			InitModel(model.GetFilePath());
+		InitModel(model.GetFilePath(),size);
 		}
 		else
 		{
@@ -76,7 +76,7 @@ namespace nsK2Engine {
 		count = 300;
 	}
 
-	void UnderLeftView::InitModel(std::string filePath)
+	void UnderLeftView::InitModel(std::string filePath, float size)
 	{
 		ModelInitData modelInitData;			//モデルのデータ
 		//tkmのファイルパスの指定
@@ -86,7 +86,7 @@ namespace nsK2Engine {
 
 		Model* model = new Model;
 		model->Init(modelInitData);
-		model->UpdateWorldMatrix(Vector3::Zero, Quaternion::Identity, Vector3::One);
+		model->UpdateWorldMatrix(Vector3::Zero, Quaternion::Identity, Vector3(size, size, size));
 
 		m_modelList.emplace(filePath, model);
 		m_model = model;

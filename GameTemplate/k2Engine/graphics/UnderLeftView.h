@@ -8,9 +8,9 @@ namespace nsK2Engine {
 
 		void Init();
 		void MRender(RenderContext& rc, RenderTarget& mainRenderTarget);
-		void SetModel(ModelRender& model);
+		void SetModel(ModelRender& model, float size = 1);
 		void SRender(RenderContext& rc);
-		void InitModel(std::string filePaht);
+		void InitModel(std::string filePaht, float size = 1);
 
 		int count;
 		bool isDraw;

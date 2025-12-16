@@ -12,6 +12,8 @@ class Stage;
 class Canvas; 
 class SphereInputSystem;
 class InputDetection;
+class UICanvas;
+class UIIcon;
 
 
 /**
@@ -68,6 +70,8 @@ namespace _internal
 		ResultInformation information_;
 		GameScene* owner_;
 
+		UICanvas* instructionButtonSprite_ = nullptr;
+		UIIcon* icon_ = nullptr;
 		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			// 「大きさ」の表示
 		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			// 「経過時間」の表示
 		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	// 「モノ」の表示
@@ -78,7 +82,7 @@ namespace _internal
 		std::unique_ptr<FontRender> buttonText_ = nullptr;						// ボタンをおしてね！のテキスト
 
 		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					// Aボタンの画像
-		std::unique_ptr<SpriteRender> instructionButtonSprite_ = nullptr;		// 指示ボタンの画像
+		//std::unique_ptr<SpriteRender> instructionButtonSprite_ = nullptr;		// 指示ボタンの画像
 		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				// テキストウィンドウの画像
 
 		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;				// 失敗時の背景用オブジェクト

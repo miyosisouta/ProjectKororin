@@ -10,6 +10,7 @@ class UIBase : public Noncopyable
 {
 public:
 	Transform m_transform;
+	Vector4 color_ = Vector4::White;
 	std::unique_ptr<UIAnimationBase> uiAnimation_ = nullptr;
 
 
@@ -17,9 +18,6 @@ protected:
 	bool isStart = false;
 	bool isUpdate = true;
 	bool isDraw = true;
-
-	
-
 
 public:
 	UIBase()
@@ -48,10 +46,7 @@ public:
 		return uiAnimation_->IsPlay();
 	}
 
-	void SetUIAnimation(UIAnimationBase* animation)
-	{
-		uiAnimation_ = std::unique_ptr<UIAnimationBase>(animation);
-	}
+	void SetUIAnimation(UIAnimationBase* animation);
 };
 
 
@@ -67,13 +62,10 @@ class UIImage : public UIBase
 protected:
 	SpriteRender m_spriteRender;
 
-
-protected:
+public:
 	UIImage();
 	~UIImage();
 
-
-public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
@@ -115,12 +107,10 @@ class UIIcon : public UIImage
 {
 	friend class UICanvas;
 
-private:
+public:
 	UIIcon();
 	~UIIcon();
 
-
-public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;

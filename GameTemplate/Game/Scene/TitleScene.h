@@ -8,6 +8,8 @@
 
 class TitleInputSyste;
 class Sphere;
+class UICanvas;
+class UIIcon;
 
 
 enum EnTitleGroundKind 
@@ -47,11 +49,15 @@ public:
 
 
 private:
-	SpriteRender titleGameNameSprite_; //!< タイトル画面用のスプライト描画器
-	ModelRender titleGround_[EnTitleGroundKind_Max]; //!< タイトル時の地面
-	SkyCube* skyCube_ = nullptr;
+	SpriteRender gameTitleNameSprite_; //!< ゲームタイトル
+
 	Sphere* sphere_ = nullptr;
 	TitleInputSyste* inputSystem_ = nullptr;
+	CalcLerpValue calcTime_;
+
+	UICanvas* pressButtonCanvas_ = nullptr;
+	UICanvas* titleGameNameCanvas_ = nullptr;
+	UIIcon* icon_ = nullptr;
 
 	bool isPlayAnimation = false;				//!< シーン切り替えの演出を再生する
 	float elapsedTime_ = 0.0f;					//!< 経過時間
