@@ -7,6 +7,7 @@
 #include "graphics/preRender/LightCulling.h"
 #include "geometry/SceneGeometryData.h"
 #include "graphics/light/VolumeLightRender.h"
+#include "graphics/UnderLeftView.h"
 
 namespace nsK2Engine {
    
@@ -506,6 +507,9 @@ namespace nsK2Engine {
         {
             return m_raytracingLightData;
         }
+
+        void SetModel(ModelRender& model);
+
     private:
         /// <summary>
         /// イメージベースドライティング(IBL)のためのデータを初期化する。
@@ -664,5 +668,7 @@ namespace nsK2Engine {
         };
         
         std::list< SEventListenerData > m_eventListeners;                // イベントリスナー。
+
+        UnderLeftView underLeftView;
     };    
 }

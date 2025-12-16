@@ -156,6 +156,8 @@ void ::InGameManager::LateUpdate()
 
 				localRot.SetRotation(computeMatrix);
 
+				g_renderingEngine->SetModel(attachableObject->GetModelRender());
+
 				/***************** ‚±‚±‚©‚çæ‚Í‹z’…Žž‚É”ò‚Î‚·’Ê’m‚É‚Â‚¢‚Ä‚Ìˆ— ********************/
 
 

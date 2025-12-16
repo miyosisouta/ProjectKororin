@@ -26,6 +26,8 @@ public:
 	virtual void Update() override {}
 	virtual void Render(RenderContext& rc) override {}
 
+	ModelRender& GetModelRender() { return modelRender_; }
+
 
 public:
 	Transform* GetTransform() { return &transform_; }

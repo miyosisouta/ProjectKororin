@@ -290,6 +290,9 @@ namespace nsK2Engine {
 		void SetRaytracingWorld(bool flag) {
 			m_isRaytracingWorld = flag;
 		}
+		const char* GetFilePath() {
+			return m_tkmFilePath.c_str();
+		}
 	private:
 		/// <summary>
 		/// スケルトンの初期化。
@@ -455,6 +458,6 @@ namespace nsK2Engine {
 		StructuredBuffer			m_worldMatrixArraySB;				// ワールド行列の配列のストラクチャードバッファ。
 		std::vector< GemometryData > m_geometryDatas;					// ジオメトリ情報。
 		std::unique_ptr<int[]>		m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
-
+		std::string m_tkmFilePath;
 	};
 }

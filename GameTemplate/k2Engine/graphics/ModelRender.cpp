@@ -121,6 +121,7 @@ namespace nsK2Engine {
 		int maxInstance,
 		bool isFrontCullingOnDrawShadowMap)
 	{
+		m_tkmFilePath = filePath;
 		// インスタンシング描画用のデータを初期化。
 		InitInstancingDraw(maxInstance);
 		// スケルトンを初期化。
