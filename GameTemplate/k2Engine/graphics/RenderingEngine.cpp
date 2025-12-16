@@ -218,9 +218,9 @@ namespace nsK2Engine {
 
     }
 
-    void RenderingEngine::SetModel(ModelRender& model)
+    void RenderingEngine::SetModel(ModelRender& model, float size)
     {
-        underLeftView.SetModel(model);
+        underLeftView.SetModel(model, size);
     }
 
     void RenderingEngine::InitIBLData(const wchar_t* iblTexFilePath, float intencity)

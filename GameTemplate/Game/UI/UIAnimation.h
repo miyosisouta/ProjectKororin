@@ -6,12 +6,18 @@
 #include "Util/Curve.h"
 
 
+class UIBase;
+
+
 template <typename T>
 using UIAnimationApplyFunc = std::function<void(const T&)>;
 
-
 class UIAnimationBase
 {
+protected:
+	UIBase* m_ui = nullptr;
+
+
 public:
 	UIAnimationBase() {}
 	~UIAnimationBase() {}
@@ -19,6 +25,9 @@ public:
 	virtual void Update() = 0;
 	virtual void Play() = 0;
 	virtual bool IsPlay() = 0;
+
+
+	void SetUI(UIBase* ui) { m_ui = ui; }
 };
 
 
@@ -62,6 +71,11 @@ public:
 
 	void SetParameter(Vector2 start, Vector2 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
+		start_ = start;
+		end_ = end;
+		timeSec_ = timeSec;
+		type_ = type;
+		loopMode_ = loopMode;
 		m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
@@ -117,6 +131,11 @@ public:
 
 	void SetParameter(Vector3 start, Vector3 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
+		start_ = start;
+		end_ = end;
+		timeSec_ = timeSec;
+		type_ = type;
+		loopMode_ = loopMode;
 		m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
@@ -136,7 +155,7 @@ public:
 
 class UIVector4Animation : public UIAnimationBase
 {
-private:
+protected:
 	Vector4Curve m_curve;
 	/** カーブ用のパラメーター */
 	Vector4 start_ = Vector4::White;
@@ -173,6 +192,11 @@ public:
 
 	void SetParameter(Vector4 start, Vector4 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
+		start_ = start;
+		end_ = end;
+		timeSec_ = timeSec;
+		type_ = type;
+		loopMode_ = loopMode;
 		m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
@@ -188,6 +212,23 @@ public:
 		applyFunc_ = func;
 	}
 };
+
+
+class UIColorAnimation : public UIVector4Animation
+{
+public:
+	UIColorAnimation();
+	~UIColorAnimation() {}
+
+	void Update() override
+	{
+		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+		applyFunc_(m_curve.GetCurrentValue());
+	}
+};
+
+
+
 //
 //
 //class UIQuaternionAnimation : public UIAnimationBase

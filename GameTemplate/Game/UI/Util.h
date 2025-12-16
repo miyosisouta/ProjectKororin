@@ -5,10 +5,9 @@ class UIUtil
 {
 public:
 	/* 「Aボタンおしてね」を表示する設定 */
-	static void SetAButtonUI(SpriteRender* spritePath, FontRender* font, Vector3 spritePos, Vector3 fontPos);
+	static void SetAButtonUI(FontRender* font, SpriteRender* sprite, Vector3 spritePos, Vector3 fontPos, Vector3 spriteScal = 1.0f, float fontScal = 1.0f);
 
 	/* テキストの設定 */
-	/* function :  */
-	static void SetText(FontRender* fontRender, const std::function<void(wchar_t*)>& func);
+	static void SetText(nsK2Engine::FontRender* fontRender, const std::function<void(wchar_t*)>& func);
 };
 

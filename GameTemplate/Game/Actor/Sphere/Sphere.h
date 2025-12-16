@@ -171,6 +171,15 @@ public:
 	 */
 	bool CheakGoalSize();
 
+	void AddAttachableObject(AttachableObject* object)
+	{
+		m_attachableObjectList.push_back(object);
+	}
+
+
+	void SetPlayable(const bool flg) { isPlayable_ = flg; }
+
+
 
 private:
 	/**
@@ -212,11 +221,15 @@ private: // Sphere関係の変数
 	float radius_ = 13.0f; //!< 半径
 	bool isDraw_ = true;
 
+	bool isPlayable_ = true;
+
 	//CollisionObject* collisionObject_ = nullptr; //衝突判定オブジェクト
 	//SphereCollision* sphereCollision_ = nullptr; // 衝突判定ゴーストオブジェクト
 
 	std::unique_ptr<SphereStatus> status_;	//!< ステータス
 	std::unique_ptr<SphereCollision> collider_;	//!< 抽象化された衝突オブジェクトを所有・管理するための器
+
+	std::vector<AttachableObject*> m_attachableObjectList;
 
 
 	Vector3 m_addForce;							//!< 外部からもらう力

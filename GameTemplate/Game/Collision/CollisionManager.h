@@ -45,8 +45,8 @@ class SplitSpace : public Noncopyable
 
 private:
 	// AABBboxを作る個数
-	static const int X_NUM_ = 4;
-	static const int Z_NUM_ = 4;
+	static const int Z_NUM_ = 16;
+	static const int X_NUM_ = 16;
 
 	/* 空間分割時に使う変数 */
 	float worldSizeX_ = 0.0f; //!< ステージの大きさx座標

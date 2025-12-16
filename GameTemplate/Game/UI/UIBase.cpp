@@ -4,6 +4,14 @@
  */
 #include "stdafx.h"
 #include "UIBase.h"
+#include "UIAnimation.h"
+
+
+void UIBase::SetUIAnimation(UIAnimationBase* animation)
+{
+	uiAnimation_ = std::unique_ptr<UIAnimationBase>(animation);
+	uiAnimation_->SetUI(this);
+}
 
 
 
@@ -126,6 +134,7 @@ void UIIcon::Update()
 	m_spriteRender.SetPosition(m_transform.m_position);
 	m_spriteRender.SetScale(m_transform.m_scale);
 	m_spriteRender.SetRotation(m_transform.m_rotation);
+	m_spriteRender.SetMulColor(color_);
 	m_spriteRender.Update();
 }
 

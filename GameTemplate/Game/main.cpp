@@ -44,6 +44,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto* fadeObject = NewGO<FadeObject>(0, "fadeObject");
 	// Effectクラスのインスタンスを作成
 	auto* effectObject = NewGO<GameEffectObject>(0, "gameEffectObject");
+	// スカイキューブ
+	auto* skyCube = NewGO<SkyCube>(0, "skyCube");
+	skyCube->SetType(enSkyCubeType_DayToon);
+	skyCube->SetScale(150.0f);
 
 	ParameterManager::CreateInstance();
 
@@ -70,6 +74,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	DeleteGO(SceneManager);
 	DeleteGO(fadeObject);
 	DeleteGO(effectObject);
+	DeleteGO(skyCube);
 
 	ParameterManager::DestroyInstance();
 

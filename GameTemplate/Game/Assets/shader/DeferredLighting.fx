@@ -112,6 +112,36 @@ float3 CalcWorldPosFromUVZ( float2 uv, float zInScreen, float4x4 mViewProjInv )
 	worldPos.xyz /= worldPos.w;
 	return worldPos.xyz;
 }
+//トゥーンシェーディング
+float CalcToonShade(float3 normalWS, float3 lightDirWS)
+{
+    //法線と光の方向のベクトルの正規化
+    float3 normalizedNormal = normalize(normalWS);
+    float3 normalizedLight = normalize(-lightDirWS);  //光が当たる方向に合わせる
+
+    float p = dot(normalizedNormal, normalizedLight);
+    p = saturate(p);
+
+    //トゥーンシェードの段階を定義
+    const float dark = 0.3f;
+    const float gray = 0.5f;
+    const float white = 0.9f;
+
+    //3段階に分ける
+    if (p < 0.33f)
+    {
+        return dark;
+    }
+    else if (p < 0.66f)
+    {
+        return gray;
+    }
+    else
+    {
+        return white;
+    }
+
+}
 /*!
  * @brief	ディレクションライトの反射光を計算
  *@param[in]	normal			サーフェイスの法線。
@@ -150,6 +180,9 @@ float3 CalcDirectionLight(
                 isSoftShadow ) * shadowParam;
         }
         
+        //トゥーンシェーディング計算
+        float shade = CalcToonShade(normal, light.directionalLight[ligNo].direction);
+
         lig += CalcLighting(
             light.directionalLight[ligNo].direction,
             light.directionalLight[ligNo].color,
@@ -159,7 +192,7 @@ float3 CalcDirectionLight(
             metaric,
             smooth,
             specColor
-        ) * ( 1.0f - shadow );
+        ) * ( 1.0f - shadow ) * shade;
     }
     return lig;
 }
@@ -364,27 +397,28 @@ float4 PSMainCore(PSInput In, uniform int isSoftShadow)
         viewportPos
     );
     
-    if(light.isEnableRaytracing){
-        // レイトレを行う場合はレイトレで作った反射テクスチャとIBLテクスチャを合成する。
-        // GLテクスチャ
-        float reflectionRate = 1.0f - ( ( smooth - 0.5f ) * 2.0f );
-        float level = lerp(0.0f, (float)(NUM_REFLECTION_TEXTURE - 1 ), pow( reflectionRate, 3.0f ));
-        if( level < NUM_REFLECTION_TEXTURE-1){
-            lig += albedoColor * SampleReflectionColor(In.uv, level);
-        }else if (light.isIBL == 1) {
-            // IBLがあるなら。
-            lig += albedoColor * SampleIBLColorFromSkyCube(
-                g_skyCubeMap, 
-                toEye, 
-                normal, 
-                smooth,
-                light.iblIntencity
-            );
-        }else{
-            // 環境光による底上げ
-            lig += light.ambientLight * albedoColor;    
-        }
-    }else if (light.isIBL == 1) {
+    // if(light.isEnableRaytracing){
+    //     // レイトレを行う場合はレイトレで作った反射テクスチャとIBLテクスチャを合成する。
+    //     // GLテクスチャ
+    //     float reflectionRate = 1.0f - ( ( smooth - 0.5f ) * 2.0f );
+    //     float level = lerp(0.0f, (float)(NUM_REFLECTION_TEXTURE - 1 ), pow( reflectionRate, 3.0f ));
+    //     if( level < NUM_REFLECTION_TEXTURE-1){
+    //         lig += albedoColor * SampleReflectionColor(In.uv, level);
+    //     }else if (light.isIBL == 1) {
+    //         // IBLがあるなら。
+    //         lig += albedoColor * SampleIBLColorFromSkyCube(
+    //             g_skyCubeMap, 
+    //             toEye, 
+    //             normal, 
+    //             smooth,
+    //             light.iblIntencity
+    //         );
+    //     }else{
+    //         // 環境光による底上げ
+    //         lig += light.ambientLight * albedoColor;    
+    //     }
+    // }else 
+    if (light.isIBL == 1) {
         // 視線からの反射ベクトルを求める。
         lig += albedoColor * SampleIBLColorFromSkyCube(
             g_skyCubeMap, 

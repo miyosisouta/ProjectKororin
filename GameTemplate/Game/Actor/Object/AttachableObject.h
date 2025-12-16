@@ -24,6 +24,11 @@ public:
 	void Render(RenderContext& rc)override;
 
 public:
+	inline float GetUIScale() const
+	{
+		return UIDisplayscale_;
+	}
+
 	inline int GetObjectSize() const
 	{
 		return objectSize_;
