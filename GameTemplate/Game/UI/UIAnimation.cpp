@@ -14,3 +14,12 @@ UIColorAnimation::UIColorAnimation()
 			m_ui->color_ = v;
 		});
 }
+
+UIScaleAnimation::UIScaleAnimation()
+{
+	SetFunc([&](Vector3 s)
+		{
+			m_ui->m_transform.m_localScale = s;
+			m_ui->m_transform.UpdateTransform();
+		});
+}

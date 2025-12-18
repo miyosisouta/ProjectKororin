@@ -94,7 +94,7 @@ public:
 
 class UIVector3Animation : public UIAnimationBase
 {
-private:
+protected:
 	Vector3Curve m_curve;
 	/** カーブ用のパラメーター */
 	Vector3 start_ = Vector3::Zero;
@@ -213,7 +213,7 @@ public:
 	}
 };
 
-
+/* 色変更アニメーション */
 class UIColorAnimation : public UIVector4Animation
 {
 public:
@@ -227,6 +227,19 @@ public:
 	}
 };
 
+/* 大きさ変更アニメーション */
+class UIScaleAnimation : public UIVector3Animation
+{
+public:
+	UIScaleAnimation();
+	~UIScaleAnimation() {}
+
+	void Update() override 
+	{
+		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+		applyFunc_(m_curve.GetCurrentValue());
+	}
+};
 
 
 //

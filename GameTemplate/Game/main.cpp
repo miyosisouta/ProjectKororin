@@ -9,6 +9,7 @@
 #include "Scene/SceneManager.h"
 
 
+
 void ReportLiveObjects()
 {
 	IDXGIDebug* pDxgiDebug;
@@ -48,6 +49,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto* skyCube = NewGO<SkyCube>(0, "skyCube");
 	skyCube->SetType(enSkyCubeType_DayToon);
 	skyCube->SetScale(150.0f);
+
 
 	ParameterManager::CreateInstance();
 

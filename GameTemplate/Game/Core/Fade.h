@@ -69,13 +69,13 @@ private:
 
 
 public:
-    inline void SetAlpha(const float alpha) { fadeOutAlpha_ = alpha; }  //!< α値の設定
-    inline void SetLoading(const bool flag) { isLoading_ = flag; }      //!< ローディング画面を描画するかどうか(trueに設定するだけ)
     inline void Play() { isPlay_ = true; }                              //!< フェードさせるかどうか(trueに設定するだけ)
     inline void Stop() { isPlay_ = false; }                             //!< フェード停止
     inline bool IsLoading() { return isLoading_; }                      //!< ローディング画面を描画させているどうか
     inline bool IsPlay() { return isPlay_; }                            //!< フェードしているかどうか
-
+    inline void SetAlpha(const float alpha) { fadeOutAlpha_ = alpha; }  //!< α値の設定
+    inline void SetLoading(const bool flag) { isLoading_ = flag; }      //!< ローディング画面を描画するかどうか(trueに設定するだけ)
+    inline FadeMode GetMode() { return mode_; }                         //!< 現在のモードを取得
 
 /******* シングルトン用 **********/
 

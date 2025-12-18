@@ -21,6 +21,11 @@ namespace
 TitleScene::TitleScene()
 {
 	CollisionHitManager::CreateInstance();
+
+	if (Fade::Get().GetMode() == FadeMode::FadeOut) 
+	{
+		Fade::Get().PlayFade(FadeMode::FadeIn);
+	}
 }
 
 TitleScene::~TitleScene()
@@ -36,31 +41,34 @@ bool TitleScene::Start()
 	// 必要な機能のNewGO
 	sphere_ = NewGO<Sphere>(0, "sphere");
 	inputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
-	
-	
+
+
+	// ゲームループ時、スカイキューブがfalseの場合アクティブにする
+	auto* skyCube = FindGO<SkyCube>("skyCube");
+	if (!skyCube->IsActive()) {
+		skyCube->Activate();
+		Vector3 skyCubePosition = sphere_->GetPosition();
+		skyCubePosition.y = 0.0f;
+		skyCube->SetPosition(skyCubePosition);
+	}
+
 
 	// 初期設定
-	inputSystem_->SetTarget(sphere_);
-	sphere_->SetPosition(Vector3(0.0f,1.0f,-50.0f));
-
-	
-	//g_renderingEngine->SetAmbientByIBLTexture(skyCube_->GetTextureFilePath(), 0.5f);
-	g_renderingEngine->SetCascadeNearAreaRates(0.01f, 0.1f, 0.5f);
-	
-
-	// 3Dオブジェクト用にディレクションライトの設定
-	g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -0.5f, 1.0f), Vector3(1.2f));
-	g_sceneLight->SetAmbinet(0.6f);
-
-	// 時間を測定の初期設定
-	calcTime_.InitCalcTime();
-
+	{
+		inputSystem_->SetTarget(sphere_); // 操作のターゲット設定
+		sphere_->SetPosition(Vector3(0.0f, 1.0f, -50.0f)); // タイトル時の塊の位置を設定
+		g_renderingEngine->SetCascadeNearAreaRates(0.01f, 0.1f, 0.5f); // カスケードシャドウのエリア率の設定
+		g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -0.5f, 1.0f), Vector3(1.2f)); // 3Dオブジェクト用にディレクションライトの設定
+		g_sceneLight->SetAmbinet(0.6f); // アンビエントライトの設定
+		calcTime_.InitCalcTime(); // 時間を測定の初期設定
+		g_camera3D->SetPosition(Vector3(0.0f, 100.0f, -200.0f));
+		g_camera3D->SetTarget(Vector3(0.0f, 50.0f, 0.0f));
+	}
 
 	// 画像の設定
 	{
 		// ゲームタイトルの表示
 		{
-			// 画像の表示
 			titleGameNameCanvas_ = new UICanvas;
 			auto* icon = titleGameNameCanvas_->CreateUI<UIIcon>();
 			icon->Initialize("Assets/sprite/title/titleGameName.DDS", 1024.0f, 512.0f, Vector3(0.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
@@ -68,18 +76,17 @@ bool TitleScene::Start()
 
 		// 「Press Button A」の表示とイージング設定
 		{
-			// 画像の表示
 			pressButtonCanvas_ = new UICanvas;
 			icon_ = pressButtonCanvas_->CreateUI<UIIcon>();
 			icon_->Initialize("Assets/sprite/UI/Press_Button_A.DDS", 512.0f, 256.0f, Vector3(0.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
 			// ここからイージング設定
-			auto* scaleAnimation = new UIVector4Animation();
+			auto scaleAnimation = std::make_unique<UIVector4Animation>();
 			scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.1f), 3.0f, EasingType::EaseInOut, LoopMode::PingPong);
 			scaleAnimation->SetFunc([&](Vector4 v)
 				{
 					icon_->color_ = Vector4(v.x, v.y, v.z, v.w);
 				});
-			icon_->SetUIAnimation(scaleAnimation);
+			icon_->SetUIAnimation(std::move(scaleAnimation));
 			icon_->PlayAnimation();
 		}
 	}
@@ -88,7 +95,6 @@ bool TitleScene::Start()
 
 void TitleScene::Update() 
 {
-
 	// 1フレームの経過時間を取得
 	elapsedTime_ += g_gameTime->GetFrameDeltaTime();
 	//  初期位置を0.5とし0.0～1.0を何度も増減する、

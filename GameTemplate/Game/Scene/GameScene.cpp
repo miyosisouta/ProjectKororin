@@ -11,7 +11,7 @@
 #include "Core/GameUIManager.h"
 #include "Core/InGameManager.h"
 #include "Core/LateStageObjectUpdateManager.h"
-#include "Scene/ResultScene.h"
+#include "Scene/TitleScene.h"
 #include "UI/Canvas.h"
 #include "UI/UIBase.h"
 #include "UI/Util.h"
@@ -21,11 +21,12 @@
 
 namespace
 {
-	constexpr const float FADE_OUT_START_TIME = 2.0f;		// フェードアウトが始まるまでの時間
-	constexpr const float FLIGHT_START_DELAY = 2.5f;		// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 150.0f;			// ゲーム時間
-	constexpr const float SPHERE_RESULT_LERP_UP_TIME = 2.0f;			// リザルト時塊がふわふわと線形補間により行う上昇にかける時間
-	constexpr const float SPHERE_RESULT_LERP_DOWN_TIME = 3.0f;			// リザルト時塊がふわふわと線形補間により行う下降にかける時間
+	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
+	constexpr const float FLIGHT_START_DELAY = 1.5;				// オブジェクトが空へ飛ぶまでの時間
+	constexpr const float SPHERE_TO_DELETE_TIME = 5.0f;			// オブジェクトが空へ飛ぶまでの時間
+	constexpr const float GAME_TIMER_LIMIT = 10.0f;				// ゲーム時間
+	constexpr const float SPHERE_RESULT_LERP_UP_TIME = 2.0f;	// リザルト時塊がふわふわと線形補間により行う上昇にかける時間
+	constexpr const float SPHERE_RESULT_LERP_DOWN_TIME = 3.0f;	// リザルト時塊がふわふわと線形補間により行う下降にかける時間
 	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
 	constexpr const uint8_t SET_CAN_NUMBER_CHARACTERS = 256;	// 設定可能な文字数
 	static const Vector3 SPRITE_BUTTON_POS = Vector3(-250.0f, -300.0f, 0.0f);			// ボタンの画像の座標
@@ -36,7 +37,7 @@ namespace
 	static const Vector3 SPHERE_RESULT_CLEAR_POS = Vector3(0.0f, 3000.0f, 0.0f);		// クリアしているときの塊の座標
 	static const Vector3 SPHERE_RESULT_FAILER_MIN_POS = Vector3(0.0f, 100.0f, -200.0f);	// クリアしていないときの塊が一番下にいる座標
 	static const Vector3 SPHERE_RESULT_FAILER_MAX_POS = Vector3(0.0f, 200.0f, -200.0f);	// クリアしていないときの塊が一番上にいる座標
-	static const Vector3 SPHERE_RESULT_FAILER_LAST_POS = Vector3(0.0f, 0.0f, 0.0f);	// クリアしていないときの塊が最終的にいる位置座標
+	static const Vector3 SPHERE_RESULT_FAILER_LAST_POS = Vector3(0.0f, 0.0f, 180.0f);		// クリアしていないときの塊が最終的にいる位置座標
 
 	// フェードの境界時間を定数として定義
 	constexpr const float FADE_START_TIME = 20.0f; // フェード開始 (α = 0.0f)
@@ -84,21 +85,31 @@ namespace _internal
 
 	void Result::Update()
 	{
-		auto& currentState = stepList_[currentStep_];
-		if (nextStep_ != Step::Invalid && nextStep_ != currentStep_)
+		// 状態を変更
 		{
-			currentState.exit(this);
-			currentState = stepList_[nextStep_];
-			currentStep_ = nextStep_;
-			currentState.enter(this);
+			auto& currentState = stepList_[currentStep_];
+			if (nextStep_ != Step::Invalid && nextStep_ != currentStep_)
+			{
+				currentState.exit(this);
+				currentState = stepList_[nextStep_];
+				currentStep_ = nextStep_;
+				currentState.enter(this);
+			}
+			currentState.update(this);
 		}
-		currentState.update(this);
 
-		// Canvasの更新
-		if (instructionButtonSprite_)
+		// 画像の更新
 		{
-			instructionButtonSprite_->Update();
+			// Canvasの更新
+			if (instructionButtonSprite_) {
+				instructionButtonSprite_->Update();
+			}
+			// タイトルへの画像更新
+			if (titleTransitionSprite_) {
+				titleTransitionSprite_->Update();
+			}
 		}
+
 		// 入力判定の状態を更新
 		owner_->inputDetection_->UpdateTriggerState();
 	}
@@ -142,6 +153,12 @@ namespace _internal
 			if (instructionButtonSprite_) {
 				instructionButtonSprite_->Render(rc);
 			}
+			if (breakScreenSprite_) {
+				breakScreenSprite_->Render(rc);
+			}
+			if (titleTransitionSprite_) {
+				titleTransitionSprite_->Render(rc);
+			}
 		}
 	}
 
@@ -171,6 +188,8 @@ namespace _internal
 		setting(Step::Step4, EnterStep4, UpdateStep4, ExitStep4);
 		// step5
 		setting(Step::Step5, EnterStep5, UpdateStep5, ExitStep5);
+		// step6
+		setting(Step::Step6, EnterStep6, UpdateStep6, ExitStep6);
 	}
 
 
@@ -181,6 +200,7 @@ namespace _internal
 		result->owner_->sphereInputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
 		result->owner_->sphereInputSystem_->SetTarget(result->owner_->sphere_);
 		result->owner_->sphere_->SetPlayable(false);
+
 
 		// クリアしていない場合
 		if (!result->owner_->sphere_->CheakGoalSize())
@@ -203,6 +223,9 @@ namespace _internal
 
 			// ディレクションンライトのパラメーター設定
 			g_sceneLight->SetDirectionLight(0, Vector3(1.0f, 1.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+
+			// スカイキューブを非アクティブに
+			result->owner_->skyCube_->Deactivate();
 		}
 
 		// フェード処理
@@ -236,7 +259,6 @@ namespace _internal
 			Vector3 deltaPosition = BLACK_OBJECT_LAST_POS - result->blackOutObject_->GetPosition(); // 移動先と今の座標の差
 			if (deltaPosition.Length() >= 0.5f)  // まだ移動させたい場合
 			{
-
 				const float lerpValue = result->calclerpValue_.CalcUpdate();
 
 				Vector3 currentPos = result->blackOutObject_->GetPosition(); // 今いる座標
@@ -302,7 +324,7 @@ namespace _internal
 				result->goalTimeText_ = std::make_unique<FontRender>();
 				UIUtil::SetText(result->goalTimeText_.get(), [&](wchar_t* text)
 					{
-						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d m %02d cm", result->goalMinuteTime_, result->goalSecondTime_);
+						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 分 %02d 秒", result->goalMinuteTime_, result->goalSecondTime_);
 					});
 				result->goalTimeText_->SetPSC(Vector3(300.0f, 150.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
@@ -334,11 +356,8 @@ namespace _internal
 
 		else 
 		{
-			// todo for test
-			
 			// リープ先の設定
-			result->sphereResultInitPos = SPHERE_RESULT_FAILER_MIN_POS;	// 初期地点
-			result->sphereResultGoalPos = SPHERE_RESULT_FAILER_MAX_POS; // 目標地点
+			result->SetUpToLerp(SPHERE_RESULT_FAILER_MIN_POS, SPHERE_RESULT_FAILER_MAX_POS);
 
 			// リープで使用する時間の設定
 			result->calclerpValue_.InitCalcTime(1.5f);
@@ -364,28 +383,15 @@ namespace _internal
 			}
 
 
-			//// ボタンを押してねの画像の設定
-			//result->instructionButtonSprite_ = std::make_unique<SpriteRender>();
-			//result->instructionButtonSprite_->Init("Assets/sprite/Result/instructionButton.DDS", 128, 128);
-			//result->instructionButtonSprite_->SetPSM(
-			//	Vector3(800.0f, 180.0f, 0.0f),
-			//	0.3f,
-			//	Vector4::White
-			//);
-
 			// 画像の表示
 			result->instructionButtonSprite_ = new UICanvas;
-			result->icon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
-			result->icon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(800.0f, 180.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
+			result->instructionIcon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
+			result->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(800.0f, 180.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
 			// ここからイージング設定
-			auto* scaleAnimation = new UIColorAnimation();
+			auto scaleAnimation = std::make_unique<UIColorAnimation>();
 			scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 2.0f, EasingType::EaseInOut, LoopMode::PingPong);
-			/*scaleAnimation->SetFunc([&](Vector4 v)
-				{
-					result->icon_->color_ = Vector4(v.x, v.y, v.z, v.w);
-				});*/
-			result->icon_->SetUIAnimation(scaleAnimation);
-			result->icon_->PlayAnimation();
+			result->instructionIcon_->SetUIAnimation(std::move(scaleAnimation));
+			result->instructionIcon_->PlayAnimation();
 
 
 			// テキストウィンドウの画像の設定
@@ -413,7 +419,7 @@ namespace _internal
 			const float lerpValue = (sinf(result->elapsedTime_) + 1.0f) * 0.5f;
 
 			Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
-			currentPos.Lerp(lerpValue, SPHERE_RESULT_FAILER_MAX_POS, SPHERE_RESULT_FAILER_MIN_POS); // 移動先の座標を線形補完
+			currentPos.Lerp(lerpValue, result->sphereResultGoalPos, result->sphereResultInitPos); // 移動先の座標を線形補完
 			result->owner_->sphere_->SetPosition(currentPos); // 移動先のポジションを設定
 			result->owner_->sphere_->Update();
 		}
@@ -446,18 +452,25 @@ namespace _internal
 	}
 	void Result::ExitStep3(Result* result)
 	{
-		result->resultGuidanceSizeText_.reset();
-		result->resultSphereSizeText_.reset();
-		result->resultGuidanceGoalTime_.reset();
-		result->goalTimeText_.reset();
-		result->resultGuidanceAttachCountText_.reset();
-		result->attachableObjectCountText_.reset();
-		result->buttonText_.reset();
-		for (int i = 0; i <= 4; ++i){ result->failureTexts_[i].reset();	}
+		if (result->owner_->sphere_->CheakGoalSize())
+		{
+			result->resultGuidanceSizeText_.reset();
+			result->resultSphereSizeText_.reset();
+			result->resultGuidanceGoalTime_.reset();
+			result->goalTimeText_.reset();
+			result->resultGuidanceAttachCountText_.reset();
+			result->attachableObjectCountText_.reset();
+			result->buttonText_.reset();
+		}
+		else 
+		{
+			for (int i = 0; i <= 4; ++i) { result->failureTexts_[i].reset(); } // テキストを削除
 
-		//result->instructionButtonSprite_.reset();
-		result->textWindowSprite_.reset();
-		result->buttonSprite_.reset();
+			result->instructionIcon_->isDraw = false;
+			result->textWindowSprite_.reset();
+			result->buttonSprite_.reset();
+		}
+		result->elapsedTime_ = 0.0f;
 	}
 
 
@@ -465,49 +478,134 @@ namespace _internal
 	{
 		// リープで使用する時間の設定
 		result->calclerpValue_.InitCalcTime(FLIGHT_START_DELAY);
+		// リープさせるための座標を設定
+		result->SetUpToLerp(result->owner_->sphere_->GetPosition(), SPHERE_RESULT_FAILER_LAST_POS);
 	}
 
 	void Result::UpdateStep4(Result* result)
 	{
-		// クリアしている場合
-		if (result->owner_->sphere_->CheakGoalSize()) 
+		result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
+		if (result->elapsedTime_ >= FLIGHT_START_DELAY) // 2秒経過したら
 		{
-			//文字が消えてから2秒たったら
-			const float hoge = result->calclerpValue_.CalcUpdate();
-			if (hoge >= FLIGHT_START_DELAY) {
+			// クリアしている場合
+			if (result->owner_->sphere_->CheakGoalSize())
+			{
 				dynamic_cast<TitleInputSyste*>(result->owner_->sphereInputSystem_)->SetMoveDirection(Vector3(0.0f, 1.0f, 0.5f));	// 斜め奥に行かせたい
-				result->nextStep_ = Step::Step5; // 次の処理へ
+				if (result->elapsedTime_ >= SPHERE_TO_DELETE_TIME) { return; } // 5秒たつまで次のシーンには移行しない
 			}
-		}
 
-		// クリア失敗している場合
-		else 
-		{
+			// クリア失敗している場合
+			else
+			{
+				//テキストが消えてから時間計算
+				const float lerpValue = result->calclerpValue_.CalcUpdate(FLIGHT_START_DELAY);
 
+				Vector3 spherePos = result->owner_->sphere_->GetPosition(); // 今の座標を取得
+				spherePos.Lerp(lerpValue, result->sphereResultInitPos, result->sphereResultGoalPos); // 線形補間
+				result->owner_->sphere_->SetPosition(spherePos); // 移動先のポジションを設定
+				result->owner_->sphere_->Update(); // 座標を更新
+
+				Vector3 deltaPos = result->sphereResultGoalPos - result->owner_->sphere_->GetPosition();
+				if (deltaPos.Length() >= 1.2f) { return; } // 塊が移動しきるまで次のシーンへ移行しない
+			}
+
+			// 画面外に行った塊のクラスと関係するクラスの削除
+			DeleteGO(result->owner_->sphere_);
+			DeleteGO(result->owner_->sphereCamera_);
+			DeleteGO(result->owner_->sphereInputSystem_);
+
+			result->nextStep_ = Step::Step5; // 次の処理へ
 		}
 	}
 	void Result::ExitStep4(Result* result)
 	{
+		result->elapsedTime_ = 0.0f;
 	}
 
 
 	void Result::EnterStep5(Result* result)
 	{
-		result->elapsedTime_ = 0.0f;
+		// クリアしている場合
+		if (result->owner_->sphere_->CheakGoalSize())
+		{
+		}
+
+		else 
+		{
+			// カメラレンズが割れた画像
+			{
+				result->breakScreenSprite_ = new UICanvas;
+				auto* icon = result->breakScreenSprite_->CreateUI<UIIcon>();
+				icon->Initialize("Assets/sprite/Result/breakScreen.DDS", 1920.0f, 1080.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
+			}
+
+			// 「タイトル」へ画像
+			{
+				// 画像の初期設定
+				result->titleTransitionSprite_ = new UICanvas;
+				result->titleTransitionWindowIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
+				result->titleTransitionWindowIcon_->Initialize("Assets/sprite/Result/titleTransitionButton.DDS", 512.0f, 256.0f, Vector3(-100.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+				// ここからイージング設定
+				auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+				scaleAnimation->SetParameter(Vector3(1.0f), Vector3(0.75f), 8.0f, EasingType::EaseInOut, LoopMode::PingPong);
+				result->titleTransitionSprite_->SetUIAnimation(std::move(scaleAnimation));
+				result->titleTransitionWindowIcon_->PlayAnimation();
+
+				auto colorAnimation = std::make_unique<UIColorAnimation>();
+				colorAnimation->SetParameter(Vector4(0.0f, 0.75f, 0.0, 1.0f), Vector4(0.0f, 1.0f, 0.0f, 1.0f), 8.0f, EasingType::EaseInOut, LoopMode::PingPong);
+				result->titleTransitionWindowIcon_->SetUIAnimation(std::move(colorAnimation));
+				result->titleTransitionWindowIcon_->PlayAnimation();
+				
+				// Aボタン画像
+				result->buttonAIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
+				result->buttonAIcon_->Initialize("Assets/sprite/UI/Button_A.DDS", 100.0f, 100.0f, Vector3(270.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+				// 画像を更新
+				result->titleTransitionSprite_->Update();
+			}
+		}
 	}
 	void Result::UpdateStep5(Result* result)
 	{
-		// フェード処理
-		Fade::Get().PlayFade(FadeMode::FadeIn, FADE_OUT_START_TIME,Vector3::Zero);
+		if (!g_pad[0]->IsTrigger(enButtonA)) { return; } // Aボタンを押していない場合処理を返す
 
-		if (!Fade::Get().IsPlay()) {
-			// 終わり
-
+		if (result->owner_->sphere_->CheakGoalSize()) 
+		{
+			// フェード処理(フェードアウト・2秒・白)
+			Fade::Get().PlayFade(FadeMode::FadeOut);
 		}
+
+		else
+		{
+			// 画像更新
+			result->titleTransitionSprite_->Update();
+
+			//フェード開始(フェードアウト・2秒・黒)
+			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME,fadeColorPreset::BLACK_COLOR_RGB);
+		}
+		result->nextStep_ = Step::Step6;
+
 	}
 	void Result::ExitStep5(Result* result)
 	{
+	}
 
+
+	void Result::EnterStep6(Result* result)
+	{
+	}
+	void Result::UpdateStep6(Result* result)
+	{
+		if (!Fade::Get().IsPlay())
+		{
+			// 次の処理へ
+			result->nextStep_ = Step::Max;
+			result->owner_->isNextScene_ = true;
+		}
+	}
+	void Result::ExitStep6(Result* result)
+	{
 	}
 }
 
@@ -641,10 +739,14 @@ void GameScene::Update()
 
 	// スカイキューブをプレイヤー追従にする
 	// 例外でFindGOする
-	auto* skyCube = FindGO<SkyCube>("skyCube");
-	Vector3 skyCubePosition = sphere_->GetPosition();
-	skyCubePosition.y = 0.0f;
-	skyCube->SetPosition(skyCubePosition);
+	skyCube_ = FindGO<SkyCube>("skyCube");
+	if (skyCube_)
+	{
+		Vector3 skyCubePosition = sphere_->GetPosition();
+		skyCubePosition.y = 0.0f;
+		skyCube_->SetPosition(skyCubePosition);
+	}
+
 
 	CollisionHitManager::Get().Update();
 	LateStageObjectUpdateManager::Get().Update();
@@ -664,7 +766,7 @@ void GameScene::Render(RenderContext& rc)
 bool GameScene::RequestID(uint32_t& id, float& waitTime)
 {
 	if (isNextScene_) {
-		id = ResultScene::ID();
+		id = TitleScene::ID();
 		waitTime = 5.0f;
 		return true;
 	}
@@ -690,4 +792,3 @@ void GameScene::CalculateFadeAlphaByTime()
 	//	// 残り10秒でα値を1.0まで上げる
 	//}
 }
-

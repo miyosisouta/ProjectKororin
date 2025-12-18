@@ -8,6 +8,7 @@ namespace
 	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 25.0f, 100.0f); // 塊との距離
 	float TARGET_DISTANCE = 200.0f;
 	float TARGET_HEIGHT = 50.0f; // 塊との高さの差
+	float ZOOM_OUT_TIME = 2.5f; // ズームアウトにかける時間
 }
 
 bool SphereCamera::Start() 
@@ -34,6 +35,7 @@ void SphereCamera::Update()
 	if (CheckForLevelUp(currentSphereLevel->GetLevel())) // カメラを遠ざける条件が満たされている場合
 	{
 		InitZoomOut(); // 移動先の設定
+		calclerpValue_.InitCalcTime(ZOOM_OUT_TIME); // 移動時間の設定
 	}
 
 
@@ -99,8 +101,9 @@ void SphereCamera::CalcZoomOut()
 
 	if (deltaPosition.y < 0.01f || deltaPosition.z < 0.01f)
 	{
+		const float calcValue = calclerpValue_.CalcUpdate();
 		// nextPositionの設定がされたとき、処理がされる
-		lerpCurrentMovement_.Lerp(0.08f, INIT_POSITION, nextPosition_); // 計算を始めてからの移動量を計算
+		lerpCurrentMovement_.Lerp(calcValue, INIT_POSITION, nextPosition_); // 計算を始めてからの移動量を計算
 		lerpCurrentMovement_ -= beforeFrameMovement_; // 前フレームの移動量を減算
 		beforeFrameMovement_ = lerpCurrentMovement_; // 今のフレームの移動量を保管
 	}
@@ -111,7 +114,7 @@ void SphereCamera::CalcZoomOut()
 
 bool ResultCamera::Start()
 {
-	Vector3 target = model_ != nullptr ? model_->GetPosition() : Vector3::Zero;
+	Vector3 target = Vector3::Zero;
 
 	Vector3 pos = target + Vector3(0.0f, 0.0f, TARGET_DISTANCE);
 

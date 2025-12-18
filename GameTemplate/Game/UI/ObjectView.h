@@ -7,7 +7,6 @@ public:
 	~ObjectView();
 
 	bool Start() override;
-	void Update() override;
 	void Render(RenderContext& rc) override;
 
 public:

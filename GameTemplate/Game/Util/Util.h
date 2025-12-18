@@ -22,11 +22,11 @@ public:
 		elapsedTime_ = 0.0f;
 	}
 
-	/* 目標時間になるまで毎フレーム時間を計算、最大1.0f*/
-	float CalcUpdate()
+	/* 目標時間になるまで毎フレーム時間を計算、初期は最大1.0f*/
+	float CalcUpdate(const float ratio = 1.0f)
 	{
 		elapsedTime_ += g_gameTime->GetFrameDeltaTime();
 
-		return min(1.0f, (elapsedTime_ / targetTime_));
+		return min(ratio, (elapsedTime_ / targetTime_));
 	}
 };
