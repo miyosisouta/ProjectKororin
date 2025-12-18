@@ -21,6 +21,11 @@ namespace
 TitleScene::TitleScene()
 {
 	CollisionHitManager::CreateInstance();
+
+	if (Fade::Get().GetMode() == FadeMode::FadeOut) 
+	{
+		Fade::Get().PlayFade(FadeMode::FadeIn);
+	}
 }
 
 TitleScene::~TitleScene()
@@ -36,12 +41,15 @@ bool TitleScene::Start()
 	// 必要な機能のNewGO
 	sphere_ = NewGO<Sphere>(0, "sphere");
 	inputSystem_ = NewGO<TitleInputSyste>(0, "inputSystem");
-	
+
 
 	// ゲームループ時、スカイキューブがfalseの場合アクティブにする
 	auto* skyCube = FindGO<SkyCube>("skyCube");
 	if (!skyCube->IsActive()) {
 		skyCube->Activate();
+		Vector3 skyCubePosition = sphere_->GetPosition();
+		skyCubePosition.y = 0.0f;
+		skyCube->SetPosition(skyCubePosition);
 	}
 
 
@@ -53,6 +61,8 @@ bool TitleScene::Start()
 		g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -0.5f, 1.0f), Vector3(1.2f)); // 3Dオブジェクト用にディレクションライトの設定
 		g_sceneLight->SetAmbinet(0.6f); // アンビエントライトの設定
 		calcTime_.InitCalcTime(); // 時間を測定の初期設定
+		g_camera3D->SetPosition(Vector3(0.0f, 100.0f, -200.0f));
+		g_camera3D->SetTarget(Vector3(0.0f, 50.0f, 0.0f));
 	}
 
 	// 画像の設定
@@ -85,7 +95,6 @@ bool TitleScene::Start()
 
 void TitleScene::Update() 
 {
-
 	// 1フレームの経過時間を取得
 	elapsedTime_ += g_gameTime->GetFrameDeltaTime();
 	//  初期位置を0.5とし0.0～1.0を何度も増減する、

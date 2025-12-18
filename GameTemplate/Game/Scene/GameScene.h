@@ -58,6 +58,7 @@ namespace _internal
 				Step3,
 				Step4,
 				Step5,
+				Step6,
 				Max,
 				Invalid = Max,
 			};
@@ -154,6 +155,11 @@ namespace _internal
 		static void EnterStep5(Result* result);
 		static void UpdateStep5(Result* result);
 		static void ExitStep5(Result* result);
+
+		/** Step6 */
+		static void EnterStep6(Result* result);
+		static void UpdateStep6(Result* result);
+		static void ExitStep6(Result* result);
 	};
 }
 

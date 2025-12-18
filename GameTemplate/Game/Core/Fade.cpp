@@ -42,24 +42,24 @@ Fade::~Fade()
 
 void Fade::Update()
 {
-	elapsedTime_ += g_gameTime->GetFrameDeltaTime();
-
 	// フェードを開始する場合
 	if (isPlay_ || isLoading_)
 	{
+		elapsedTime_ += g_gameTime->GetFrameDeltaTime(); // 1フレームの時間
+
 		UpdateAlpha();
 		fadeSprite_.SetMulColor(Vector4(currentFadeColor_.x, currentFadeColor_.y, currentFadeColor_.z, fadeOutAlpha_));
 		fadeSprite_.Update();
-	}
 
-	// ローディング画面を表示する場合
-	if (isLoading_)
-	{
-		UpdateLoading();
-		loadingStaticSprite_.SetMulColor(Vector4(currentLoadingColor_.x, currentLoadingColor_.y, currentLoadingColor_.z, fadeOutAlpha_));
-		loadingMoveSprite_.SetMulColor(Vector4(currentLoadingColor_.x, currentLoadingColor_.y, currentLoadingColor_.z, fadeOutAlpha_));
-		loadingStaticSprite_.Update();
-		loadingMoveSprite_.Update();
+		// ローディング画面を表示する場合
+		if (isLoading_)
+		{
+			UpdateLoading();
+			loadingStaticSprite_.SetMulColor(Vector4(currentLoadingColor_.x, currentLoadingColor_.y, currentLoadingColor_.z, fadeOutAlpha_));
+			loadingMoveSprite_.SetMulColor(Vector4(currentLoadingColor_.x, currentLoadingColor_.y, currentLoadingColor_.z, fadeOutAlpha_));
+			loadingStaticSprite_.Update();
+			loadingMoveSprite_.Update();
+		}
 	}
 }
 
@@ -112,16 +112,13 @@ void Fade::UpdateAlpha()
 	SetAlpha(fadeAlphaValue); // α値の設定
 
 	// α値が1.0以上になる場合、初期化(floatは完全一致は使わない)
-	if (fadeAlphaValue >= 1.0f)
-	{
-		fadeAlphaValue = 1.0f;
-	}
-	else if (fadeAlphaValue <= 0.0f) 
+	if (fadeAlphaValue >= 1.0f || fadeAlphaValue <= 0.0f)
 	{
 		isPlay_ = false;			// フェードを停止
 		mode_ = FadeMode::None;		// モードを初期化
 	}
 }
+
 
 void Fade::UpdateLoading()
 {

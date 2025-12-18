@@ -11,7 +11,7 @@
 #include "Core/GameUIManager.h"
 #include "Core/InGameManager.h"
 #include "Core/LateStageObjectUpdateManager.h"
-#include "Scene/ResultScene.h"
+#include "Scene/TitleScene.h"
 #include "UI/Canvas.h"
 #include "UI/UIBase.h"
 #include "UI/Util.h"
@@ -188,6 +188,8 @@ namespace _internal
 		setting(Step::Step4, EnterStep4, UpdateStep4, ExitStep4);
 		// step5
 		setting(Step::Step5, EnterStep5, UpdateStep5, ExitStep5);
+		// step6
+		setting(Step::Step6, EnterStep6, UpdateStep6, ExitStep6);
 	}
 
 
@@ -566,18 +568,44 @@ namespace _internal
 	}
 	void Result::UpdateStep5(Result* result)
 	{
-		result->titleTransitionSprite_->Update();
-		// フェード処理
-		//Fade::Get().PlayFade(FadeMode::FadeIn, FADE_OUT_START_TIME,Vector3::Zero);
+		if (!g_pad[0]->IsTrigger(enButtonA)) { return; } // Aボタンを押していない場合処理を返す
 
-		if (!Fade::Get().IsPlay()) {
-			// 終わり
-
+		if (result->owner_->sphere_->CheakGoalSize()) 
+		{
+			// フェード処理(フェードアウト・2秒・白)
+			Fade::Get().PlayFade(FadeMode::FadeOut);
 		}
+
+		else
+		{
+			// 画像更新
+			result->titleTransitionSprite_->Update();
+
+			//フェード開始(フェードアウト・2秒・黒)
+			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME,fadeColorPreset::BLACK_COLOR_RGB);
+		}
+		result->nextStep_ = Step::Step6;
+
 	}
 	void Result::ExitStep5(Result* result)
 	{
+	}
 
+
+	void Result::EnterStep6(Result* result)
+	{
+	}
+	void Result::UpdateStep6(Result* result)
+	{
+		if (!Fade::Get().IsPlay())
+		{
+			// 次の処理へ
+			result->nextStep_ = Step::Max;
+			result->owner_->isNextScene_ = true;
+		}
+	}
+	void Result::ExitStep6(Result* result)
+	{
 	}
 }
 
@@ -738,7 +766,7 @@ void GameScene::Render(RenderContext& rc)
 bool GameScene::RequestID(uint32_t& id, float& waitTime)
 {
 	if (isNextScene_) {
-		id = ResultScene::ID();
+		id = TitleScene::ID();
 		waitTime = 5.0f;
 		return true;
 	}

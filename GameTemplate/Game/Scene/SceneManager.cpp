@@ -29,7 +29,7 @@ bool SceneManager::Start()
 	SoundManager::CreateInstance(); // SoundManagerのインスタンスを作成
 
 	// 初期シーンを設定
-	currentScene_ = NextScene(TitleScene::ID());		// @todo for test
+	currentScene_ = NextScene(TitleScene::ID());
 	currentScene_->Start();
 
 	return true;
