@@ -11,13 +11,13 @@ class UIBase : public Noncopyable
 public:
 	Transform m_transform;
 	Vector4 color_ = Vector4::White;
-	std::unique_ptr<UIAnimationBase> uiAnimation_ = nullptr;
 
+	std::vector<std::unique_ptr<UIAnimationBase>> uiAnimationList_;
 
-protected:
 	bool isStart = false;
 	bool isUpdate = true;
 	bool isDraw = true;
+
 
 public:
 	UIBase()
@@ -35,18 +35,24 @@ public:
 public:
 	void UpdateAnimation()
 	{
-		uiAnimation_->Update();
+		for (auto& ui : uiAnimationList_) {
+			ui.get()->Update();
+		}
 	}
 	void PlayAnimation()
 	{
-		uiAnimation_->Play();
+		for (auto& ui : uiAnimationList_) {
+			ui.get()->Play();
+		}
 	}
 	bool IsPlayAnimation() const
 	{
-		return uiAnimation_->IsPlay();
+		for (auto& ui : uiAnimationList_) {
+			return ui.get()->IsPlay();
+		}
 	}
 
-	void SetUIAnimation(UIAnimationBase* animation);
+	void SetUIAnimation(std::unique_ptr<UIAnimationBase>animation);
 };
 
 

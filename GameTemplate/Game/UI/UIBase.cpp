@@ -7,10 +7,10 @@
 #include "UIAnimation.h"
 
 
-void UIBase::SetUIAnimation(UIAnimationBase* animation)
+void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation)
 {
-	uiAnimation_ = std::unique_ptr<UIAnimationBase>(animation);
-	uiAnimation_->SetUI(this);
+	animation->SetUI(this);
+	uiAnimationList_.push_back(std::move(animation));
 }
 
 
@@ -69,9 +69,10 @@ bool UIGauge::Start()
 
 void UIGauge::Update()
 {
-	if (uiAnimation_) {
+	for (auto& ui : uiAnimationList_) 
+	{
 		UpdateAnimation();
-		uiAnimation_->Update();
+		ui->Update();
 	}
 
 	m_transform.UpdateTransform();
@@ -125,9 +126,10 @@ bool UIIcon::Start()
 
 void UIIcon::Update()
 {
-	if (uiAnimation_) {
+	for (auto& ui : uiAnimationList_) 
+	{
 		UpdateAnimation();
-		uiAnimation_->Update();
+		ui->Update();
 	}
 
 	m_transform.UpdateTransform();
@@ -191,15 +193,17 @@ bool UICanvas::Start()
 
 void UICanvas::Update()
 {
-	if (uiAnimation_) {
+	for (auto& ui : uiAnimationList_) {
 		UpdateAnimation();
-		uiAnimation_->Update();
+		ui->Update();
 	}
 
 	m_transform.UpdateTransform();
 
 	for (auto* ui : m_uiList) {
-		ui->Update();
+		if (ui->isUpdate) {
+			ui->Update();
+		}
 	}
 }
 
@@ -207,6 +211,8 @@ void UICanvas::Update()
 void UICanvas::Render(RenderContext& rc)
 {
 	for (auto* ui : m_uiList) {
-		ui->Render(rc);
+		if (ui->isDraw) {
+			ui->Render(rc);
+		}
 	}
 }

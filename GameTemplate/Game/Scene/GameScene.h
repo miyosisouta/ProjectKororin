@@ -24,10 +24,10 @@ namespace _internal
 {
 	struct ResultInformation
 	{
-		float time;				// クリア時間
-		int count;				// くっついた個数
-		float scale;			// 大きさ
-		bool isSetting = false;	// 情報が設定されたか
+		float time;				//!< クリア時間
+		int count;				//!< くっついた個数
+		float scale;			//!< 大きさ
+		bool isSetting = false;	//!< 情報が設定されたか
 	};
 
 
@@ -65,40 +65,46 @@ namespace _internal
 
 
 	private:
-		Step::Enum currentStep_ = Step::Step1;
-		Step::Enum nextStep_ = Step::Invalid;
-		ResultInformation information_;
-		GameScene* owner_;
+		static std::array<State, Step::Max> stepList_;
 
-		UICanvas* instructionButtonSprite_ = nullptr;
-		UIIcon* icon_ = nullptr;
-		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			// 「大きさ」の表示
-		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			// 「経過時間」の表示
-		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	// 「モノ」の表示
-		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			// 塊の大きさのテキスト
-		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					// 塊の目標サイズ達成時の時間のテキスト
-		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		// 吸着したオブジェクトの個数のテキスト
-		std::unique_ptr<FontRender> failureTexts_[5];							// 失敗時のテキスト
-		std::unique_ptr<FontRender> buttonText_ = nullptr;						// ボタンをおしてね！のテキスト
+	private:
+		Step::Enum currentStep_ = Step::Step1;				//!< 現在のステップ
+		Step::Enum nextStep_ = Step::Invalid;				//!< 次のステップ
+		ResultInformation information_;						//!< リザルト時に必要な情報を持つ構造体
+		CalcLerpValue calclerpValue_;						//!< リープ用クラスの変数
+		GameScene* owner_;									//!< ゲームシーン
+		UICanvas* instructionButtonSprite_ = nullptr;		//!< 指示ボタンの画像
+		UICanvas* breakScreenSprite_ = nullptr;				//!< 画面が割れた画像
+		UICanvas* titleTransitionSprite_ = nullptr;			//!< タイトルへの画像
+		UIIcon* instructionIcon_ = nullptr;					//!< 指示ボタン
+		UIIcon* titleTransitionWindowIcon_ = nullptr;		//!< タイトルへウィンドウ
+		UIIcon* buttonAIcon_ = nullptr;						//!< Aボタン
 
-		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					// Aボタンの画像
-		//std::unique_ptr<SpriteRender> instructionButtonSprite_ = nullptr;		// 指示ボタンの画像
-		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				// テキストウィンドウの画像
+		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			//!< 「大きさ」の表示
+		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			//!< 「経過時間」の表示
+		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	//!< 「モノ」の表示
+		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			//!< 塊の大きさのテキスト
+		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					//!< 塊の目標サイズ達成時の時間のテキスト
+		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		//!< 吸着したオブジェクトの個数のテキスト
+		std::unique_ptr<FontRender> failureTexts_[5];							//!< 失敗時のテキスト
+		std::unique_ptr<FontRender> buttonText_ = nullptr;						//!< ボタンをおしてね！のテキスト
 
-		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;				// 失敗時の背景用オブジェクト
+		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					//!< Aボタンの画像
+		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				//!< テキストウィンドウの画像
 
-		CalcLerpValue calclerpValue_;
+		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;					//!< 失敗時の背景用オブジェクト
 
-		Vector3 sphereResultGoalPos = Vector3::Zero;		// リザルト時の塊が移動する座標を格納
-		Vector3 sphereResultInitPos = Vector3::Zero;		// リザルト時の塊の移動前の座標を格納
-		bool isMoveBlackOutObject_ = false; // 黒いオブジェクトが移動しているかどうか
-		bool isResultTextRender_ = false;	// リザルトテキストを表示するか
-		bool isSphereMoveUp_ = true;		// リザルト時塊を上に動かすかどうかのフラグ
-		bool isGoNextText_ = true;			// 次のテキストを映してよいか
-		float elapsedTime_ = 0.0f;		// 経過時間
-		uint8_t currentSentenceIndex = 0;		// 文の数
-		int goalMinuteTime_ = 0.0f;				// クリアタイム : 分
-		int goalSecondTime_ = 0.0f;				// クリアタイム : 秒
+
+		Vector3 sphereResultGoalPos = Vector3::Zero; //!< リザルト時の塊が移動する座標を格納
+		Vector3 sphereResultInitPos = Vector3::Zero; //!< リザルト時の塊の移動前の座標を格納
+		bool isMoveBlackOutObject_ = false; //!< 黒いオブジェクトが移動しているかどうか
+		bool isResultTextRender_ = false;	//!< リザルトテキストを表示するか
+		bool isSphereMoveUp_ = true;		//!< リザルト時塊を上に動かすかどうかのフラグ
+		bool isGoNextText_ = true;			//!< 次のテキストを映してよいか
+		uint8_t currentSentenceIndex = 0;	//!< 文の数
+		int goalMinuteTime_ = 0.0f;			//!< クリアタイム : 分
+		int goalSecondTime_ = 0.0f;			//!< クリアタイム : 秒
+		float elapsedTime_ = 0.0f;		//!< 経過時間
 		
 		
 
@@ -116,10 +122,12 @@ namespace _internal
 
 	public:
 		static void Initialize();
-
-
-	private:
-		static std::array<State, Step::Max> stepList_;
+		/* リープ */
+		void SetUpToLerp(Vector3 start, Vector3 end)
+		{
+			sphereResultInitPos = start;
+			sphereResultGoalPos = end;
+		}
 
 	private:
 		/** Step1 */
@@ -210,6 +218,7 @@ private:
 	void CalculateFadeAlphaByTime();
 
 private:
+	SkyCube* skyCube_ = nullptr; //!< スカイキューブ
 	Player* m_player = nullptr; //!< プレイヤーキャラクタ
 	Sphere* sphere_ = nullptr; //!< ボール（Sphere）
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
