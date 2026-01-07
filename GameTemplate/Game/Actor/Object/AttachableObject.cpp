@@ -38,25 +38,13 @@ bool AttachableObject::Start()
 
 	return true;
 }
-
 void AttachableObject::Update() 
 {
-	//// @todo for test
-	//btRigidBody* btBody = physicsStaticObject_->GetRigidBody()->GetBody(); // 当たり判定の剛体を取得
-	//btTransform& trans = btBody->getWorldTransform(); // 剛体のワールド座標を取得
-
-	//physicsStaticObject_->GetCollider()->GetBody(); 
-
-	//// transに入っているワールド座標をローカル座標に格納
-	//transform_.m_localPosition = Vector3(trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z()); 
-
-
 	transform_.UpdateTransform();
 	modelRender_.SetPosition(transform_.m_position);
 	modelRender_.SetRotation(transform_.m_rotation);
 	modelRender_.Update();
 }
-
 void AttachableObject::Render(RenderContext& rc) 
 {
 	if (isVisible_) {

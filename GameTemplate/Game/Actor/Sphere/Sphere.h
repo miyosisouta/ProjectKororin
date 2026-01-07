@@ -89,7 +89,7 @@ public:
 	inline const float GetRadius() { return radius_; }
 
 	/**
-	 * @brief 他の昨日に影響を与える半径を取得
+	 * @brief 他の機能に影響を与える半径を取得
 	 * @return 
 	 */
 	inline const float GetEffectiveRadius() { return effectiveRadius_; }
@@ -119,7 +119,17 @@ public:
 	 */
 	inline const void SetPosition(const Vector3 pos) { transform_.m_localPosition = pos; }
 
+	/**
+	 * @brief 塊を描画するかを設定
+	 * @param isDrawed 
+	 * @return 
+	 */
 	inline const void SetIsDraw(const bool isDrawed) { isDraw_ = isDrawed; }
+	
+	/**
+	 * @brief 塊が描画状況を取得
+	 * @return 
+	 */
 	inline const bool GetIsDraw() { return isDraw_; }
 	/**
 	 * @brief 球体のY座標を増加させる
@@ -171,11 +181,11 @@ public:
 	 */
 	bool CheakGoalSize();
 
+	// 吸着したオブジェクトをリストにまとめる
 	void AddAttachableObject(AttachableObject* object)
 	{
 		m_attachableObjectList.push_back(object);
 	}
-
 
 	void SetPlayable(const bool flg) { isPlayable_ = flg; }
 

@@ -5,10 +5,10 @@
 namespace 
 {
 	Vector3 INIT_POSITION = Vector3::Zero;
-	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 25.0f, 100.0f); // 塊との距離
+	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 50.0f, 150.0f); // 塊との距離
 	float TARGET_DISTANCE = 200.0f;
 	float TARGET_HEIGHT = 50.0f; // 塊との高さの差
-	float ZOOM_OUT_TIME = 2.5f; // ズームアウトにかける時間
+	float ZOOM_OUT_TIME = 2.0f; // ズームアウトにかける時間
 }
 
 bool SphereCamera::Start() 
@@ -20,7 +20,7 @@ bool SphereCamera::Start()
 	g_camera3D->SetFar(1000000.0f);
 
 	// Lerp先を設定
-	nextPosition_ = transform_.m_localPosition;
+	//nextPosition_ = transform_.m_localPosition;
 
 	// トランスフォームを更新
 	transform_.UpdateTransform();
@@ -98,14 +98,18 @@ void SphereCamera::CalcZoomOut()
 {
 	Vector3 deltaPosition = nextPosition_ - lerpCurrentMovement_; // Lerpにて動かした移動量と動かしたい座標の差
 	deltaPosition.Normalize(); // 正規化
+	deltaPosition.Length(); // 正規化
 
-	if (deltaPosition.y < 0.01f || deltaPosition.z < 0.01f)
+	if (deltaPosition.y < 0.01f && deltaPosition.z < 0.01f)
 	{
 		const float calcValue = calclerpValue_.CalcUpdate();
 		// nextPositionの設定がされたとき、処理がされる
 		lerpCurrentMovement_.Lerp(calcValue, INIT_POSITION, nextPosition_); // 計算を始めてからの移動量を計算
 		lerpCurrentMovement_ -= beforeFrameMovement_; // 前フレームの移動量を減算
 		beforeFrameMovement_ = lerpCurrentMovement_; // 今のフレームの移動量を保管
+	}
+	else {
+		nextPosition_ = Vector3::Zero;
 	}
 
 	// 1フレームごとのズームアウト量をローカル座標に加算
@@ -130,4 +134,4 @@ bool ResultCamera::Start()
 	transform_.UpdateTransform();
 
 	return true;
-}
+};

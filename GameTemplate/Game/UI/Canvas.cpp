@@ -26,7 +26,7 @@ bool Canvas::Start()
     objectView_ = new ObjectView;
     
 
-    // new‚¾‚¯‚¾‚ÆStart‚ÍŒÄ‚Î‚ê‚È‚¢‚Ì‚Å‚±‚±‚ÅŒÄ‚Ô
+    //new‚¾‚¯‚¾‚ÆStart‚ÍŒÄ‚Î‚ê‚È‚¢‚Ì‚Å‚±‚±‚ÅŒÄ‚Ô
     timer_->Start(); 
     sphereSizeText_->Start();
     objectView_->Start();

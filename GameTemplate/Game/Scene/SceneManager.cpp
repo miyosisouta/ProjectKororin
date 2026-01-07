@@ -13,8 +13,6 @@ SceneManager* SceneManager::instance_ = nullptr;
 
 SceneManager::SceneManager()
 {
-	// 初期化
-	_internal::Result::Initialize();
 }
 
 
