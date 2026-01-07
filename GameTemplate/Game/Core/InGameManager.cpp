@@ -107,25 +107,40 @@ void ::InGameManager::LateUpdate()
 				// pairが引っ付いたとき一度だけSEを流す
 				if (!attachableObject->IsPlayedSE())  
 				{
-					SoundManager::Get().PlaySE(enSoundKind_AttachSuccess);
+					switch (attachableObject->GetAttachSoundNum()) 
+					{
+					case 0:
+						SoundManager::Get().PlaySE(enSoundKind_Attach_Tiny);
+						break;
+					case 1:
+						SoundManager::Get().PlaySE(enSoundKind_Attach_Small);
+						break;
+					case 2:
+						SoundManager::Get().PlaySE(enSoundKind_Attach_Medium);
+						break;
+					case 3:
+						SoundManager::Get().PlaySE(enSoundKind_Attach_Large);
+						break;
+					default:
+						SoundManager::Get().PlaySE(enSoundKind_AttachSuccess);
+						break;
+					}
 					attachableObject->SetPlayedSE(true);
 				}
 
-
-				sphere->AddCurrentLevelUpNum(); // 引っ付いたオブジェクトの数を増加
-				sphere->AddTotalNum(); // 引っ付いたオブジェクトの合計の数を増加
-				sphere->GrowByRadius(attachableObject->GetGrowAmount()); // オブジェクトの半径を増加・移動速度の制限
-
+				// 引っ付いたときの塊の処理
+				
+				sphere->AddCurrentLevelUpNum();							// 引っ付いたオブジェクトの数を増加
+				sphere->AddTotalNum();									// 引っ付いたオブジェクトの合計の数を増加
+				sphere->GrowByRadius(attachableObject->GetGrowAmount());// オブジェクトの半径を増加・移動速度の制限
+				
 
 				//オブジェクトを塊につけ、一緒に動くようにする
 				sphere->SetParent(attachableObject); // transformの親子関係を設定
-				sphere->AddAttachableObject(attachableObject);
-				attachableObject->DeletePhysicsStatics();
+				sphere->AddAttachableObject(attachableObject); // Listに追加
+				attachableObject->SetVisibleAttachedObject(true); // 吸着したオブジェクトを描画可能とする
+				attachableObject->DeletePhysicsStatics(); // 当たり判定の破棄
 
-
-				// オブジェクトがどのあたりにくっつくかを処理してみる
-				Vector3 direction = attachableObject->GetTransform()->m_position - sphere->GetTransform()->m_position;
-				direction.Normalize();
 
 				// 現在の半径を取得
 				const float sphereSize = sphere->GetEffectiveRadius();

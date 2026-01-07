@@ -22,56 +22,59 @@ class UIIcon;
 class GameScene;
 namespace _internal
 {
-	struct ResultInformation
+	enum ResultType
 	{
-		float time;				//!< クリア時間
-		int count;				//!< くっついた個数
-		float scale;			//!< 大きさ
-		bool isSetting = false;	//!< 情報が設定されたか
+		Clear,
+		Failure,
+		Max,
 	};
 
 
 	class Result
 	{
-	private:
-		using EnterFunc = void (*)(Result*);
-		using UpdateFunc = void (*)(Result*);
-		using ExitFunc = void (*)(Result*);
+	public:
+		/** Step1 */
+		static void CommonEnterStep1(Result* result);
+		static void CommonUpdateStep1(Result* result);
+		static void CommonExitStep1(Result* result);
+
+		/** Step2 */
+		static void CommonEnterStep2(Result* result);
+		static void CommonUpdateStep2(Result* result);
+		static void CommonExitStep2(Result* result);
+
+		/** Step3 */
+		static void CommonEnterStep3(Result* result);
+		static void CommonUpdateStep3(Result* result);
+		static void CommonExitStep3(Result* result);
+
+		/** Step4 */
+		static void CommonEnterStep4(Result* result);
+		static void CommonUpdateStep4(Result* result);
+		static void CommonExitStep4(Result* result);
+
+		/** Step5 */
+		static void CommonEnterStep5(Result* result);
+		static void CommonUpdateStep5(Result* result);
+		static void CommonExitStep5(Result* result);
+
+		/** Step6 */
+		static void CommonEnterStep6(Result* result);
+		static void CommonUpdateStep6(Result* result);
+		static void CommonExitStep6(Result* result);
 
 
-	private:
-		struct State
+
+	protected:
+		/* 線形補間の初期化 */
+		void SetUpToLerp(Vector3 start, Vector3 end)
 		{
-			EnterFunc enter = nullptr;
-			UpdateFunc update = nullptr;
-			ExitFunc exit = nullptr;
-		};
+			sphereResultInitPos = start;
+			sphereResultGoalPos = end;
+		}
 
 
-	private:
-		struct Step
-		{
-			enum Enum
-			{
-				Step1,
-				Step2,
-				Step3,
-				Step4,
-				Step5,
-				Step6,
-				Max,
-				Invalid = Max,
-			};
-		};
-
-
-	private:
-		static std::array<State, Step::Max> stepList_;
-
-	private:
-		Step::Enum currentStep_ = Step::Step1;				//!< 現在のステップ
-		Step::Enum nextStep_ = Step::Invalid;				//!< 次のステップ
-		ResultInformation information_;						//!< リザルト時に必要な情報を持つ構造体
+	protected:
 		CalcLerpValue calclerpValue_;						//!< リープ用クラスの変数
 		GameScene* owner_;									//!< ゲームシーン
 		UICanvas* instructionButtonSprite_ = nullptr;		//!< 指示ボタンの画像
@@ -80,15 +83,6 @@ namespace _internal
 		UIIcon* instructionIcon_ = nullptr;					//!< 指示ボタン
 		UIIcon* titleTransitionWindowIcon_ = nullptr;		//!< タイトルへウィンドウ
 		UIIcon* buttonAIcon_ = nullptr;						//!< Aボタン
-
-		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			//!< 「大きさ」の表示
-		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			//!< 「経過時間」の表示
-		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	//!< 「モノ」の表示
-		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			//!< 塊の大きさのテキスト
-		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					//!< 塊の目標サイズ達成時の時間のテキスト
-		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		//!< 吸着したオブジェクトの個数のテキスト
-		std::unique_ptr<FontRender> failureTexts_[5];							//!< 失敗時のテキスト
-		std::unique_ptr<FontRender> buttonText_ = nullptr;						//!< ボタンをおしてね！のテキスト
 
 		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					//!< Aボタンの画像
 		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				//!< テキストウィンドウの画像
@@ -112,58 +106,200 @@ namespace _internal
 
 	public:
 		Result(GameScene* owner);
-		~Result();
+		virtual ~Result();
 
-		void Start();
-		void Update();
-		void Render(RenderContext& rc);
+		virtual void Start();
+		virtual void Update();
+		virtual void Render(RenderContext& rc);
+
+	};
 
 
-		void SetInformation(const ResultInformation info) { information_ = info; }
+	/*********** クリア用リザルト ***********/
+
+	class ClearResult : public Result 
+	{
+	public:
+		struct ClearStep
+		{
+			enum Enum
+			{
+				Step1,
+				Step2,
+				Step3,
+				Step4,
+				Step5,
+				Step6,
+				Max,
+				Invalid = Max,
+			};
+		};
+
+		struct ResultInformation
+		{
+			float time;				//!< クリア時間
+			int count;				//!< くっついた個数
+			float scale;			//!< 大きさ
+			bool isSetting = false;	//!< 情報が設定されたか
+		};
+
 
 	public:
-		static void Initialize();
-		/* リープ */
-		void SetUpToLerp(Vector3 start, Vector3 end)
-		{
-			sphereResultInitPos = start;
-			sphereResultGoalPos = end;
-		}
+		ClearResult(GameScene* owner);
+		~ClearResult()override;
+
+		void Start() override;
+		void Update() override;
+		void Render(RenderContext&rc) override;
+
+
+	public:
+		void SetInformation(const ResultInformation info) { information_ = info; }
+
 
 	private:
 		/** Step1 */
-		static void EnterStep1(Result* result);
-		static void UpdateStep1(Result* result);
-		static void ExitStep1(Result* result);
+		static void EnterStep1(ClearResult* result);
+		static void UpdateStep1(ClearResult* result);
+		static void ExitStep1(ClearResult* result);
 
 		/** Step2 */
-		static void EnterStep2(Result* result);
-		static void UpdateStep2(Result* result);
-		static void ExitStep2(Result* result);
+		static void EnterStep2(ClearResult* result);
+		static void UpdateStep2(ClearResult* result);
+		static void ExitStep2(ClearResult* result);
 
 		/** Step3 */
-		static void EnterStep3(Result* result);
-		static void UpdateStep3(Result* result);
-		static void ExitStep3(Result* result);
+		static void EnterStep3(ClearResult* result);
+		static void UpdateStep3(ClearResult* result);
+		static void ExitStep3(ClearResult* result);
 
 		/** Step4 */
-		static void EnterStep4(Result* result);
-		static void UpdateStep4(Result* result);
-		static void ExitStep4(Result* result);
+		static void EnterStep4(ClearResult* result);
+		static void UpdateStep4(ClearResult* result);
+		static void ExitStep4(ClearResult* result);
 
 		/** Step5 */
-		static void EnterStep5(Result* result);
-		static void UpdateStep5(Result* result);
-		static void ExitStep5(Result* result);
+		static void EnterStep5(ClearResult* result);
+		static void UpdateStep5(ClearResult* result);
+		static void ExitStep5(ClearResult* result);
 
 		/** Step6 */
-		static void EnterStep6(Result* result);
-		static void UpdateStep6(Result* result);
-		static void ExitStep6(Result* result);
+		static void EnterStep6(ClearResult* result);
+		static void UpdateStep6(ClearResult* result);
+		static void ExitStep6(ClearResult* result);
+
+	private:
+		using EnterFunc = void(*)(ClearResult*);
+		using UpdateFunc = void(*)(ClearResult*);
+		using ExitFunc = void(*)(ClearResult*);
+
+		struct State
+		{
+			EnterFunc enter = nullptr;
+			UpdateFunc update = nullptr;
+			ExitFunc exit = nullptr;
+		};
+
+
+	private:
+		ResultInformation information_;					//!< リザルト時に必要な情報を持つ構造体
+		std::array<State, ClearStep::Max> stepList_;	//!< クリア時の処理の流れ
+
+		ClearStep::Enum currentStep_ = ClearStep::Step1;			//!< 現在のステップ
+		ClearStep::Enum nextStep_ = ClearStep::Invalid;				//!< 次のステップ
+
+		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			//!< 「大きさ」の表示
+		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			//!< 「経過時間」の表示
+		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	//!< 「モノ」の表示
+		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			//!< 塊の大きさのテキスト
+		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					//!< 塊の目標サイズ達成時の時間のテキスト
+		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		//!< 吸着したオブジェクトの個数のテキスト
+		std::unique_ptr<FontRender> clearTexts_[5];								//!< 成功時のテキスト
+	};
+
+
+	/*********** 失敗用リザルト ***********/
+	class FailureResult : public Result 
+	{
+		struct FailureStep
+		{
+			enum Enum
+			{
+				Step1,
+				Step2,
+				Step3,
+				Step4,
+				Step5,
+				Step6,
+				Max,
+				Invalid = Max,
+			};
+		};
+
+	private:
+		/** Step1 */
+		static void EnterStep1(FailureResult* result);
+		static void UpdateStep1(FailureResult* result);
+		static void ExitStep1(FailureResult* result);
+ 
+		/** Step2 */
+		static void EnterStep2(FailureResult* result);
+		static void UpdateStep2(FailureResult* result);
+		static void ExitStep2(FailureResult* result);
+		 
+		/** Step3 */
+		static void EnterStep3(FailureResult* result);
+		static void UpdateStep3(FailureResult* result);
+		static void ExitStep3(FailureResult* result);
+		 
+		/** Step4 */
+		static void EnterStep4(FailureResult* result);
+		static void UpdateStep4(FailureResult* result);
+		static void ExitStep4(FailureResult* result);
+		
+		/** Step5 */
+		static void EnterStep5(FailureResult* result);
+		static void UpdateStep5(FailureResult* result);
+		static void ExitStep5(FailureResult* result);
+		 
+		/** Step6 */
+		static void EnterStep6(FailureResult* result);
+		static void UpdateStep6(FailureResult* result);
+		static void ExitStep6(FailureResult* result);
+
+
+	private:
+		using EnterFunc = void(*)(FailureResult*);
+		using UpdateFunc = void(*)(FailureResult*);
+		using ExitFunc = void(*)(FailureResult*);
+
+		struct State
+		{
+			EnterFunc enter = nullptr;
+			UpdateFunc update = nullptr;
+			ExitFunc exit = nullptr;
+		};
+
+	public:
+		FailureResult(GameScene* owner);
+		~FailureResult() override;
+
+		void Start() override;
+		void Update() override;
+		void Render(RenderContext& rc) override;
+
+	
+	private:
+		std::array<State, FailureStep::Max> stepList_;	//!< クリア時の処理の流れ
+
+		FailureStep::Enum currentStep_ = FailureStep::Step1;			//!< 現在のステップ
+		FailureStep::Enum nextStep_ = FailureStep::Invalid;				//!< 次のステップ
+
+		std::unique_ptr<FontRender> failureTexts_[5];							//!< 失敗時のテキスト
+		std::unique_ptr<FontRender> buttonText_ = nullptr;						//!< ボタンをおしてね！のテキスト
+
 	};
 }
-
-
 
 
 
@@ -173,6 +309,8 @@ class GameScene : public IScene
 	appScene(GameScene);
 
 	friend class _internal::Result;
+	friend class _internal::ClearResult;
+	friend class _internal::FailureResult;
 
 private:
 	enum ResultStep

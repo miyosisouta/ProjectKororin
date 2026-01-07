@@ -25,9 +25,9 @@ namespace nsK2Engine {
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
 		spriteInitData.m_width = 800;
 		spriteInitData.m_height = 450;
-		spriteInitData.m_textures[0] = &rt.GetRenderTargetTexture();
-		spriteInitData.m_colorBufferFormat[0] = rt.GetColorBufferFormat();
-		spriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+		spriteInitData.m_textures[0] = &rt.GetRenderTargetTexture(); // rcのなかのテクスチャを参照して取得
+		spriteInitData.m_colorBufferFormat[0] = rt.GetColorBufferFormat(); // 色
+		spriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans; // 周りが黒くならないようにする透明度の設定
 		sprite.Init(spriteInitData);
 		sprite.Update({ -1100,-600,0 }, Quaternion::Identity, Vector3::One, Vector2::Zero);
 
@@ -44,18 +44,24 @@ namespace nsK2Engine {
 
 	void UnderLeftView::MRender(RenderContext& rc, RenderTarget& mainRenderTarget)
 	{
-		if (count > 0) {
-			rc.WaitUntilToPossibleSetRenderTarget(rt);
-			rc.SetRenderTargetAndViewport(rt);
-			rc.ClearRenderTargetView(rt);
-			m_model->Draw(rc,camera);
-			rc.WaitUntilFinishDrawingToRenderTarget(rt);
+		if (count > 0) 
+		{
+			// オフスクリーンの設定
+			{
+			rc.WaitUntilToPossibleSetRenderTarget(rt); // レンダリングターゲットを再設定のための準備
+			rc.SetRenderTargetAndViewport(rt); //次のレンダリングターゲットの設定
+			rc.ClearRenderTargetView(rt); // 前のターゲットのピクセル情報リセット
+			m_model->Draw(rc, camera); // 新しいターゲットの描画(新しいものを見るために別でカメラが必要)
+			rc.WaitUntilFinishDrawingToRenderTarget(rt); // ピクセル情報などの書き込み終わるのを待つ
+			}
 
-			rc.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
-			rc.SetRenderTargetAndViewport(mainRenderTarget);
-			sprite.Draw(rc);
-			rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
-
+			// オンスクリーンレンダリング
+			{
+				rc.WaitUntilToPossibleSetRenderTarget(mainRenderTarget); // レンダリングターゲットを再設定のための準備
+				rc.SetRenderTargetAndViewport(mainRenderTarget); //次のレンダリングターゲットの設定
+				sprite.Draw(rc); // 描画。sprite : テクスチャの情報ど
+				rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);// ピクセル情報などの書き込み終わるのを待つ
+			}
 			camera.RotateOriginTarget(rotation);
 			count--;
 		}

@@ -44,6 +44,10 @@ public:
 		return grouthAmount_;
 	}
 
+	inline int GetAttachSoundNum() const
+	{
+		return soundNum_;
+	}
 	inline void SetPlayedSE(bool isPlayedSE)
 	{
 		isPlayedSE_ = isPlayedSE;
@@ -54,6 +58,8 @@ public:
 		return isPlayedSE_;
 	}
 
+	inline void SetVisibleAttachedObject(const bool flg) { isVisibleAttachedObject_ = flg; }	// 吸着しているオブジェクトを描画するかどうかのフラグ
+	inline bool GetVisibleAttachedObject() { return isVisibleAttachedObject_; }	// 吸着しているオブジェクトを描画するかどうかのフラグ
 
 public:
 	/**
@@ -64,5 +70,7 @@ public:
 
 private:
 	bool isPlayedSE_ = false;
+	bool isVisibleAttachedObject_ = false;	// くっついたオブジェクトの表示
+
 };
 

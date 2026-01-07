@@ -172,10 +172,39 @@ namespace
 	auto ParseUIDisPlayScale(const nlohmann::json& attributeJson) {
 		return attributeJson["UIDisplayScale"].get<float>();
 	}
+	// attachableValueデータを取得しint型で返すための関数
+	auto ParseAttachSoundNum(const nlohmann::json& attributeJson)
+	{
+		return attributeJson["attachSoundNum"].get<int>();
+	}
 }
 
 
-bool Stage::Start() 
+Stage::~Stage()
+{
+	// 
+	for (auto it : attachableObjectList_) 
+	{
+		DeleteGO(it);
+	}
+
+	for (auto it : staticObjectList_) 
+	{
+		DeleteGO(it);
+	}
+
+	for (auto it : movableObjectList_)
+	{
+		DeleteGO(it);
+	}
+
+	// メモリ解放
+	attachableObjectList_.clear();
+	staticObjectList_.clear();
+	movableObjectList_.clear();
+}
+
+bool Stage::Start()
 {
 	// for分で繰り返される
 	//LoadScene("Assets/Scene/SceneExport.json", [&](const nlohmann::json& j)
@@ -206,6 +235,7 @@ bool Stage::Start()
 				const auto colliderPivot = ParseVector3(attributeJson.at("colliderCenter")); // コライダーの起点のポジションを格納
 				const auto colliderSize = ParseVector3(attributeJson.at("colliderSize")); // コライダーの大きさを格納
 				const auto uiDisPlayScale = ParseUIDisPlayScale(attributeJson); // UIとして表示するオブジェクトの大きさを格納
+				const auto attachSoundNum = ParseAttachSoundNum(attributeJson); // 吸着時の音の番号
 
 
 				// 属性別のNewGO
@@ -215,21 +245,21 @@ bool Stage::Start()
 					{
 						auto* obj = NewGO<AttachableObject>(0, "AttachableObject");
 						const auto colliderPivot = ParseVector3(attributeJson.at("colliderCenter")); // コライダーの起点のポジションを格納
-						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale);
+						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale, attachSoundNum);
 						attachableObjectList_.push_back(obj);
 						break;
 					}
 					case 1:
 					{
 						auto* obj = NewGO<StaticObject>(0, "StaticObject");
-						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale);
+						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale, attachSoundNum);
 						staticObjectList_.push_back(obj);
 						break;
 					}
 					case 2:
 					{
 						auto* obj = NewGO<MovableObject>(0, "MovableObject");
-						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale);
+						obj->Initialize(attributeValue, transform.position, transform.scale, transform.rotation, requiredSphereSize, objectAssetName, growthAmount, colliderPivot, colliderSize, uiDisPlayScale, attachSoundNum);
 						movableObjectList_.push_back(obj);
 						break;
 					}
@@ -253,9 +283,18 @@ void Stage::Update()
 {
 	// 吸着可能オブジェクトに対しての処理
 	{
-		const bool isVisible = isVisibleAll_ || isVisibleAttackObject_;	// どちらかtrueじゃないと表示されない
 		for (auto* obj : attachableObjectList_) {
-			obj->SetVisible(isVisible);
+			// 全てのオブジェクトを表示するかどうか
+			if (!isVisibleAll_) 
+			{
+				obj->SetVisible(isVisibleAll_);
+			}
+			// 吸着したオブジェクトだけ描画するかどうか
+			if (obj->GetVisibleAttachedObject() && isVisibleAttachedObject_) 
+			{
+				obj->SetVisible(obj->GetVisibleAttachedObject());
+			}
+
 		}
 	}
 	// 吸着不可オブジェクト

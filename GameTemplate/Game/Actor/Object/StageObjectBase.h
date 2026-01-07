@@ -14,6 +14,7 @@ protected:
 	std::string assetName_; // アセットの名前
 	uint8_t attachableValue_; // 吸着可能かどうか
 	uint8_t objectSize_; // 吸着可能サイズ
+	uint8_t soundNum_; // 吸着時の音の番号
 	int grouthAmount_; // 塊のサイズの増加量
 	float UIDisplayscale_; // UIとして表示するときのオブジェクトの大きさの倍率
 
@@ -53,7 +54,7 @@ public:
 	 * @brief 初期化
 	 * @note  NewGOした直後に絶対呼んでください！！！！
 	 */
-	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const int size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize, const float uiObjectScal)
+	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const int size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize, const float uiObjectScal,const int soundNum)
 	{
 		transform_.m_localPosition = position; // 座標
 		transform_.m_localScale = scale; // 大きさ
@@ -66,6 +67,7 @@ public:
 		colliderPivot_ = colliderPivot; // コライダーの起点の座標
 		colliderSize_ = colliderSize; // コライダーの大きさ
 		UIDisplayscale_ = uiObjectScal; // UIとして表示する際のオブジェクトの大きさの倍率
+		soundNum_ = soundNum; // 音番号
 	}
 
 

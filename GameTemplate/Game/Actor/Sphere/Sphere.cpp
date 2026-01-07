@@ -8,9 +8,9 @@
 
 namespace 
 {
-	const float ALWAYS_SPEED = 500.0f;	// 固定移動速度
+	const float ALWAYS_SPEED = 400.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
-	const float GOAL_RADIUS = 300.0f; // 目標サイズ
+	const float GOAL_RADIUS = 100.0f; // 目標サイズ
 }
 
 
@@ -96,7 +96,6 @@ bool Sphere::Start()
 	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
 
 
-	//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 	m_rigidBody->GetBody()->setUserIndex(enCollisionAttr_Character);
 	m_rigidBody->GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
