@@ -9,7 +9,7 @@ class Player;
 class Sphere;
 class SphereCamera;
 class Stage;
-class Canvas; 
+class Canvas;
 class SphereInputSystem;
 class InputDetection;
 class UICanvas;
@@ -96,12 +96,12 @@ namespace _internal
 		bool isResultTextRender_ = false;	//!< リザルトテキストを表示するか
 		bool isSphereMoveUp_ = true;		//!< リザルト時塊を上に動かすかどうかのフラグ
 		bool isGoNextText_ = true;			//!< 次のテキストを映してよいか
-		uint8_t currentSentenceIndex = 0;	//!< 文の数
+		uint8_t currentSentenceIndex_ = 0;	//!< 文の数
 		int goalMinuteTime_ = 0.0f;			//!< クリアタイム : 分
 		int goalSecondTime_ = 0.0f;			//!< クリアタイム : 秒
 		float elapsedTime_ = 0.0f;		//!< 経過時間
-		
-		
+
+
 
 
 	public:
@@ -117,7 +117,7 @@ namespace _internal
 
 	/*********** クリア用リザルト ***********/
 
-	class ClearResult : public Result 
+	class ClearResult : public Result
 	{
 	public:
 		struct ClearStep
@@ -150,7 +150,7 @@ namespace _internal
 
 		void Start() override;
 		void Update() override;
-		void Render(RenderContext&rc) override;
+		void Render(RenderContext& rc) override;
 
 
 	public:
@@ -208,6 +208,14 @@ namespace _internal
 		ClearStep::Enum currentStep_ = ClearStep::Step1;			//!< 現在のステップ
 		ClearStep::Enum nextStep_ = ClearStep::Invalid;				//!< 次のステップ
 
+		UICanvas* scoreWindow_ = nullptr;			//!< スコア表示時の背景画像
+		UICanvas* goodRatingStamp_ = nullptr;		//!< 最高評価スタンプの画像
+		UICanvas* normalRatingStamp_ = nullptr;		//!< 通常評価スタンプの画像
+		UIIcon* scoreWindowIcon_ = nullptr;			//!< スコア表示時の背景画像のアイコン
+		UIIcon* goodRatingStampIcon_ = nullptr;		//!< 最高評価スタンプの画像のアイコン
+		UIIcon* normalRatingStampIcon_ = nullptr;	//!< 通常評価スタンプの画像のアイコン
+
+
 		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			//!< 「大きさ」の表示
 		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			//!< 「経過時間」の表示
 		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	//!< 「モノ」の表示
@@ -215,11 +223,14 @@ namespace _internal
 		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					//!< 塊の目標サイズ達成時の時間のテキスト
 		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		//!< 吸着したオブジェクトの個数のテキスト
 		std::unique_ptr<FontRender> clearTexts_[5];								//!< 成功時のテキスト
+
+		uint8_t scoreDrawStep_ = 1;
+		uint8_t scaleRate_ = 0;
 	};
 
 
 	/*********** 失敗用リザルト ***********/
-	class FailureResult : public Result 
+	class FailureResult : public Result
 	{
 		struct FailureStep
 		{
@@ -241,27 +252,27 @@ namespace _internal
 		static void EnterStep1(FailureResult* result);
 		static void UpdateStep1(FailureResult* result);
 		static void ExitStep1(FailureResult* result);
- 
+
 		/** Step2 */
 		static void EnterStep2(FailureResult* result);
 		static void UpdateStep2(FailureResult* result);
 		static void ExitStep2(FailureResult* result);
-		 
+
 		/** Step3 */
 		static void EnterStep3(FailureResult* result);
 		static void UpdateStep3(FailureResult* result);
 		static void ExitStep3(FailureResult* result);
-		 
+
 		/** Step4 */
 		static void EnterStep4(FailureResult* result);
 		static void UpdateStep4(FailureResult* result);
 		static void ExitStep4(FailureResult* result);
-		
+
 		/** Step5 */
 		static void EnterStep5(FailureResult* result);
 		static void UpdateStep5(FailureResult* result);
 		static void ExitStep5(FailureResult* result);
-		 
+
 		/** Step6 */
 		static void EnterStep6(FailureResult* result);
 		static void UpdateStep6(FailureResult* result);
@@ -288,7 +299,7 @@ namespace _internal
 		void Update() override;
 		void Render(RenderContext& rc) override;
 
-	
+
 	private:
 		std::array<State, FailureStep::Max> stepList_;	//!< クリア時の処理の流れ
 
