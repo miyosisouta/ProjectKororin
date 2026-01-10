@@ -46,6 +46,22 @@ bool StageObjectBase:: Start()
 }
 
 
+void StageObjectBase::Initialize(ObjectData* objectData)
+{
+	transform_.m_localPosition = objectData->position; // 座標
+	transform_.m_localScale = objectData->scale; // 大きさ
+	transform_.m_localRotation = objectData->rotation; // 回転
+
+	attachableValue_ = objectData->attachValue; // 吸着可能かどうか
+	objectSize_ = objectData->size; // オブジェクトの吸着可能サイズ
+	assetName_ = objectData->assetName; // アセットの名前
+	grouthAmount_ = objectData->grouthAmount; // 塊のサイズの増加量
+	colliderPivot_ = objectData->colliderPivot; // コライダーの起点の座標
+	colliderSize_ = objectData->colliderSize; // コライダーの大きさ
+	UIDisplayscale_ = objectData->uiObjectScal; // UIとして表示する際のオブジェクトの大きさの倍率
+	soundNum_ = objectData->soundNum;
+}
+
 Vector3 StageObjectBase::ApplyCollisionSizeDelta(Vector3 scale)
 {
 	Vector3 adjusted_size = Vector3(scale.x - 1.0f, scale.y - 1.0f, scale.z - 1.0f);

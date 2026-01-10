@@ -2,7 +2,7 @@
 #include "GameScene.h"
 #include "SphereInputSystem.h"
 #include "SphereCamera.h"
-#include "Stage.h"
+#include "SpacePartitioning.h"
 #include "Actor/Sphere/Player.h"
 #include "Actor/Sphere/Sphere.h"
 #include "Collision/CollisionManager.h"
@@ -24,7 +24,7 @@ namespace
 {
 	/********* 共通の定数 *********/
 	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 10.0f;				// ゲーム時間
+	constexpr const float GAME_TIMER_LIMIT = 210.0f;				// ゲーム時間
 	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);		// クリア時のカメラの座標
 
 	/********* ゲームクリア時の定数 *********/
@@ -39,7 +39,7 @@ namespace
 	/********* ゲームオーバー時の定数 *********/
 	constexpr const float FLIGHT_START_DELAY = 1.5f;		// 塊がカメラの後方へ飛ぶまでの時間
 	constexpr const uint8_t SENTENCE_COUNT_MAX = 4;			// テキストの最大文の数
-	static const Vector3 FAILER_FONT_TEXTS_POS = Vector3(150.0f, 375.0f, 0.0f);		// クリア失敗時のリザルトでのテキスト位置
+	static const Vector3 FAILER_FONT_TEXTS_POS = Vector3(150.0f, 330.0f, 0.0f);		// クリア失敗時のリザルトでのテキスト位置
 	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 1500.0f, -1000.0f);	// 黒い背景用オブジェクトの最初の位置
 	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, -1000.0f);		// 黒い背景用オブジェクトの最終的な位置
 	static const Vector3 FAILER_SPHERE_MIN_POS = Vector3(0.0f, 100.0f, -200.0f);	// クリアしていないときの塊が一番下にいる座標
@@ -342,7 +342,8 @@ namespace _internal
 
 		// インゲームにて「塊に吸着しているオブジェクトを描画できる」ようフラグを立てている
 		// オブジェクト全て非表示→個人(吸着しているオブジェクト)のフラグが優先されて描画がされる
-		result->owner_->stage_->SetVisibleAll(false);
+		SpacePartitioning::GetInstance()->OffRender();
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////result->owner_->stage_->SetVisibleAll(false);
 
 		// 経過時間の初期化
 		result->elapsedTime_ = 0.0f;
@@ -726,8 +727,7 @@ namespace _internal
 		}
 
 		// オブジェクト非表示
-		result->owner_->stage_->SetVisibleAll(false);
-		result->owner_->stage_->SetVisibleAttachedObject(false);
+		SpacePartitioning::GetInstance()->OffRender();
 
 		// ディレクションンライトのパラメーター設定
 		g_sceneLight->SetDirectionLight(0, Vector3(1.0f, 1.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
@@ -1134,7 +1134,6 @@ GameScene::~GameScene()
 {
 	DeleteGO(sphere_);
 	DeleteGO(sphereCamera_);
-	DeleteGO(stage_);
 	DeleteGO(canvas_);
 	DeleteGO(sphereInputSystem_);
 
@@ -1144,6 +1143,8 @@ GameScene::~GameScene()
 	InGameManager::DeleteInstance();
 	GameUIManager::DeleteInstance();
 	GameTimer::DestroyInstance();
+	SpacePartitioning::DeleteInstance();
+
 }
 
 
@@ -1152,7 +1153,6 @@ bool GameScene::Start()
 	/* 必要なオブジェクトの作成 */
 	sphere_ = NewGO<Sphere>(0, "sphere"); // 塊
 	sphereCamera_ = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
-	stage_ = NewGO<Stage>(0, "stage"); // ステージ
 	canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
 	sphereInputSystem_ = NewGO<SphereInputSystem>(0, "inputSystem"); // 操作用クラスの作成と操作する物の設定
 	inputDetection_ = new InputDetection; // 入力判定用クラス
@@ -1171,6 +1171,8 @@ bool GameScene::Start()
 	InGameManager::CreateInstance();
 	GameUIManager::CreateInstance();
 	GameTimer::CreateInstance();
+	SpacePartitioning::CreateInstance();
+	SpacePartitioning::GetInstance()->UpdateStart();
 
 
 	/* セッター */
@@ -1260,6 +1262,8 @@ void GameScene::Update()
 	CollisionHitManager::Get().Update();
 	LateStageObjectUpdateManager::Get().Update();
 	GameTimer::Get().Update();
+	SpacePartitioning::GetInstance()->Update();
+
 }
 
 

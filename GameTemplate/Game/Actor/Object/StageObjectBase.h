@@ -5,6 +5,20 @@
 #pragma once
 #include "Actor/Actor.h"
 
+struct ObjectData
+{
+	std::string	assetName		= "";
+	Vector3		position		= Vector3::Zero;		// 座標
+	Quaternion	rotation		= Quaternion::Identity; // 回転
+	Vector3		scale			= Vector3::One;			// 大きさ
+	int			attachValue		= 0;					// 吸着可能かどうか
+	int			size			= 0;					// オブジェクトの吸着可能サイズ
+	uint8_t		grouthAmount	= 0;					// 塊のサイズの増加量
+	Vector3		colliderPivot	= Vector3::Zero;		// コライダーの起点の座標
+	Vector3		colliderSize	= Vector3::Zero;		// コライダーの大きさ
+	float		uiObjectScal	= 0.0f;					// UIとして表示する際のオブジェクトの大きさの倍率
+	int			soundNum		= 0;					//効果音の番号
+};
 
 class StageObjectBase : public Actor
 {
@@ -14,9 +28,9 @@ protected:
 	std::string assetName_; // アセットの名前
 	uint8_t attachableValue_; // 吸着可能かどうか
 	uint8_t objectSize_; // 吸着可能サイズ
-	uint8_t soundNum_; // 吸着時の音の番号
 	int grouthAmount_; // 塊のサイズの増加量
 	float UIDisplayscale_; // UIとして表示するときのオブジェクトの大きさの倍率
+	int	soundNum_;//効果音の番号
 
 	// 静的な当たり判定(物理的に当たったということをしたい用)
 	PhysicsStaticObject* physicsStaticObject_ = nullptr;
@@ -48,28 +62,14 @@ public:
 	inline const Vector3& GetSize() { return size_; }
 	inline const Vector3& GetPosition() { return position_; }
 	inline const Vector3& GetColliderSize() { return colliderSize_; }
+	inline void OffRender() { isVisible_ = false; }
 
 public:
 	/**
 	 * @brief 初期化
 	 * @note  NewGOした直後に絶対呼んでください！！！！
 	 */
-	void Initialize(const int attachValue_, const Vector3& position, const Vector3& scale, const Quaternion& rotation, const int size, const std::string& assetName, const uint8_t grouthAmount, const Vector3& colliderPivot, const Vector3& colliderSize, const float uiObjectScal,const int soundNum)
-	{
-		transform_.m_localPosition = position; // 座標
-		transform_.m_localScale = scale; // 大きさ
-		transform_.m_localRotation = rotation; // 回転
-
-		attachableValue_ = attachValue_; // 吸着可能かどうか
-		objectSize_ = size; // オブジェクトの吸着可能サイズ
-		assetName_ = assetName; // アセットの名前
-		grouthAmount_ = grouthAmount; // 塊のサイズの増加量
-		colliderPivot_ = colliderPivot; // コライダーの起点の座標
-		colliderSize_ = colliderSize; // コライダーの大きさ
-		UIDisplayscale_ = uiObjectScal; // UIとして表示する際のオブジェクトの大きさの倍率
-		soundNum_ = soundNum; // 音番号
-	}
-
+	void Initialize(ObjectData* objectData);
 
 public:
 	inline int GetObjectSize() 

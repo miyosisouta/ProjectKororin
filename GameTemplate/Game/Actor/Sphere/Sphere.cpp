@@ -10,7 +10,7 @@ namespace
 {
 	const float ALWAYS_SPEED = 400.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
-	const float GOAL_RADIUS = 10.0f; // 目標サイズ
+	const float GOAL_RADIUS = 100.0f; // 目標サイズ
 }
 
 

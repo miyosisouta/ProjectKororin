@@ -26,7 +26,7 @@ void UIUtil::SetAButtonUI(FontRender* font, SpriteRender* sprite, Vector3 sprite
 }
 
 
-void UIUtil::SetText(nsK2Engine::FontRender* fontRender, const std::function<void(wchar_t*)>& func)
+void UIUtil::SetText(FontRender* fontRender, const std::function<void(wchar_t*)>& func)
 {
 	wchar_t text[256];
 	func(text);

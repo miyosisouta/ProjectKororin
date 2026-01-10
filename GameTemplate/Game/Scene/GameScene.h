@@ -8,13 +8,11 @@
 class Player;
 class Sphere;
 class SphereCamera;
-class Stage;
 class Canvas;
 class SphereInputSystem;
 class InputDetection;
 class UICanvas;
 class UIIcon;
-
 
 /**
  * @brief ゲームシーン内部でのみ使用します
@@ -377,7 +375,6 @@ private:
 	Player* m_player = nullptr; //!< プレイヤーキャラクタ
 	Sphere* sphere_ = nullptr; //!< ボール（Sphere）
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
-	Stage* stage_ = nullptr; //!< ステージ
 	Canvas* canvas_ = nullptr; //!< キャンバス
 	SphereInputSystem* sphereInputSystem_ = nullptr; // 塊用インプットシステム
 	InputDetection* inputDetection_ = nullptr; // 入力判定用インプットシステム
