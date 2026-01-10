@@ -14,7 +14,7 @@ struct MessageType
 		GameFailure			// クリア失敗時の会話
 	};
 
-	/* 言語 */ 
+	/* 言語 */
 	enum Language
 	{
 		ja,		//!< 日本語
@@ -80,10 +80,10 @@ static std::vector<std::wstring> sMessageSphereLevelThirdTextEnList = {
 
 /* ゲームクリアしたときの最高評価テキスト */
 static std::vector<std::wstring> sMessageGameClearGoodTextJaList = {
-	std::wstring(L"コレコソガ、\nワタシガユメミタソウジカクメイソノモノダ！\nコノウツクシイアッシュクニワカンドウサエオボエルゾ。"),
-	std::wstring(L"カンペキダ、\nコノエリアノゴミヲスベテノミコミ、\nヒトツノゲイジュツエトショウカサセタシゴトブリワ、\nマサニモハンテキダ。"),
-	std::wstring(L"スバラシイ！\nコノアツマルベキシテアツマッタゴミノケッショウワ\nワガソシキノシンボルトシテ\nゲンカンニカザリタイクライダ。"),
-	std::wstring(L"ミヨ！コノアットウテキナシツリョウコソガ\nワタシタチガモトメテイタ\nシンノクリーンカンキョウノスガタデワナイカ！"),
+	std::wstring(L"コレコソガ、\nワタシガユメミタソウジカクメイソノモノダ！\nコノウツクシイアッシュクニワ\nカンドウサエオボエルゾ。"),
+	std::wstring(L"カンペキダ、\nコノエリアノゴミヲスベテノミコミ、\nヒトツノゲイジュツエト\nショウカサセタシゴトブリワ、\nマサニモハンテキダ。"),
+	std::wstring(L"スバラシイ！\nコノアツマルベキシテアツマッタ\nゴミノケッショウワ\nワガソシキノシンボルトシテ\nゲンカンニカザリタイクライダ。"),
+	std::wstring(L"ミヨ！\nコノアットウテキナシツリョウコソガ\nワタシタチガモトメテイタ\nシンノクリーンカンキョウノスガタデワナイカ！"),
 	std::wstring(L"ソウジノガイネンヲクツガエス\nキョウイテキナセイカダ！\nキミノヨウナジンザイガイタコトヲ\nワタシワホコリニオモウゾ！"),
 };
 
@@ -136,7 +136,7 @@ static std::vector<std::wstring> sMessageGameFailureTextEnList = {
  * @param index 文の数
  * @param scene シーン
  * @param languageType 言語
- * @return 
+ * @return
  */
 static const wchar_t* GetMessageText(int index, MessageType::MessageScene scene, MessageType::Language languageType = MessageType::Language::ja)
 {

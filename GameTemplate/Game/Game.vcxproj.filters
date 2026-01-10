@@ -47,7 +47,6 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Actor\Actor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -161,13 +160,14 @@
     <ClCompile Include="Util\Curve.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="SpacePartitioning.cpp" />
+    <ClCompile Include="StageLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h" />
     <ClInclude Include="Actor\Actor.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -294,5 +294,7 @@
     <ClInclude Include="Util\Curve.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="SpacePartitioning.h" />
+    <ClInclude Include="StageLoader.h" />
   </ItemGroup>
 </Project>

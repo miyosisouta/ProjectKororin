@@ -36,40 +36,40 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -240,6 +240,7 @@
     <ClCompile Include="Core\LateStageObjectUpdateManager.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Effect\GameEffectManager.cpp" />
+    <ClCompile Include="SpacePartitioning.cpp" />
     <ClCompile Include="SphereInputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneLoader\SceneLoader.cpp" />
@@ -251,7 +252,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="SphereCamera.cpp" />
-    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageLoader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -290,6 +291,7 @@
     <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="Effect\GameEffectManager.h" />
     <ClInclude Include="Effect\Types.h" />
+    <ClInclude Include="SpacePartitioning.h" />
     <ClInclude Include="SphereInputSystem.h" />
     <ClInclude Include="Json\json.hpp" />
     <ClInclude Include="SceneLoader\SceneLoader.h" />
@@ -302,7 +304,7 @@
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\Types.h" />
     <ClInclude Include="SphereCamera.h" />
-    <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Types.h" />

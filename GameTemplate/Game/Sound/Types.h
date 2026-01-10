@@ -11,13 +11,14 @@ enum enSoundKind
 {
 	enSoundKind_SE = 0,
 	enSoundKind_Attach_Tiny = enSoundKind_SE, // ˆê”Ô¬‚³‚¢ƒIƒuƒWƒFƒNƒg‚Ì‹z’…‰¹
-	/* ‚±‚±‚©‚çSE‚ğ’Ç‰Á */			
+	/* ‚±‚±‚©‚çSE‚ğ’Ç‰Á */
 	enSoundKind_Attach_Small,				// 2”Ô–Ú‚Ì‹z’…‰¹
 	enSoundKind_Attach_Medium,				// 3”Ô–Ú‚Ì‹z’…‰¹
 	enSoundKind_Attach_Large,				// 4”Ô–Ú‚Ì‹z’…‰¹
 	enSoundKind_AttachSuccess,				// ‹z’…¬Œ÷
 	enSoundKind_AttachFailure,				// ‹z’…¸”s
 	enSoundKind_Decision,					// Œˆ’è‚Ì‰¹
+	enSoundKind_RateStamp,					// •]‰¿ƒXƒ^ƒ“ƒv‚Ì‰¹
 	enSoundKind_SE_Max,						// SE‚ÌÅ‘å”
 	enSoundKind_BGM = enSoundKind_SE_Max,
 	enSoundKind_Title = enSoundKind_BGM,
@@ -39,8 +40,8 @@ struct SoundInformation
 };
 
 
-/** 
- *	î•ñ‚ğ•Û 
+/**
+ *	î•ñ‚ğ•Û
  *	—¬‚·soundƒtƒ@ƒCƒ‹‚ğSoundInformation‚ÉŠi”[
  */
 static SoundInformation soundInformation[enSoundKind_SE_Max] =
@@ -53,6 +54,7 @@ static SoundInformation soundInformation[enSoundKind_SE_Max] =
 	SoundInformation("Assets/Audio/SE/AttachSuccess.wav"),
 	SoundInformation("Assets/Audio/SE/AttachFailure.wav"),
 	SoundInformation("Assets/Audio/SE/decision.wav"),
+	SoundInformation("Assets/Audio/SE/RateStamp.wav")
 
 
 	////BGM

@@ -76,7 +76,7 @@ CollisionHitManager::~CollisionHitManager()
 void CollisionHitManager::Update()
 {
 	// 1回だけ更新するためnullptrチェックを行う
-	if (splitSpace_ == nullptr) 
+	if (splitSpace_ == nullptr)
 	{
 		// 空間分割をするための範囲の生成と設定
 		splitSpace_ = std::make_unique<SplitSpace>(Vector3(7000.0f, 500.0f, 2500.0f));
@@ -88,7 +88,7 @@ void CollisionHitManager::Update()
 	CollisionInfo* sphereInfo = nullptr;
 	for (auto* info : m_collisionInfoList) // 当たり判定のリストからSphereを探す
 	{
-		if (info->type == GameObjectType::Sphere) 
+		if (info->type == GameObjectType::Sphere)
 		{
 			// objectがIGameObject型なので型をSpehreに変更
 			sphereInfo = info;
@@ -171,7 +171,7 @@ void CollisionHitManager::Update()
 	for (auto& pair : m_collisionPairList)
 	{
 		// 吸着可能な場合処理を続行
-		if (UpdateHitAttatchableObject(*pair.get())) 
+		if (UpdateHitAttatchableObject(*pair.get()))
 		{
 			continue;
 		}

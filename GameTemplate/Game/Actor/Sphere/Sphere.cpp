@@ -6,7 +6,7 @@
 #include "Scene/SceneManager.h"
 
 
-namespace 
+namespace
 {
 	const float ALWAYS_SPEED = 400.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
@@ -152,13 +152,14 @@ void Sphere::Move()
 	if (m_addForce.Length() > 0.1f) {
 		moveSpeed_ = m_addForce;
 		m_addForce *= 0.8f;
-	} else {
+	}
+	else {
 		m_addForce = Vector3::Zero;
 	}
 
 	// 移動先
 	transform_.m_localPosition += (moveSpeed_ * g_gameTime->GetFrameDeltaTime());
-	
+
 	// 引っ付いたオブジェクトによって地面との距離が変わるようにしてみる（疑似）
 	// 本当はレイキャストとか使いたい
 	{
@@ -205,7 +206,7 @@ void Sphere::Rotation()
 	Vector3 move = transform_.m_position - beforePosition_;
 
 	//移動が全くされていない場合、処理を返す
-	if (fabsf(move.x) < 0.001f && fabsf(move.z) < 0.001f) { return;	}
+	if (fabsf(move.x) < 0.001f && fabsf(move.z) < 0.001f) { return; }
 
 	// 移動量を求める
 	float length = move.Length();
@@ -221,7 +222,7 @@ void Sphere::Rotation()
 
 	//求めたクォータニオンを乗算する
 	transform_.m_localRotation.Multiply(transform_.m_localRotation, rot);
-	
+
 	transform_.UpdateTransform();
 	sphereRender_.SetRotation(transform_.m_rotation);
 }
@@ -269,7 +270,7 @@ void Sphere::UpdateLevelUp(const bool isInit)
 {
 	if (currentLevelUpNum_ >= status_->GetLevelUpNum()) {
 		currentLevelUpNum_ -= status_->GetLevelUpNum();
-		
+
 		// ステータスセットアップ
 		const MasterSphereStatusParameter* parameter = ParameterManager::Get().FindParameter<MasterSphereStatusParameter>([&](const MasterSphereStatusParameter& parameter)
 			{
