@@ -1,30 +1,14 @@
 #include "stdafx.h"
 #include "GameTimer.h"
 
-namespace 
-{
-}
-
-
 GameTimer* GameTimer::instance_ = nullptr; //初期化
-
-
-GameTimer::GameTimer()
-{
-
-}
-
-
-GameTimer::~GameTimer()
-{
-}
 
 
 void GameTimer::Update()
 {
-	if (remainingTime_ == 0.0f) { return; }// 残り時間が0秒になった場合計算しない
+	if (remainingTime_ == 0.0f) { return; } // 残り時間が0秒になった場合計算しない
 
-	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();// 経過時間
 	remainingTime_ -= deltaTime;
 	// 0より小さくならないように
 	if (remainingTime_ < 0.0f) {

@@ -12,31 +12,16 @@ class UICanvas;
 class UIIcon;
 
 
-enum EnTitleGroundKind 
-{
-	EnTitleGroundKind_P,
-	EnTitleGroundKind_L,
-	EnTitleGroundKind_A,
-	EnTitleGroundKind_Y,
-	EnTitleGroundKind_Max
-};
-
-
 class TitleScene : public IScene
 {
 	appScene(TitleScene);
 
 
 public:
-	/**
-	 * @brief コンストラクタ。
-	 */
+	/* コンストラクタ */
 	TitleScene();
-	/**
-	 * @brief デストラクタ。
-	 */
+	/* デストラクタ */
 	virtual ~TitleScene();
-
 
 	/** 初期化処理 */
 	virtual bool Start()override;
@@ -45,24 +30,25 @@ public:
 	/** 描画処理 */
 	virtual void Render(RenderContext& rc)override;
 
+	/* シーン切り替え */
 	virtual bool RequestID(uint32_t& nextID, float& waitTime) override;
 
 
 private:
 	SpriteRender gameTitleNameSprite_; //!< ゲームタイトル
 
-	Sphere* sphere_ = nullptr;
-	TitleInputSyste* inputSystem_ = nullptr;
-	CalcLerpValue calcTime_;
+	Sphere* sphere_ = nullptr;					//!< 塊
+	TitleInputSyste* inputSystem_ = nullptr;	//!< タイトル操作
+	CalcLerpValue calcTime_;					//!< 時間計算
 
-	UICanvas* pressButtonCanvas_ = nullptr;
-	UICanvas* titleGameNameCanvas_ = nullptr;
-	UIIcon* icon_ = nullptr;
+	UICanvas* pressButtonCanvas_ = nullptr;		//!< ボタン画像
+	UICanvas* titleGameNameCanvas_ = nullptr;	//!< ゲーム名
+	UIIcon* icon_ = nullptr;					//!< ボタンアニメーション
 
-	bool isPlayAnimation = false;				//!< シーン切り替えの演出を再生する
-	float elapsedTime_ = 0.0f;					//!< 経過時間
+	bool isPlayAnimation = false;	//!< シーン切り替えの演出を再生する
+	float elapsedTime_ = 0.0f;		//!< 経過時間
 
 private:
-	bool isNextScene_ = false;
+	bool isNextScene_ = false;		//!< 次のシーンに移るかのフラグ
 };
 

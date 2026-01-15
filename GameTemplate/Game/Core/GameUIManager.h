@@ -6,24 +6,31 @@
 class GameUIUpdate : public IGameObject
 {
 public:
+	/* コンストラクタ */
 	GameUIUpdate() {}
+	/* デストラクタ */
 	~GameUIUpdate() {}
 
-	virtual bool Start() override { return true; }	// 使用しない
+	/* スタート処理 */
+	virtual bool Start() override { return true; }	//!< 使用しない
+	/* 更新処理 */
 	virtual void Update() override;
-	virtual void Render(RenderContext& rc) {}		// 使用しない
+	/* 描画処理 */
+	virtual void Render(RenderContext& rc) {}		//!< 使用しない
 };
 
-// 構造体にすることでEnumの名前が同じでも問題ない状態にする
+
+/* 通知のタイプ */
 struct UINotifyType
 {
 	enum Enum
 	{
 		SphereSizeText,
-		ObjectView,
 	};
 };
 
+
+/* 通知取得時の情報 */
 struct UIINotify
 {
 	UINotifyType::Enum type;
@@ -31,6 +38,8 @@ struct UIINotify
 	UIINotify(int type) : type(static_cast<UINotifyType::Enum>(type)) {}
 };
 
+
+/* UIに伝える情報をまとめる通知 */
 struct NotifySphereSizeText : UIINotify
 {
 	float radius = 0.0f;
@@ -39,14 +48,6 @@ struct NotifySphereSizeText : UIINotify
 	// SphereSizeTextを引数としてコンストラクタに渡す
 	NotifySphereSizeText()
 		: UIINotify(UINotifyType::SphereSizeText)
-	{}
-};
-
-struct NotifyObjectView : UIINotify
-{
-	// ObjectViewを引数としてコンストラクタに渡す
-	NotifyObjectView()
-		: UIINotify(UINotifyType::ObjectView)
 	{
 	}
 };
@@ -57,37 +58,32 @@ class ObjectView;
 class GameUIManager
 {
 private:
-	std::vector<UIINotify*> notifyList_;
-	SphereSizeText* sphereSizeText = nullptr;
-	ObjectView* objectView = nullptr;
+	std::vector<UIINotify*> notifyList_;		//!< 通知のリスト
+	SphereSizeText* sphereSizeText = nullptr;	//!< スフィアサイズテキスト
 
 
 private:
+	/* コンストラクタ */
 	GameUIManager();
+	/* デストラクタ */
 	~GameUIManager();
 
 
 public:
-	/**
-	 * @brief 通常更新
-	 */
+	/* 更新処理 */
 	void Update();
 
 
 public:
-	/**
-	 * @brief 通知追加
-	 */
+	/* 通知の追加 */
 	void Notify(UIINotify* notify);
 
-	// SphereSizeTextのポインターを設定する関数を追加
+	/* SphereSizeTextのポインターを設定する関数を追加 */
 	void SetSphereSizeText(SphereSizeText* text) { sphereSizeText = text; }
-	void SetObjectView(ObjectView* object) { objectView = object; }
+
 
 private:
-	/**
-	 * @brief リストの情報をすべて削除、nullptrにする
-	 */
+	/* リストの中を全て削除 */
 	void ClearNotify()
 	{
 		for (auto* notify : notifyList_) {
@@ -99,11 +95,10 @@ private:
 
 
 
-	/**
-	 * シングルトン関連
-	 */
+	/*************************** シングルトン *****************************/
+
 private:
-	static GameUIManager* instance_;
+	static GameUIManager* instance_; //!< インスタンス
 
 
 public:
@@ -120,18 +115,14 @@ public:
 	{
 		return instance_ != nullptr;
 	}
-	/**
-	 * @brief インスタンスを入手
-	 * @return 
-	 */
+
+	/* インスタンスの取得 */
 	static GameUIManager& Get()
 	{
 		return *instance_;
 	}
 
-	/**
-	 * @brief インスタンスを削除
-	 */
+	/* インスタンスの削除 */
 	static void DeleteInstance()
 	{
 		if (instance_) {

@@ -1,13 +1,13 @@
 /**
  * LateStageObjectUpdateManager.h
  * 遅れてステージオブジェクトを更新するための処理
- * NOTE: 
+ * NOTE:
  */
 #pragma once
 
 
-class Sphere; // 塊
-class StageObjectBase; // オブジェクト管理
+class Sphere;			//!< 塊
+class StageObjectBase;	//!< オブジェクト管理用クラス
 
 
 /**
@@ -16,28 +16,29 @@ class StageObjectBase; // オブジェクト管理
 class LateStageObjectUpdateManager
 {
 private:
-	/**
-	 * スフィア
-	 * NOTE:オブジェクトを更新するための対象
-	 */
+	/* 塊 */
 	Sphere* sphere_;
 
-	/** オブジェクト群 */
+	/* StageObjectBase型のポインタリスト */
 	std::vector<StageObjectBase*> objectList_;
 
 
 private:
+	/* コンストラクタ */
 	LateStageObjectUpdateManager();
+	/* デストラクタ */
 	~LateStageObjectUpdateManager();
 
 
 public:
+	/* 更新処理 */
 	void Update();
 
 
 public:
 	/** オブジェクトを登録 */
 	void RegisterObject(StageObjectBase* object);
+	/* リストから要素を削除 */
 	void UnregisterObject(StageObjectBase* object);
 
 	/** スフィアを登録 */
@@ -45,22 +46,25 @@ public:
 	{
 		sphere_ = sphere;
 	}
+	/* 塊を削除 */
 	void UnRegisterSphere()
 	{
 		sphere_ = nullptr;
 	}
 
 private:
+	/* オブジェクトの形のデータを探す */
 	StageObjectBase* FindTargetObject(btCollisionShape* target);
 
 
-
-
 private:
-	static LateStageObjectUpdateManager* instance_;
+	static LateStageObjectUpdateManager* instance_; //!< インスタンス
 
 
+	/************************************* シングルトン *****************************************/
 public:
+
+	/* インスタンスを作成 */
 	static void CreateInstance()
 	{
 		if (instance_ == nullptr)
@@ -68,10 +72,14 @@ public:
 			instance_ = new LateStageObjectUpdateManager();
 		}
 	}
+
+	/* インスタンスを取得 */
 	static LateStageObjectUpdateManager& Get()
 	{
 		return *instance_;
 	}
+
+	/* インスタンスを削除 */
 	static void Delete()
 	{
 		if (instance_)

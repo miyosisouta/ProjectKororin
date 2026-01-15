@@ -10,17 +10,15 @@
 class StaticObject : public StageObjectBase
 {
 public:
-	/**
-	 * @brief コンストラクタ
-	 */
+	/* コンストラクタ */
 	StaticObject() {};
-	/**
-	 * @brief デストラクタ
-	 */
+	/* デストラクタ */
 	~StaticObject() {};
 
-
+	/* スタート処理 */
 	bool Start()override;
+	/* 更新処理 */
 	void Update()override;
+	/* 描画処理 */
 	void Render(RenderContext& rc)override;
 };

@@ -9,14 +9,14 @@
 class UIBase : public Noncopyable
 {
 public:
-	Transform m_transform;
-	Vector4 color_ = Vector4::White;
+	Transform m_transform; //!< トランスフォーム
+	Vector4 color_ = Vector4::White; //!< カラー
 
-	std::vector<std::unique_ptr<UIAnimationBase>> uiAnimationList_;
+	std::vector<std::unique_ptr<UIAnimationBase>> uiAnimationList_; //!< UIアニメーションリスト
 
-	bool isStart = false;
-	bool isUpdate = true;
-	bool isDraw = true;
+	bool isStart = false;	//!< スタートフラグ
+	bool isUpdate = true;	//!< 更新フラグ
+	bool isDraw = true;		//!< 描画フラグ
 
 
 public:

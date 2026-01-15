@@ -3,6 +3,7 @@
 
 bool MovableObject::Start()
 {
+	// eƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—
 	StageObjectBase::Start();
 	return true;
 }

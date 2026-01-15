@@ -11,24 +11,24 @@ public:
 	void Update() override;
 	void Render(RenderContext& rc) override;
 
-	/**
-	 * UIの線が制限時間をもとに回るよう更新
-	 */
+	/* UIの線が制限時間をもとに回るよう更新 */
 	void UpdateLineValue();
 
 
 public:
+	/* 時間の設定 */
 	void SetTimer(const float timer) { gameTimer_ = timer; }
+	/* 制限時間の設定 */
 	void SetGameTimerLimit(const float limitTimer) { gameTimeLimit = limitTimer; };
 
 
 private:
-	SpriteRender clockBackSprite_; //!< タイマーをみやすくするための黒の背景
-	SpriteRender timeGaugeSprite_; //!< タイマーの画像
-	SpriteRender timeLineSprite_; //!< タイマーの針
-	Quaternion rotation_ = Quaternion::Identity; 
+	SpriteRender clockBackSprite_;	//!< タイマーをみやすくするための黒の背景
+	SpriteRender timeGaugeSprite_;	//!< タイマーの画像
+	SpriteRender timeLineSprite_;	//!< タイマーの針
+	Quaternion rotation_ = Quaternion::Identity;
 
-	float gameTimer_ = 0.0f;
-	float gameTimeLimit = 0.0f;
+	float gameTimer_ = 0.0f;	//!< 現在の時間
+	float gameTimeLimit = 0.0f;	//!< 制限時間
 };
 

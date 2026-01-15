@@ -9,17 +9,17 @@
 class MovableObject : public StageObjectBase
 {
 public:
-	/**
-	 * @brief コンストラクタ
-	 */
+	/* コンストラクタ */
 	MovableObject() {};
-	/**
-	 * @brief デストラクタ
-	 */
+
+	/* デストラクタ */
 	~MovableObject() {};
 
+	/* スタート処理 */
+	bool Start()override;
+	/* 更新処理 */
+	void Update()override {};
+	/* 描画処理 */
+	void Render(RenderContext& rc)override {};
 
-	bool Start() override;
-	void Update() override {}
-	void Render(RenderContext& rc) override {}
 };

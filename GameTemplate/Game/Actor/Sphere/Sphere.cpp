@@ -10,12 +10,13 @@ namespace
 {
 	const float ALWAYS_SPEED = 400.0f;	// 固定移動速度
 	const float INITIAL_RADIUS = 15.0f;	// 初期半径
-	const float GOAL_RADIUS = 100.0f; // 目標サイズ
+	const float GOAL_RADIUS = 300.0f;	// 目標サイズ
 }
 
 
 SphereStatus::SphereStatus()
 {
+	// Jsonファイルからデータを読み込み
 	ParameterManager::Get().LoadParameter<MasterSphereStatusParameter>("Assets/Parameter/SphereStatusParameter.json", [](const nlohmann::json& j, MasterSphereStatusParameter& status)
 		{
 			status.level = j["Level"];
@@ -26,12 +27,14 @@ SphereStatus::SphereStatus()
 
 SphereStatus::~SphereStatus()
 {
+	// パラメーターマネージャーの解放
 	ParameterManager::Get().UnloadParameter<MasterSphereStatusParameter>();
 }
 
 
 void SphereStatus::Setup(const MasterSphereStatusParameter& parameter)
 {
+	// レベルアップに必要な数を設定
 	levelUpNum_ = parameter.levelUpNum;
 }
 
@@ -42,6 +45,7 @@ void SphereStatus::Setup(const MasterSphereStatusParameter& parameter)
 
 Sphere::~Sphere()
 {
+	// 設定されたコリジョンの開放
 	if (CollisionHitManager::IsAvailable()) {
 		CollisionHitManager::Get().UnregisterCollisionObject(this);
 	}
@@ -51,54 +55,68 @@ bool Sphere::Start()
 {
 	// ステータス生成
 	status_ = std::make_unique<SphereStatus>();
+	// レベルアップさせる
 	UpdateLevelUp(true);
 
-	// コリジョンを生成
-	auto sphereCollider = std::make_unique<SphereCollision>();
-	sphereCollider->Init(GetPosition(), radius_);
-	// ICollisionに所有権を移動
-	collider_ = std::move(sphereCollider);
 
-	// モデルのInit
-	sphereRender_.Init("Assets/modelData/mass/model/mass.tkm");
+	// 当たり判定の設定
+	{
+		// コリジョンを生成・設定
+		auto sphereCollider = std::make_unique<SphereCollision>();
+		sphereCollider->Init(GetPosition(), radius_);
 
-	// 塊の初期の大きさを代入
-	radius_ = INITIAL_RADIUS;
+		// ICollisionに所有権を移動
+		collider_ = std::move(sphereCollider);
+
+		// 当たり判定の登録
+		CollisionHitManager::Get().RegisterCollisionObject(
+			GameObjectType::Sphere,   // 種類
+			this,                     // Sphere自身（IGameObject*）
+			collider_.get()          // Sphereのコリジョン
+		);
+
+		//子に追加するコライダーの設定
+		m_collider = new CCompoundCollider();
+		m_collider->Init(radius_);
+	}
 
 	// 初期化
-	transform_.m_scale = Vector3::One;
-	sphereRender_.SetPosition(transform_.m_position);
-	sphereRender_.SetRotation(transform_.m_rotation);
-	sphereRender_.SetScale(transform_.m_scale);
-	sphereRender_.Update();
+	{
+		// モデルのInit
+		sphereRender_.Init("Assets/modelData/mass/model/mass.tkm");
+
+		// 塊の初期の大きさを代入
+		radius_ = INITIAL_RADIUS;
+
+		// 初期化
+		transform_.m_scale = Vector3::One;
+		sphereRender_.SetPosition(transform_.m_position);
+		sphereRender_.SetRotation(transform_.m_rotation);
+		sphereRender_.SetScale(transform_.m_scale);
+		sphereRender_.Update();
+	}
+
+	//コライダーの初期化
+	{
+		//剛体のデータを生成・設定
+		RigidBodyInitData rbInfo;
+		rbInfo.collider = m_collider;
+		rbInfo.mass = 0.0f;
+
+		// 剛体クラスの生成・設定
+		m_rigidBody = new RigidBody();
+		m_rigidBody->Init(rbInfo);
+		btTransform& trans = m_rigidBody->GetBody()->getWorldTransform();
+
+		//剛体の位置を更新。
+		trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
 
 
-	// 当たり判定の登録
-	CollisionHitManager::Get().RegisterCollisionObject(
-		GameObjectType::Sphere,   // 種類
-		this,                     // Sphere自身（IGameObject*）
-		collider_.get()          // Sphereのコリジョン
-	);
+		m_rigidBody->GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody->GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	}
 
-	//
-
-	m_collider = new CCompoundCollider();
-	m_collider->Init(radius_);
-
-	//剛体を初期化。
-	RigidBodyInitData rbInfo;
-	rbInfo.collider = m_collider;
-	rbInfo.mass = 0.0f;
-	m_rigidBody = new RigidBody();
-	m_rigidBody->Init(rbInfo);
-	btTransform& trans = m_rigidBody->GetBody()->getWorldTransform();
-	//剛体の位置を更新。
-	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
-
-
-	m_rigidBody->GetBody()->setUserIndex(enCollisionAttr_Character);
-	m_rigidBody->GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-
+	// トランスフォームの更新
 	transform_.UpdateTransform();
 
 	return true;
@@ -106,22 +124,29 @@ bool Sphere::Start()
 
 void Sphere::Update()
 {
+	// レベルアップ処理
 	UpdateLevelUp();
 
 	// 前の座標を保存
 	beforePosition_ = transform_.m_position;
 
-	Move();
-	Rotation();
-	SetGravity();
-	sphereRender_.Update();
+	// 動き
+	{
+		Move();
+		Rotation();
+		sphereRender_.Update();
+	}
 
-	collider_->SetPosition(transform_.m_position);
-	collider_->Update();
+	// コライダー
+	{
+		collider_->SetPosition(transform_.m_position);
+		collider_->Update();
+	}
 }
 
 void Sphere::Render(RenderContext& rc)
 {
+	// 描画するなら
 	if (GetIsDraw())
 	{
 		sphereRender_.Draw(rc);
@@ -149,12 +174,12 @@ void Sphere::Move()
 	moveSpeed_.y = moveDirection_.y * moveSpeedMultiply_;
 	moveSpeed_.z = moveDirection_.z * moveSpeedMultiply_;
 
-	if (m_addForce.Length() > 0.1f) {
-		moveSpeed_ = m_addForce;
-		m_addForce *= 0.8f;
+	if (addForce_.Length() > 0.1f) {
+		moveSpeed_ = addForce_;
+		addForce_ *= 0.8f;
 	}
 	else {
-		m_addForce = Vector3::Zero;
+		addForce_ = Vector3::Zero;
 	}
 
 	// 移動先
@@ -179,20 +204,24 @@ void Sphere::Move()
 			transform_.m_localPosition.y = disntace;
 		}
 	}
-	//transform_.m_localPosition.y = radius_;
 
-	// TransformをUpdate　→　移動先を更新
+	// Transformを更新
 	transform_.UpdateTransform();
 
-	//// @todo for test
-	btRigidBody* btBody = m_rigidBody->GetBody();
-	//剛体を動かす。
-	btBody->setActivationState(DISABLE_DEACTIVATION);
-	btTransform& trans = btBody->getWorldTransform();
-	//剛体の位置を更新。
-	trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
+	// 剛体
+	{
+		// 剛体を取得
+		btRigidBody* btBody = m_rigidBody->GetBody();
 
-	// 絵描きさんに座標を教える。
+		// 移動処理
+		btBody->setActivationState(DISABLE_DEACTIVATION);
+		btTransform& trans = btBody->getWorldTransform();
+
+		// 座標更新
+		trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
+	}
+
+	// 座標設定
 	sphereRender_.SetPosition(transform_.m_position);
 }
 
@@ -205,13 +234,13 @@ void Sphere::Rotation()
 	// 前の座標と今の座標の差を計算
 	Vector3 move = transform_.m_position - beforePosition_;
 
-	//移動が全くされていない場合、処理を返す
+	// 移動が全くされていない場合、処理を返す
 	if (fabsf(move.x) < 0.001f && fabsf(move.z) < 0.001f) { return; }
 
 	// 移動量を求める
 	float length = move.Length();
 
-	//正規化
+	// 正規化
 	move.Normalize();
 
 	// 外積を求める
@@ -223,39 +252,16 @@ void Sphere::Rotation()
 	//求めたクォータニオンを乗算する
 	transform_.m_localRotation.Multiply(transform_.m_localRotation, rot);
 
+	// トランスフォームの更新
 	transform_.UpdateTransform();
+	// 座標の設定
 	sphereRender_.SetRotation(transform_.m_rotation);
 }
 
 
-void Sphere::SetGravity()
-{
-	// 地面に付いていたら
-	//if (charaCon_.IsOnGround())
-	//{
-	//	// 重力を無くす。
-	//	moveSpeed_.y = 0.0f;
-	//}
-
-	//// 地面に付いていなかったら。
-	//else
-	{
-		// 重力を発生させる
-		//moveSpeed_.y -= 10.0f;
-	}
-
-
-	// トランスフォームの更新
-	//transform_.UpdateTransform();
-
-	// 絵描きさんに座標を教える。
-	sphereRender_.SetPosition(transform_.m_position);
-}
-
-
-
 void Sphere::SetParent(AttachableObject* attachableObject)
 {
+	// トランスフォームの親子関係を設定
 	attachableObject->GetTransform()->SetParent(&transform_);
 
 	// 上のコードをわかりやすくしたもの
@@ -269,9 +275,10 @@ void Sphere::SetParent(AttachableObject* attachableObject)
 void Sphere::UpdateLevelUp(const bool isInit)
 {
 	if (currentLevelUpNum_ >= status_->GetLevelUpNum()) {
-		currentLevelUpNum_ -= status_->GetLevelUpNum();
 
-		// ステータスセットアップ
+		currentLevelUpNum_ = 0; // オブジェクトの取得数の初期化
+
+		// ステータスセットアップ : レベルアップするかどうかのフラグ
 		const MasterSphereStatusParameter* parameter = ParameterManager::Get().FindParameter<MasterSphereStatusParameter>([&](const MasterSphereStatusParameter& parameter)
 			{
 				if (status_->GetLevel() == parameter.level) {
@@ -279,9 +286,10 @@ void Sphere::UpdateLevelUp(const bool isInit)
 				}
 				return false;
 			});
+
+
 		if (parameter) {
-			// 初期化の時はレベルアップしません
-			if (!isInit) {
+			if (!isInit) { // 初期化の時はレベルアップしませんs
 				status_->AddLevel();
 			}
 			status_->Setup(*parameter);

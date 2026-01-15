@@ -31,17 +31,17 @@ public:
 };
 
 
-
+/* Vector2用アニメーションクラス */
 class UIVector2Animation : public UIAnimationBase
 {
 private:
 	Vector2Curve m_curve;
 	/** カーブ用のパラメーター */
-	Vector2 start_ = Vector2::Zero;
-	Vector2 end_ = Vector2::Zero;
-	float timeSec_ = 0.0f;
-	EasingType type_ = EasingType::Linear;
-	LoopMode loopMode_ = LoopMode::Once;
+	Vector2 start_ = Vector2::Zero;			//!< 開始時間　　　　
+	Vector2 end_ = Vector2::Zero;			//!< 終わり時間
+	float timeSec_ = 0.0f;					//!< 経過時間
+	EasingType type_ = EasingType::Linear;	//!< イージングタイプ
+	LoopMode loopMode_ = LoopMode::Once;	//!< ループモード
 
 	UIAnimationApplyFunc<Vector2> applyFunc_;
 
@@ -91,17 +91,17 @@ public:
 	}
 };
 
-
+/* Vector3用アニメーションクラス */
 class UIVector3Animation : public UIAnimationBase
 {
 protected:
 	Vector3Curve m_curve;
 	/** カーブ用のパラメーター */
-	Vector3 start_ = Vector3::Zero;
-	Vector3 end_ = Vector3::Zero;
-	float timeSec_ = 0.0f;
-	EasingType type_ = EasingType::Linear;
-	LoopMode loopMode_ = LoopMode::Once;
+	Vector3 start_ = Vector3::Zero;			//!< 開始時間　　　　
+	Vector3 end_ = Vector3::Zero;			//!< 終わり時間
+	float timeSec_ = 0.0f;					//!< 経過時間
+	EasingType type_ = EasingType::Linear;	//!< イージングタイプ
+	LoopMode loopMode_ = LoopMode::Once;	//!< ループモード
 
 	UIAnimationApplyFunc<Vector3> applyFunc_;
 
@@ -152,17 +152,17 @@ public:
 	}
 };
 
-
+/* Vector4用アニメーションクラス */
 class UIVector4Animation : public UIAnimationBase
 {
 protected:
 	Vector4Curve m_curve;
 	/** カーブ用のパラメーター */
-	Vector4 start_ = Vector4::White;
-	Vector4 end_ = Vector4::White;
-	float timeSec_ = 0.0f;
-	EasingType type_ = EasingType::Linear;
-	LoopMode loopMode_ = LoopMode::Once;
+	Vector4 start_ = Vector4::White;		//!< 開始時間　　　　
+	Vector4 end_ = Vector4::White;			//!< 終わり時間
+	float timeSec_ = 0.0f;					//!< 経過時間
+	EasingType type_ = EasingType::Linear;	//!< イージングタイプ
+	LoopMode loopMode_ = LoopMode::Once;	//!< ループモード
 
 	UIAnimationApplyFunc<Vector4> applyFunc_;
 
@@ -234,7 +234,7 @@ public:
 	UIScaleAnimation();
 	~UIScaleAnimation() {}
 
-	void Update() override 
+	void Update() override
 	{
 		m_curve.Update(g_gameTime->GetFrameDeltaTime());
 		applyFunc_(m_curve.GetCurrentValue());

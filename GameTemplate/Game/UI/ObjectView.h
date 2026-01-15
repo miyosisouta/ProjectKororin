@@ -4,15 +4,17 @@
 class ObjectView : public BlackOverRay
 {
 public:
+	/* デストラクタ */
 	~ObjectView();
 
+	/* スタート処理 */
 	bool Start() override;
+	/* 描画処理 */
 	void Render(RenderContext& rc) override;
 
-public:
-	
+
 private:
-	SpriteRender AttachObjectBackSprite;
+	SpriteRender AttachObjectBackSprite;	//!< 吸着可能オブジェクトの背景画像 
 	SpriteRender PlaceHolderSprite;
 };
 

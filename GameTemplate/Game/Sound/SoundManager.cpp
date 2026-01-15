@@ -12,6 +12,7 @@ SoundManager* SoundManager::instance_ = nullptr; //初期化
 
 SoundManager::SoundManager()
 {
+	// リストの削除
 	seList_.clear();
 
 	// サウンドの登録
@@ -20,7 +21,6 @@ SoundManager::SoundManager()
 		g_soundEngine->ResistWaveFileBank(i, info.assetPath.c_str());
 	}
 }
-
 
 SoundManager::~SoundManager()
 {
@@ -35,7 +35,7 @@ void SoundManager::Update()
 		const auto key = it.first;
 		auto* se = it.second;
 		// 再生が終わっているなら削除
-		if (!se->IsPlaying()) 
+		if (!se->IsPlaying())
 		{
 			eraseList.push_back(key);
 		}
@@ -58,7 +58,7 @@ void SoundManager::PlayBGM(const int kind)
 		bgm_->Stop();
 	}
 	// 初期化
-	bgm_->Init(kind);
+	bgm_->Init(kind);	// BGMの初期化
 	bgm_->Play(true);	// BGMなのでループ再生する
 }
 

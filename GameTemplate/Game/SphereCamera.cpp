@@ -2,25 +2,23 @@
 #include "SphereCamera.h"
 #include "Actor/Sphere/sphere.h"
 
-namespace 
+namespace
 {
-	Vector3 INIT_POSITION = Vector3::Zero;
-	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 50.0f, 150.0f); // 塊との距離
-	float TARGET_DISTANCE = 200.0f;
-	float TARGET_HEIGHT = 50.0f; // 塊との高さの差
-	float ZOOM_OUT_TIME = 2.0f; // ズームアウトにかける時間
+	Vector3 INIT_POSITION = Vector3::Zero;							// 初期座標
+	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 50.0f, 150.0f);	// 塊との距離
+	float TARGET_DISTANCE = 200.0f;									// ターゲットとの距離
+	float TARGET_HEIGHT = 50.0f;									// 塊との高さの差
+	float ZOOM_OUT_TIME = 2.0f;										// ズームアウトにかける時間
 }
 
-bool SphereCamera::Start() 
+bool SphereCamera::Start()
 {
 	// カメラの初期設定
 	transform_.m_localPosition = Vector3(0.0f, TARGET_HEIGHT, TARGET_DISTANCE);
+
 	//近平面・遠平面の設定
 	g_camera3D->SetNear(1.0f);
 	g_camera3D->SetFar(1000000.0f);
-
-	// Lerp先を設定
-	//nextPosition_ = transform_.m_localPosition;
 
 	// トランスフォームを更新
 	transform_.UpdateTransform();
