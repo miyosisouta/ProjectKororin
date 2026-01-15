@@ -4,74 +4,80 @@
  */
 #pragma once
 
-/**
- * GameTimer.h
- * ゲームの制限時間を計算するクラス
- */
+ /**
+  * GameTimer.h
+  * ゲームの制限時間を計算するクラス
+  */
 class GameTimer
 {
 private:
-    /** 残り時間 */
-    float remainingTime_ = 0.0f;
-    /** ゲームの時間(最初に設定されるだけ) */
-    float gameTime_ = 0.0f;
+	/** 残り時間 */
+	float remainingTime_ = 0.0f;
+	/** ゲームの時間(最初に設定されるだけ) */
+	float gameTime_ = 0.0f;
 
 
 private:
-    GameTimer();
-    ~GameTimer();
+	/* コンストラクタ */
+	GameTimer() {};
+	/* デストラクタ */
+	~GameTimer() {};
 
 
 public:
-    void Update();
+	/* 更新処理 */
+	void Update();
 
 
 public:
-    inline float GetRemainingTime() { return remainingTime_; }
-    inline float GetGameTime() { return gameTime_; }
-    inline void SetGameTime(const float time) { gameTime_ = time; }
-    inline void Init() { remainingTime_ = gameTime_; };
+	/* 残り時間の取得 */
+	inline float GetRemainingTime() { return remainingTime_; }
+	/* ゲーム時間の取得 */
+	inline float GetGameTime() { return gameTime_; }
+	/* ゲーム時間の設定 */
+	inline void SetGameTime(const float time) { gameTime_ = time; }
+	/* 初期化 */
+	inline void Init() { remainingTime_ = gameTime_; };
 
 
 
-/**
- * シングルトン用
- */
+	/**
+	 * シングルトン用
+	 */
 private:
-    static GameTimer* instance_;
+	static GameTimer* instance_; //!< インスタンス
 
 
 public:
-    /**
-     * インスタンスを作る
-     */
-    static void CreateInstance()
-    {
-        if (instance_ == nullptr)
-        {
-            instance_ = new GameTimer();
-        }
-    }
+	/**
+	 * インスタンスを作る
+	 */
+	static void CreateInstance()
+	{
+		if (instance_ == nullptr)
+		{
+			instance_ = new GameTimer();
+		}
+	}
 
-    /// <summary>
-    /// インスタンスを取得
-    /// </summary>
-    static GameTimer& Get()
-    {
-        return *instance_;
-    }
+	/// <summary>
+	/// インスタンスを取得
+	/// </summary>
+	static GameTimer& Get()
+	{
+		return *instance_;
+	}
 
-    /// <summary>
-    /// インスタンスを破棄
-    /// </summary>
-    static void DestroyInstance()
-    {
-        if (instance_ != nullptr)
-        {
-            delete instance_;
-            instance_ = nullptr;
-        }
-    }
+	/// <summary>
+	/// インスタンスを破棄
+	/// </summary>
+	static void DestroyInstance()
+	{
+		if (instance_ != nullptr)
+		{
+			delete instance_;
+			instance_ = nullptr;
+		}
+	}
 };
- 
-   
+

@@ -11,26 +11,25 @@ class AABBBox;
 
 
 
-
+/* 情報の管理用構造体 */
 struct CollisionInfo : public Noncopyable
 {
-	int type;	// オブジェクトの種類(プレイヤーと壁がヒットしたみたいな処理をするために必要。自分がだれかの判断)
-	IGameObject* object;	// 当たり判定を持つオブジェクトのポインタ
-	//CollisionObject* collision; // 当たり判定オブジェクトのポインタ
-	ICollision* collision;
-	//
+	int type;				//!< オブジェクトの種類(プレイヤーと壁がヒットしたみたいな処理をするために必要。自分がだれかの判断)
+	IGameObject* object;	//!< 当たり判定を持つオブジェクトのポインタ
+	ICollision* collision;	//!< アイコリジョン
+
+	/* オブジェクトとコリジョンの設定 */
 	CollisionInfo() : type(GameObjectType::Sphere), object(nullptr), collision(nullptr) {}
-	//CollisionInfo(const GameObjectType::Enum type, IGameObject* object, CollisionObject* collision) : type(type), object(object), collision(collision) {}
 	CollisionInfo(const GameObjectType::Enum type, IGameObject* object, ICollision* collision) : type(type), object(object), collision(collision) {}
 };
 
 
 
-
+/* 衝突したペアを管理する構造体 */
 struct CollisionPair : public Noncopyable
 {
-	CollisionInfo* left;	// 当たり判定A
-	CollisionInfo* right;	// 当たり判定B
+	CollisionInfo* left;	//!< 当たり判定A
+	CollisionInfo* right;	//!< 当たり判定B
 	//
 	CollisionPair() : left(nullptr), right(nullptr) {}
 	CollisionPair(CollisionInfo* left, CollisionInfo* right) : left(left), right(right) {}
@@ -38,15 +37,15 @@ struct CollisionPair : public Noncopyable
 
 
 
-
+// 空間分割クラス
 class SplitSpace : public Noncopyable
 {
 	friend class CollisionHitManager;
 
 private:
 	// AABBboxを作る個数
-	static const int Z_NUM_ = 16;
-	static const int X_NUM_ = 16;
+	static const int Z_NUM_ = 16; //!< x方向につくる空間の数
+	static const int X_NUM_ = 16; //!< z方向につくる空間の数
 
 	/* 空間分割時に使う変数 */
 	float worldSizeX_ = 0.0f; //!< ステージの大きさx座標
@@ -64,7 +63,7 @@ private:
 
 private:
 	/* ステージのサイズの半分を設定 */
-	Vector3 worldHalfSize_ = Vector3(500.0f, 0.0f, 500.0f); 
+	Vector3 worldHalfSize_ = Vector3(500.0f, 0.0f, 500.0f);
 
 	/* 空間分割時の情報 */
 	std::vector<CollisionInfo*> colisionSpacialList[X_NUM_][Z_NUM_];
@@ -131,11 +130,14 @@ private:
 	int sphereGridZ_ = 0;
 
 private:
+	/* コンストラクタ */
 	CollisionHitManager();
+	/* デストラクタ */
 	~CollisionHitManager();
 
 
 public:
+	/* 更新処理 */
 	void Update();
 
 
@@ -170,28 +172,16 @@ private:
 		return nullptr;
 	}
 
-	/* ここから空間分割関係 */
-
-private: 
-	///* 検索範囲にあるオブジェクトのデータが入ったListを削除 */
-	//void Clear();
-
-	///* ステージ上の吸着可能なオブジェクトの登録 */
-	//void Register();
-	//
-	///* 塊の近くにあるオブジェクトを探して登録 */
-	//void RigisterNearObjects();
-
-private:
-
-
 
 	/************************* ここからシングルトン **************************/
+
 private:
+	// インスタンス
 	static CollisionHitManager* instance_;
 
 
 public:
+	/* インスタンスの作成 */
 	static void CreateInstance()
 	{
 		if (instance_ == nullptr)
@@ -199,14 +189,20 @@ public:
 			instance_ = new CollisionHitManager();
 		}
 	}
+
+	/* インスタンスの取得 */
 	static CollisionHitManager& Get()
 	{
 		return *instance_;
 	}
+
+	/* インスタンスがあるかどうか */
 	static bool IsAvailable()
 	{
 		return instance_ != nullptr;
 	}
+
+	/* インスタンスの削除 */
 	static void Delete()
 	{
 		if (instance_)

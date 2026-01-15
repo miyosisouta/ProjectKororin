@@ -1,4 +1,4 @@
-/* 
+/*
  * # : 文字を数字に置き換える
  * \ : 改行
  * 文字列の場合比較に時間がかかるため数字に変換する
@@ -26,5 +26,6 @@ public:
 	/**	次のシーンを要求する。idは次のシーンのIDを返す。trueならば要求成功、falseならば失敗 */
 	virtual bool RequestID(uint32_t& id, float& waitTime) = 0;
 
+	/* ボタンUIの作成・設定 */
 	void ButtonUI(SpriteRender& spritePath, FontRender& font, Vector3 spritePos, Vector3 fontPos);
 };

@@ -5,8 +5,8 @@
  * エフェクトの定数や情報をまとめるクラス
  */
 
-/** エフェクトの種類 */
-enum EffectKinds 
+ /** エフェクトの種類 */
+enum EffectKinds
 {
 	enEffectKind_Hit_Reject,	//!< 吸着不可能なオブジェクトにぶつかったときの反動エフェクト
 	enEffectKind_Dash_Wind,		//!< ダッシュ時の風エフェクト
@@ -26,7 +26,7 @@ struct EffectInformation
 /** エフェクトの情報を登録 */
 static EffectInformation effectInfo[enEffectKind_Max] =
 {
-	EffectInformation(u"Assets/Effect/Hit_Reject.efk"),
-	EffectInformation(u"Assets/Effect/Dash_Wind.efk"),
+	EffectInformation(u"Assets/Effect/Hit_Reject.efk"), //!< 吸着できずはじかれたとき
+	EffectInformation(u"Assets/Effect/Dash_Wind.efk"),	//!< ダッシュ時の風
 
 };

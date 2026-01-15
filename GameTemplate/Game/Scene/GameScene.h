@@ -20,6 +20,7 @@ class UIIcon;
 class GameScene;
 namespace _internal
 {
+	/* リザルトのタイプ */
 	enum ResultType
 	{
 		Clear,
@@ -84,7 +85,6 @@ namespace _internal
 
 		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					//!< Aボタンの画像
 		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				//!< テキストウィンドウの画像
-
 		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;					//!< 失敗時の背景用オブジェクト
 
 
@@ -103,11 +103,16 @@ namespace _internal
 
 
 	public:
+		/* コンストラクタ */
 		Result(GameScene* owner);
+		/* デストラクタ */
 		virtual ~Result();
 
+		/* スタート処理 */
 		virtual void Start();
+		/* 更新処理 */
 		virtual void Update();
+		/* 描画処理 */
 		virtual void Render(RenderContext& rc);
 
 	};
@@ -118,6 +123,7 @@ namespace _internal
 	class ClearResult : public Result
 	{
 	public:
+		/* クリアステップ */
 		struct ClearStep
 		{
 			enum Enum
@@ -133,6 +139,7 @@ namespace _internal
 			};
 		};
 
+		/* リザルト時の情報 */
 		struct ResultInformation
 		{
 			float time;				//!< クリア時間
@@ -143,15 +150,21 @@ namespace _internal
 
 
 	public:
+		/* コンストラクタ */
 		ClearResult(GameScene* owner);
+		/* デストラクタ */
 		~ClearResult()override;
 
+		/* スタート処理 */
 		void Start() override;
+		/* 更新処理 */
 		void Update() override;
+		/* 描画処理 */
 		void Render(RenderContext& rc) override;
 
 
 	public:
+		/* 情報の設定 */
 		void SetInformation(const ResultInformation info) { information_ = info; }
 
 
@@ -191,6 +204,7 @@ namespace _internal
 		using UpdateFunc = void(*)(ClearResult*);
 		using ExitFunc = void(*)(ClearResult*);
 
+		/* ステート情報 */
 		struct State
 		{
 			EnterFunc enter = nullptr;
@@ -230,6 +244,7 @@ namespace _internal
 	/*********** 失敗用リザルト ***********/
 	class FailureResult : public Result
 	{
+		/* 失敗時のステップ */
 		struct FailureStep
 		{
 			enum Enum
@@ -282,6 +297,7 @@ namespace _internal
 		using UpdateFunc = void(*)(FailureResult*);
 		using ExitFunc = void(*)(FailureResult*);
 
+		/* ステートの種類 */
 		struct State
 		{
 			EnterFunc enter = nullptr;
@@ -290,22 +306,27 @@ namespace _internal
 		};
 
 	public:
+		/* コンストラクタ */
 		FailureResult(GameScene* owner);
+		/* デストラクタ */
 		~FailureResult() override;
 
+		/* スタート処理 */
 		void Start() override;
+		/* 更新処理 */
 		void Update() override;
+		/* 描画処理 */
 		void Render(RenderContext& rc) override;
 
 
 	private:
 		std::array<State, FailureStep::Max> stepList_;	//!< クリア時の処理の流れ
 
-		FailureStep::Enum currentStep_ = FailureStep::Step1;			//!< 現在のステップ
-		FailureStep::Enum nextStep_ = FailureStep::Invalid;				//!< 次のステップ
+		FailureStep::Enum currentStep_ = FailureStep::Step1;	//!< 現在のステップ
+		FailureStep::Enum nextStep_ = FailureStep::Invalid;		//!< 次のステップ
 
-		std::unique_ptr<FontRender> failureTexts_[5];							//!< 失敗時のテキスト
-		std::unique_ptr<FontRender> buttonText_ = nullptr;						//!< ボタンをおしてね！のテキスト
+		std::unique_ptr<FontRender> failureTexts_[5];			//!< 失敗時のテキスト
+		std::unique_ptr<FontRender> buttonText_ = nullptr;		//!< ボタンをおしてね！のテキスト
 
 	};
 }

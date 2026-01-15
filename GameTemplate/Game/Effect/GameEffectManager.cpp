@@ -3,24 +3,25 @@
 #include "graphics/effect/EffectEmitter.h"
 
 
-GameEffectManager* GameEffectManager::instance_ = nullptr; //初期化
+GameEffectManager* GameEffectManager::instance_ = nullptr; //インスタンス
 
 
 GameEffectManager::GameEffectManager()
 {
+	// リストの削除
 	effectList_.clear();
 
-	// エフェクトの登録
+	// リストの登録
 	for (int i = 0; i < ARRAYSIZE(effectInfo); ++i) {
 		const auto& info = effectInfo[i];
-		EffectEngine::GetInstance()->ResistEffect(i,info.assetPath);
+		EffectEngine::GetInstance()->ResistEffect(i, info.assetPath);
 	}
 }
 
 
 EffectHandle GameEffectManager::Play(const int kind, const Vector3& pos, const Quaternion& rot, Vector3& scal)
 {
-	if (effectHandleCount_ == INVALID_EFFECT_HANDLE) 
+	if (effectHandleCount_ == INVALID_EFFECT_HANDLE)
 	{
 		K2_ASSERT(false, "エフェクトの再生が多いです。\n");
 		return INVALID_EFFECT_HANDLE;
@@ -47,17 +48,13 @@ void GameEffectManager::Stop(const EffectHandle handle)
 
 /*********************************************/
 
-GameEffectObject::GameEffectObject() 
- {
-
-}
 GameEffectObject::~GameEffectObject()
 {
 	GameEffectManager::Get().DestroyInstance(); // インスタンスの破棄
 }
 
 
-bool GameEffectObject::Start() 
+bool GameEffectObject::Start()
 {
 	GameEffectManager::Get().CreateInstance(); // インスタンスの生成
 	return true;

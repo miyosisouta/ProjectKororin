@@ -15,34 +15,42 @@ class StageObjectBase;
 class SpacePartitioning
 {
 private:
-	std::vector<int> aaa;
-	std::vector<int> bbb;
+
 	static SpacePartitioning* instance;
 
+	/* コンストラクタ */
 	SpacePartitioning();
 
 public:
+	/* デストラクタ */
 	~SpacePartitioning();
 
+	/* コピープロテクト */
 	SpacePartitioning(const SpacePartitioning&) = delete;
+	/* コピープロテクト */
 	SpacePartitioning& operator=(const SpacePartitioning&) = delete;
 
+	/* インスタンスの取得 */
 	static SpacePartitioning* GetInstance() {
 		return instance;
 	}
 
+	/* インスタンスの作成 */
 	static void CreateInstance() {
 		if (instance == nullptr) {
 			instance = new SpacePartitioning(); // 初回だけ作成
 		}
 	}
 
+	/* インスタンスの削除 */
 	static void DeleteInstance() {
 		delete instance;
 		instance = nullptr;
 	}
 
+	/* 更新処理 */
 	void Update();
+	/* オブジェクトの追加 */
 	void AddObject(int num, ObjectData* object);
 	void AddDeleteList(Cell& position);
 	void AddCreateist(Cell& position);

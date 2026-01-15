@@ -21,19 +21,19 @@ struct IMasterParameter {};
 /** プレイヤーのステータス */
 struct MasterSphereStatusParameter : public IMasterParameter
 {
-    appParameter(MasterSphereStatusParameter);
-    //
-    int level;			    // 吸着できるレベル
-    int levelUpNum;		// レベルアップに必要な数(吸着したオブジェクトの数)
+	appParameter(MasterSphereStatusParameter);
+	//
+	int level;			    // 吸着できるレベル
+	int levelUpNum;		// レベルアップに必要な数(吸着したオブジェクトの数)
 };
 
 /** インゲーム中固有のパラメーター */
 struct MasterInGameParameter : public IMasterParameter
 {
-    appParameter(MasterInGameParameter);
-    //
-    float BouncePower[5];
-    float limitTime;
+	appParameter(MasterInGameParameter);
+	//
+	float BouncePower[5];
+	float limitTime;
 };
 
 
@@ -47,150 +47,143 @@ struct MasterInGameParameter : public IMasterParameter
 class ParameterManager
 {
 private:
-    // 複数パラメーターがあっても良いように
-    using ParameterVector = std::vector<IMasterParameter*>;
-    // 各パラメーターごとに保持する
-    using ParameterMap = std::map<uint32_t, ParameterVector>;
+	/* 複数パラメーターがあっても良いように */
+	using ParameterVector = std::vector<IMasterParameter*>;
+	/* 各パラメーターごとに保持する */
+	using ParameterMap = std::map<uint32_t, ParameterVector>;
 
 private:
-    ParameterMap parameterMap_;  // パラメーターを保持
+	ParameterMap parameterMap_;  //!< パラメーターを保持
 
 private:
-    ParameterManager();
-    ~ParameterManager();
+	/* コンストラクタ */
+	ParameterManager();
+	/* デストラクタ */
+	~ParameterManager();
 
 public:
-    /// <summary>
-    /// パラメーター読み込み
-    /// NOTE: Unloadも呼ぶことを忘れないように
-    ///       第2引数のラムダ式でテンプレートで指定する型の情報に変換する
-    /// </summary>
-    template <typename T>
-    void LoadParameter(const char* path, const std::function<void(const nlohmann::json& json, T& p)>& func)
-    {
-        std::ifstream file(path);
-        if (!file.is_open()) {
-            return;
-        }
+	/// <summary>
+	/// パラメーター読み込み
+	/// NOTE: Unloadも呼ぶことを忘れないように
+	/// 第2引数のラムダ式でテンプレートで指定する型の情報に変換する
+	/// </summary>
+	template <typename T>
+	void LoadParameter(const char* path, const std::function<void(const nlohmann::json& json, T& p)>& func)
+	{
+		std::ifstream file(path);
+		if (!file.is_open()) {
+			return;
+		}
 
-        nlohmann::json jsonRoot;
-        file >> jsonRoot;
+		nlohmann::json jsonRoot;
+		file >> jsonRoot;
 
-        std::vector<IMasterParameter*> parameters;
-        for (const auto& j : jsonRoot) {
-            T* parameter = new T();
-            func(j, *parameter);
-            parameters.push_back(static_cast<IMasterParameter*>(parameter));
-        }
+		std::vector<IMasterParameter*> parameters;
+		for (const auto& j : jsonRoot) {
+			T* parameter = new T();
+			func(j, *parameter);
+			parameters.push_back(static_cast<IMasterParameter*>(parameter));
+		}
 
-        parameterMap_.emplace(T::ID(), parameters);
-    }
-
-    /// <summary>
-    /// パラメーター解放
-    /// </summary>
-    template <typename T>
-    void UnloadParameter()
-    {
-        auto it = parameterMap_.find(T::ID());
-        if (it != parameterMap_.end()) {
-            auto& parameters = it->second;
-            for (auto* p : parameters) {
-                delete p;
-            }
-            parameterMap_.erase(it);
-        }
-    }
-
-    /// <summary>
-    /// 1つだけパラメーターを取得する
-    /// </summary>
-    template <typename T>
-    const T* GetParameter(const int index = 0) const
-    {
-        const auto parameters = GetParameters<T>();
-        if (parameters.size() == 0) { return nullptr; }
-        if (parameters.size() <= index) { return nullptr; }
-        return parameters[index];
-    }
-    /// <summary>
-    /// 複数パラメーターを取得する
-    /// </summary>
-    template <typename T>
-    inline const std::vector<T*> GetParameters() const
-    {
-        std::vector<T*> parameters;
-        auto it = parameterMap_.find(T::ID());
-        if (it != parameterMap_.end()) {
-            for (auto* parameter : it->second) {
-                parameters.push_back(static_cast<T*>(parameter));
-            }
-        }
-        return parameters;
-    }
-    /// <summary>
-    /// パラメーターをラムダ式で回すForEach
-    /// </summary>
-    template <typename T>
-    void ForEach(std::function<void(const T&)> func) const
-    {
-        const std::vector<T*> parameters = GetParameters<T>();
-        for (const T* paramter : parameters) {
-            func(*paramter);
-        }
-    }
-    template <typename T>
-    const T* FindParameter(std::function<bool(const T&)> func)
-    {
-        const std::vector<T*> parameters = GetParameters<T>();
-        for (const T* paramter : parameters) {
-            if (func(*paramter)) {
-                return paramter;
-            }
-        }
-        return nullptr;
-    }
+		parameterMap_.emplace(T::ID(), parameters);
+	}
 
 
+	/* パラメーター解放 */
+	template <typename T>
+	void UnloadParameter()
+	{
+		auto it = parameterMap_.find(T::ID());
+		if (it != parameterMap_.end()) {
+			auto& parameters = it->second;
+			for (auto* p : parameters) {
+				delete p;
+			}
+			parameterMap_.erase(it);
+		}
+	}
+
+
+	/* 1つだけパラメーターを取得する */
+	template <typename T>
+	const T* GetParameter(const int index = 0) const
+	{
+		const auto parameters = GetParameters<T>();
+		if (parameters.size() == 0) { return nullptr; }
+		if (parameters.size() <= index) { return nullptr; }
+		return parameters[index];
+	}
+
+
+	/* 複数パラメーターを取得する */
+	template <typename T>
+	inline const std::vector<T*> GetParameters() const
+	{
+		std::vector<T*> parameters;
+		auto it = parameterMap_.find(T::ID());
+		if (it != parameterMap_.end()) {
+			for (auto* parameter : it->second) {
+				parameters.push_back(static_cast<T*>(parameter));
+			}
+		}
+		return parameters;
+	}
+
+
+	/* パラメーターをラムダ式で回すForEach */
+	template <typename T>
+	void ForEach(std::function<void(const T&)> func) const
+	{
+		const std::vector<T*> parameters = GetParameters<T>();
+		for (const T* paramter : parameters) {
+			func(*paramter);
+		}
+	}
+
+	/* パラメーターをラムダ式で探すFind */
+	template <typename T>
+	const T* FindParameter(std::function<bool(const T&)> func)
+	{
+		const std::vector<T*> parameters = GetParameters<T>();
+		for (const T* paramter : parameters) {
+			if (func(*paramter)) {
+				return paramter;
+			}
+		}
+		return nullptr;
+	}
 
 
 
-    /**
-     * シングルトン用
-     */
+	/********************************* シングルトン *************************************/
+
 private:
-    static ParameterManager* instance_;
+	static ParameterManager* instance_; //!< インスタンス
 
 
 public:
-    /// <summary>
-    /// インスタンスを作る
-    /// </summary>
-    static void CreateInstance()
-    {
-        if (instance_ == nullptr)
-        {
-            instance_ = new ParameterManager();
-        }
-    }
+	/* インスタンスを作る */
+	static void CreateInstance()
+	{
+		if (instance_ == nullptr)
+		{
+			instance_ = new ParameterManager();
+		}
+	}
 
-    /// <summary>
-    /// インスタンスを取得
-    /// </summary>
-    static ParameterManager& Get()
-    {
-        return *instance_;
-    }
+	/* インスタンスを取得 */
+	static ParameterManager& Get()
+	{
+		return *instance_;
+	}
 
-    /// <summary>
-    /// インスタンスを破棄
-    /// </summary>
-    static void DestroyInstance()
-    {
-        if (instance_ != nullptr)
-        {
-            delete instance_;
-            instance_ = nullptr;
-        }
-    }
+	/* インスタンスを破棄 */
+	static void DestroyInstance()
+	{
+		if (instance_ != nullptr)
+		{
+			delete instance_;
+			instance_ = nullptr;
+		}
+	}
 };

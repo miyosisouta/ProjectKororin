@@ -4,15 +4,20 @@
 #include "Actor/Object/AttachableObject.h"
 #include "Actor/Sphere/Sphere.h"
 
-// 最初に実行するUpdate
+ // 最初に実行するUpdate
 class InGameUpdateObject : public IGameObject
 {
 public:
+	/* コンストラクタ */
 	InGameUpdateObject() {}
+	/* デストラクタ */
 	~InGameUpdateObject() {}
 
+	/* スタート処理 */
 	virtual bool Start() override { return true; }	// 使用しない
+	/* 更新処理 */
 	virtual void Update() override;
+	/* 描画処理 */
 	virtual void Render(RenderContext& rc) {}		// 使用しない
 };
 
@@ -20,11 +25,16 @@ public:
 class InGameLateUpdateObject : public IGameObject
 {
 public:
+	/* コンストラクタ */
 	InGameLateUpdateObject() {}
+	/* デストラクタ */
 	~InGameLateUpdateObject() {}
 
+	/* スタート処理 */
 	virtual bool Start() override { return true; }	// 使用しない
+	/* 更新処理 */
 	virtual void Update() override;
+	/* 描画処理 */
 	virtual void Render(RenderContext& rc) {}		// 使用しない
 };
 
@@ -32,8 +42,10 @@ public:
 
 /**************************/
 
-
-// 構造体にすることでEnumの名前が同じでも問題ない状態にする
+/*
+ * 通知のタイプ
+ * 構造体にすることでEnumの名前が同じでも問題ない状態にする
+ */
 struct NotifyType
 {
 	enum Enum
@@ -42,6 +54,7 @@ struct NotifyType
 	};
 };
 
+/* 通知の際の情報 */
 struct INotify
 {
 	NotifyType::Enum type;
@@ -50,13 +63,14 @@ struct INotify
 };
 
 
+/* コリジョンヒット時に必要な情報 */
 struct NotifyCollisionHit : INotify
 {
 	IGameObject* left;
 	IGameObject* right;
 	GameObjectType::Enum leftType;
 	GameObjectType::Enum rightType;
-	
+
 	// CollisionHitを引数としてコンストラクタに渡す
 	NotifyCollisionHit()
 		: INotify(NotifyType::CollisionHit)
@@ -68,41 +82,34 @@ struct NotifyCollisionHit : INotify
 class InGameManager
 {
 private:
-	std::vector<INotify*> notifyList_;
-
+	std::vector<INotify*> notifyList_; //!< 通知のリスト
 
 
 private:
+	/* コンストラクタ */
 	InGameManager();
+	/* デストラクタ */
 	~InGameManager();
 
+	/* 吸着可能かどうか確かめるクラス */
 	bool CanAttach(AttachableObject& target, Sphere& sphere);
 
+
 public:
-	/**
-	 * @brief 通常更新
-	 */
+	/* 更新処理 */
 	void Update();
 
-	/**
-	 * @brief 遅れて更新
-	 */
+	/* 遅れて更新 */
 	void LateUpdate();
 
 
 public:
-	/**
-	 * @brief 通知追加
-	 */
+	/* 通知の追加 */
 	void Notify(INotify* notify);
 
 
-
-
 private:
-	/**
-	 * @brief リストの情報をすべて削除、nullptrにする
-	 */
+	/* リストを削除 */
 	void ClearNotify()
 	{
 		for (auto* notify : notifyList_) {
@@ -132,11 +139,9 @@ private:
 
 
 
-	/**
-	 * シングルトン関連
-	 */
+	/******************************** シングルトン ***********************************/
 private:
-	static InGameManager* instance_;
+	static InGameManager* instance_;//!< インスタンス
 
 
 public:
@@ -155,7 +160,7 @@ public:
 	}
 	/**
 	 * @brief インスタンスを入手
-	 * @return 
+	 * @return
 	 */
 	static InGameManager& Get()
 	{

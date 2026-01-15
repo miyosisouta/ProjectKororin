@@ -1183,7 +1183,7 @@ bool GameScene::Start()
 
 	Fade::Get().Stop();
 
-	g_sceneLight->SetDirectionLight(0, Vector3(1.0f, -1.0f, -1.0f), Vector3(0.5f));
+	g_sceneLight->SetDirectionLight(0, Vector3(0.5f, -1.0f, -1.0f), Vector3(0.5f));
 	g_sceneLight->SetAmbinet(Vector3(0.8f));
 
 	return true;

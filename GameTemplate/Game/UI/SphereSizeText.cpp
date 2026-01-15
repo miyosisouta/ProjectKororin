@@ -7,17 +7,15 @@ namespace
 {
 	/*** 画像の設定 ***/
 
-	const Vector3 TEXT_BACKRAY_POS = Vector3(-700.0f, 320.0f, 0.0f); // 黒の背景の座標
-	const Vector3 TEXT_BACKRAY_SCALE = Vector3(10.0f, 10.0f, 0.0f); // 黒の背景の大きさ
+	const Vector3 TEXT_BACKRAY_POS = Vector3(-700.0f, 320.0f, 0.0f);	// 黒の背景の座標
+	const Vector3 TEXT_BACKRAY_SCALE = Vector3(10.0f, 10.0f, 0.0f);		// 黒の背景の大きさ
 
-	const float ALWAYS_SPEED = 100.0f; // 丸い画像の回転の基準速度
-	const float OBJECTIVESIZE = 500.0f; // 塊の大きさの指標
-	const float DEFAULTSIZE = 1.0f; // 画像のデフォルトの大きさ倍率
+	const float ALWAYS_SPEED = 100.0f;				// 丸い画像の回転の基準速度
+	const float OBJECTIVESIZE = 500.0f;				// 塊の大きさの指標
+	const float DEFAULTSIZE = 1.0f;					// 画像のデフォルトの大きさ倍率
 	const float SPHERESIZETEXT_DRAWLIMMIT = 300.0f; // 塊の目標サイズのテキスト表示を制限する
 
 	// 変数作成
-	// SPRITE_RENDER_INFO_LIST[0] = SpriteRenderInfoType()
-	// SPRITE_RENDER_INFO_LIST[1] = SpriteRenderInfoType()
 	const SpriteConstans::SpriteRenderInfo SPRITE_RENDER_INFO_LIST[] =
 	{
 		SpriteConstans::SpriteRenderInfo("SizeOrb_Green.DDS"		, 200, Vector3(-700.0f, 320.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
@@ -147,10 +145,10 @@ bool SphereSizeText::Start()
 
 void SphereSizeText::Update()
 {
-	Rotation(); // 画像の回転
-	AdjustOrbScaleByRadius(); // 画像の大きさ
-	ApplyScaleToUIElement(); // Sphereの現在の大きさを表示
-	SphereGoalSizeText();
+	Rotation();					// 画像の回転
+	AdjustOrbScaleByRadius();	// 画像の大きさ
+	ApplyScaleToUIElement();	// Sphereの現在の大きさを表示
+	SphereGoalSizeText();		// 塊の目標サイズのテキスト
 	textGreenOrbSprite_.Update();
 	textBlueOrbSprite_.Update();
 	textPinkOrbSprite_.Update();
@@ -166,7 +164,7 @@ void SphereSizeText::Render(RenderContext& rc)
 		GoalSizeColorCornSprite_.Draw(rc);
 		sphereGoalSizeText_.Draw(rc);
 	}
-	
+
 	textGreenOrbSprite_.Draw(rc);
 	textBlueOrbSprite_.Draw(rc);
 	textPinkOrbSprite_.Draw(rc);
@@ -175,7 +173,7 @@ void SphereSizeText::Render(RenderContext& rc)
 }
 
 
-void SphereSizeText::Rotation() 
+void SphereSizeText::Rotation()
 {
 	// 1フレームの経過時間を取得
 	float orbMoveSpeed = ALWAYS_SPEED * g_gameTime->GetFrameDeltaTime();
@@ -203,8 +201,8 @@ void SphereSizeText::AdjustOrbScaleByRadius()
 
 void SphereSizeText::ApplyScaleToUIElement()
 {
-	const int radiusMeters = sphereRadius_ / METERS_TO_CENTIMETERS; // メートルを算出
-	const int radiusCentimeters = (int)sphereRadius_ % METERS_TO_CENTIMETERS; // センチメートルを算出
+	const int radiusMeters = sphereRadius_ / METERS_TO_CENTIMETERS;				// メートルを算出
+	const int radiusCentimeters = (int)sphereRadius_ % METERS_TO_CENTIMETERS;	// センチメートルを算出
 
 	//塊の大きさを定義・表示
 	wchar_t currentSize[256];

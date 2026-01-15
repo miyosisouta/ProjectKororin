@@ -11,18 +11,14 @@ class IScene;
 class SceneManager
 {
 private:
-	IScene* currentScene_ = nullptr;
-	float elapsedTime_ = 0.0f;
-	float waitTime_ = 0.0f;
+	IScene* currentScene_ = nullptr; //!< 現在のシーン
+	float elapsedTime_ = 0.0f;		 //!< 経過時間
+	float waitTime_ = 0.0f;			 //!< 待機時間
 
 private:
-	/**
-	 * @brief コンストラクタ。
-	 */
+	/* シングルトン */
 	SceneManager();
-	/**
-	 * @brief デストラクタ。
-	 */
+	/* デストラクタ */
 	~SceneManager();
 
 
@@ -39,11 +35,9 @@ private:
 	IScene* NextScene(const uint32_t nextId);
 
 
-/**
- * シングルトン関連
- */
+	/************************* シングルトン **********************************/
 private:
-	static SceneManager* instance_;
+	static SceneManager* instance_;//!< インスタンス
 
 
 public:
@@ -74,7 +68,7 @@ public:
 	 */
 	static void DeleteInstance()
 	{
-		if (instance_) 
+		if (instance_)
 		{
 			delete instance_;
 			instance_ = nullptr;
@@ -83,13 +77,18 @@ public:
 };
 
 
-class SceneManagerObject : public IGameObject 
+class SceneManagerObject : public IGameObject
 {
 public:
+	/* シングルトン */
 	SceneManagerObject();
+	/* デストラクタ */
 	~SceneManagerObject();
 
-	bool Start()override;
-	void Update()override;
-	void Render(RenderContext& rc)override;
+	/** 初期化 */
+	bool Start();
+	/** 更新処理 */
+	void Update();
+	/** 描画処理 */
+	void Render(RenderContext& rc);
 };

@@ -22,7 +22,7 @@ TitleScene::TitleScene()
 {
 	CollisionHitManager::CreateInstance();
 
-	if (Fade::Get().GetMode() == FadeMode::FadeOut) 
+	if (Fade::Get().GetMode() == FadeMode::FadeOut)
 	{
 		Fade::Get().PlayFade(FadeMode::FadeIn);
 	}
@@ -61,14 +61,15 @@ bool TitleScene::Start()
 		g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -0.5f, 1.0f), Vector3(1.2f)); // 3Dオブジェクト用にディレクションライトの設定
 		g_sceneLight->SetAmbinet(0.6f); // アンビエントライトの設定
 		calcTime_.InitCalcTime(); // 時間を測定の初期設定
-		g_camera3D->SetPosition(Vector3(0.0f, 100.0f, -200.0f));
-		g_camera3D->SetTarget(Vector3(0.0f, 50.0f, 0.0f));
+		g_camera3D->SetPosition(Vector3(0.0f, 100.0f, -200.0f)); // カメラの設定
+		g_camera3D->SetTarget(Vector3(0.0f, 50.0f, 0.0f)); // カメラのターゲットポジション
 	}
 
 	// 画像の設定
 	{
 		// ゲームタイトルの表示
 		{
+			// 画像を作成
 			titleGameNameCanvas_ = new UICanvas;
 			auto* icon = titleGameNameCanvas_->CreateUI<UIIcon>();
 			icon->Initialize("Assets/sprite/title/titleGameName.DDS", 1024.0f, 512.0f, Vector3(0.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
@@ -76,9 +77,11 @@ bool TitleScene::Start()
 
 		// 「Press Button A」の表示とイージング設定
 		{
+			// 画像を作成
 			pressButtonCanvas_ = new UICanvas;
 			icon_ = pressButtonCanvas_->CreateUI<UIIcon>();
 			icon_->Initialize("Assets/sprite/UI/Press_Button_A.DDS", 512.0f, 256.0f, Vector3(0.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
 			// ここからイージング設定
 			auto scaleAnimation = std::make_unique<UIVector4Animation>();
 			scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.1f), 3.0f, EasingType::EaseInOut, LoopMode::PingPong);
@@ -93,7 +96,7 @@ bool TitleScene::Start()
 	return true;
 }
 
-void TitleScene::Update() 
+void TitleScene::Update()
 {
 	// 1フレームの経過時間を取得
 	elapsedTime_ += g_gameTime->GetFrameDeltaTime();
@@ -118,7 +121,7 @@ void TitleScene::Update()
 			Fade::Get().PlayFade(FadeMode::FadeOut, NEXT_SCENE_ANIMATION_TIME, Vector3::One);
 		}
 	}
-	else 
+	else
 	{
 		// 次のシーンへ遷移OKにする
 		isNextScene_ = true;
@@ -129,7 +132,7 @@ void TitleScene::Update()
 	pressButtonCanvas_->Update();
 }
 
-void TitleScene::Render(RenderContext& rc) 
+void TitleScene::Render(RenderContext& rc)
 {
 	// 画像の描画
 	titleGameNameCanvas_->Render(rc);

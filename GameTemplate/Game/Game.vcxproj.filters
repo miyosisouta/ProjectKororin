@@ -108,9 +108,6 @@
     <ClCompile Include="Core\ParameterManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\Collision.cpp">
-      <Filter>Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Core\GameUIManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -131,9 +128,6 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\IScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\ResultScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneManager.cpp">
@@ -162,6 +156,7 @@
     </ClCompile>
     <ClCompile Include="SpacePartitioning.cpp" />
     <ClCompile Include="StageLoader.cpp" />
+    <ClCompile Include="Collision\Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -262,9 +257,6 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\IScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\ResultScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneManager.h">

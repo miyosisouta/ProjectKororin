@@ -10,9 +10,7 @@ class Sphere;
 class Player : public Actor
 {
 private:
-	/**
-	 * @brief プレイヤーの状態を表す列挙体。
-	 */
+	/* プレイヤーのステート */
 	struct PlayerState
 	{
 		enum Enum
@@ -22,9 +20,7 @@ private:
 		};
 	};
 
-	/**
-	 * @brief プレイヤーのアニメーションクリップ種別。
-	 */
+	/* プレイヤーのアニメーションステート */
 	struct PlayerAnimClips
 	{
 		enum Enum
@@ -38,57 +34,35 @@ private:
 
 
 private:
-	CharacterController m_charaCon; //!< キャラクターコントローラ
-	AnimationClip m_playerAnimClips[PlayerAnimClips::Max];
-	PlayerState::Enum m_playerState = PlayerState::Idle;
-	Sphere* Sphere_ = nullptr; //!< ボール
+	CharacterController m_charaCon;	//!< キャラクターコントローラ
+	AnimationClip m_playerAnimClips[PlayerAnimClips::Max]; //!< アニメーションクリップ
+	PlayerState::Enum m_playerState = PlayerState::Idle; //!< プレイヤーステート
+	Sphere* Sphere_ = nullptr; //!< 塊
 
 	Vector3 moveSpeed_ = Vector3::Zero; //!< 移動速度
 
 
 public:
-	/**
-	 * @brief コンストラクタ。
-	 */
+	/* コンストラクタ */
 	Player() {};
-	/**
-	 * @brief デストラクタ。
-	 */
+	/* デストラクタ */
 	~Player() {};
 
-
-	/**
-	 * @brief 初期化処理。
-	 * @return 成功した場合は true。
-	 */
+	/* スタート処理 */
 	bool Start() override;
-	/**
-	 * @brief 毎フレームの更新処理。
-	 */
+	/* 更新処理 */
 	void Update() override;
-	/**
-	 * @brief 描画処理。
-	 * @param rc 描画に使用するレンダーコンテキスト。
-	 */
+	/* 描画処理 */
 	void Render(RenderContext& rc) override;
 
-
-	/**
-	 * @brief 移動処理。
-	 */
+private:
+	/* 移動処理 */
 	void Move();
 
-	/**
-	 * @brief ステート管理処理。
-	 */
+	/* ステート管理 */
 	void ManageState();
 
-	/**
-	 * @brief アニメーションのセット。
-	 * @param animationClip 設定するアニメーションクリップ。
-	 * @param animationFileName アニメーションファイル名。
-	 * @param loopFlag ループ再生するかどうか。
-	 */
+	/* アニメーション設定 */
 	void SetAnimation(PlayerAnimClips::Enum animationClip, std::string animationFileName, bool loopFlag);
 };
 

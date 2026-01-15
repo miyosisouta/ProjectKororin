@@ -14,12 +14,10 @@ namespace
 
 
 	// •Ï”ì¬
-	// SPRITE_RENDER_INFO_LIST[0] = SpriteRenderInfoType()
-	// SPRITE_RENDER_INFO_LIST[1] = SpriteRenderInfoType()
 	const SpriteConstans::SpriteRenderInfo SPRITE_RENDER_INFO_LIST[] =
 	{
 		SpriteConstans::SpriteRenderInfo("TimeGauge.DDS",				256,	Vector3(750.0f, 400.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-		SpriteConstans::SpriteRenderInfo("TimeLimitLine.DDS",			128,	Vector3(750.0f, 400.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),		
+		SpriteConstans::SpriteRenderInfo("TimeLimitLine.DDS",			128,	Vector3(750.0f, 400.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
 	};
 
 
@@ -70,7 +68,7 @@ bool Timer::Start()
 		&timeLineSprite_,
 		timeLimitLine.filePath,
 		timeLimitLine.size,
-		timeLimitLine.pos, 
+		timeLimitLine.pos,
 		timeLimitLine.scale,
 		timeLimitLine.color
 	);
@@ -98,8 +96,8 @@ void Timer::Render(RenderContext& rc)
 
 void Timer::UpdateLineValue()
 {
-	float progressRate =gameTimer_ / gameTimeLimit; // 1ƒtƒŒ[ƒ€‚Ì‰ñ“]”ä—¦‚ğŒvZ
-	float angle = progressRate * ONE_LAP; // ‰ñ“]Šp“x
-	rotation_.SetRotationDegZ(angle); // zÀ•W‚ğ²‚ÉQuaternion‚ğ§ì
-	timeLineSprite_.SetRotation(rotation_); // ‰ñ‚·
+	float progressRate = gameTimer_ / gameTimeLimit;// 1ƒtƒŒ[ƒ€‚Ì‰ñ“]”ä—¦‚ğŒvZ
+	float angle = progressRate * ONE_LAP;			// ‰ñ“]Šp“x
+	rotation_.SetRotationDegZ(angle);				// zÀ•W‚ğ²‚ÉQuaternion‚ğ§ì
+	timeLineSprite_.SetRotation(rotation_);			// ‰ñ‚·
 }

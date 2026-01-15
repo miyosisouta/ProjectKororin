@@ -10,66 +10,54 @@
 class AttachableObject : public StageObjectBase
 {
 public:
-	/**
-	 * @brief コンストラクタ
-	 */
+	/* コンストラクタ */
 	AttachableObject() {};
-	/**
-	 * @brief デストラクタ
-	 */
+
+	/* デストラクタ */
 	~AttachableObject();
 
+	/* スタート処理 */
 	bool Start()override;
+	/* 更新処理 */
 	void Update()override;
+	/* 描画処理 */
 	void Render(RenderContext& rc)override;
 
 public:
-	inline float GetUIScale() const
-	{
-		return UIDisplayscale_;
-	}
+	/* UI時のオブジェクトの大きさを取得 */
+	inline float GetUIScale() const { return UIDisplayscale_; }
 
-	inline int GetObjectSize() const
-	{
-		return objectSize_;
-	}
+	/* オブジェクトの吸着可能なレベルを取得 */
+	inline int GetObjectSize() const { return objectSize_; }
 
-	inline int GetObjectValue() const
-	{
-		return attachableValue_;
-	}
+	/* 吸着タイプの取得 */
+	inline int GetObjectValue() const { return attachableValue_; }
 
-	inline int GetGrowAmount() const
-	{
-		return grouthAmount_;
-	}
+	/* 塊のサイズの増加量取得 */
+	inline int GetGrowAmount() const { return grouthAmount_; }
 
-	inline int GetAttachSoundNum() const
-	{
-		return soundNum_;
-	}
-	inline void SetPlayedSE(bool isPlayedSE)
-	{
-		isPlayedSE_ = isPlayedSE;
-	}
+	/* 吸着時のSEの番号を取得 */
+	inline int GetAttachSoundNum() const { return soundNum_; }
 
-	inline bool IsPlayedSE() const
-	{
-		return isPlayedSE_;
-	}
+	/* SEを鳴らしたかどうかを設定 */
+	inline void SetPlayedSE(bool isPlayedSE) { isPlayedSE_ = isPlayedSE; }
 
-	inline void SetVisibleAttachedObject(const bool flg) { isVisibleAttachedObject_ = flg; }	// 吸着しているオブジェクトを描画するかどうかのフラグ
-	inline bool GetVisibleAttachedObject() { return isVisibleAttachedObject_; }	// 吸着しているオブジェクトを描画するかどうかのフラグ
+	/* SEを鳴らしたかのフラグ */
+	inline bool IsPlayedSE() const { return isPlayedSE_; }
+
+	/* 吸着しているオブジェクトを描画するかどうかのフラグ */
+	inline void SetVisibleAttachedObject(const bool flg) { isVisibleAttachedObject_ = flg; }
+
+	/* 吸着しているオブジェクトを描画するかどうかのフラグ */
+	inline bool GetVisibleAttachedObject() { return isVisibleAttachedObject_; }
 
 public:
-	/**
-	 * @brief 当たり判定の破棄とnullptr
-	 */
+	/* 当たり判定の破棄 */
 	void DeletePhysicsStatics();
 
 
 private:
-	bool isPlayedSE_ = false;
+	bool isPlayedSE_ = false;				// SEをならしたかフラグ(初期はfalse)
 	bool isVisibleAttachedObject_ = false;	// くっついたオブジェクトの表示
 
 };
