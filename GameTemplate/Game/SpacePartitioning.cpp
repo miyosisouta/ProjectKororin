@@ -220,6 +220,20 @@ void SpacePartitioning::OffRender()
 	}
 }
 
+void SpacePartitioning::RemmoveObject(int num)
+{
+	deleteObjectList_.erase(
+		std::remove(deleteObjectList_.begin(), deleteObjectList_.end(), num),
+		deleteObjectList_.end()
+	);
+
+
+	{
+		auto it = objectDataList_.find(num);
+		objectDataList_.erase(it);
+	}
+}
+
 // グリッド移動時の更新処理
 // プレイヤーが移動した方向に応じて、新しいエリアを生成し、古いエリアを削除する
 void SpacePartitioning::ListUpdate(int x, int z)
