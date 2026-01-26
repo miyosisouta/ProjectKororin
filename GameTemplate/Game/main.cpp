@@ -42,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// GameManagerクラスのインスタンスを作成
 	auto* SceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
 	// fadeクラスのインスタンすを作成
-	auto* fadeObject = NewGO<FadeObject>(0, "fadeObject");
+	auto* fadeObject = NewGO<FadeObject>(1, "fadeObject");
 	// Effectクラスのインスタンスを作成
 	auto* effectObject = NewGO<GameEffectObject>(0, "gameEffectObject");
 	// スカイキューブ

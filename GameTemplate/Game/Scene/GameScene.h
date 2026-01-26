@@ -100,8 +100,6 @@ namespace _internal
 		float elapsedTime_ = 0.0f;		//!< 経過時間
 
 
-
-
 	public:
 		/* コンストラクタ */
 		Result(GameScene* owner);
@@ -329,15 +327,111 @@ namespace _internal
 		std::unique_ptr<FontRender> buttonText_ = nullptr;		//!< ボタンをおしてね！のテキスト
 
 	};
+
+
+	/*********** インゲームスタートイベント用 ***********/
+	class StartEvent
+	{
+		struct StartEventStep
+		{
+			enum Enum
+			{
+				Step1,
+				Step2,
+				Max,
+				Invalid
+			};
+		};
+
+		using EnterFunc = void(*)(StartEvent*);
+		using UpdateFunc = void(*)(StartEvent*);
+		using ExitFunc = void(*)(StartEvent*);
+
+		/* ステートの種類 */
+		struct State
+		{
+			EnterFunc enter = nullptr;
+			UpdateFunc update = nullptr;
+			ExitFunc exit = nullptr;
+		};
+
+
+	private: // スタートイベント用UI
+
+		UICanvas* startEventTextWindow_ = nullptr;		//!< スタートイベント用テキストウィンドウ
+		UICanvas* instructionButtonSprite_ = nullptr;	//!< 指示ボタンの画像
+		UIIcon* startEventTextWindowIcon_ = nullptr;	//!< スタートイベント用テキストウィンドウアイコン
+		UIIcon* instructionIcon_ = nullptr;				//!< 指示ボタンアイコン
+		std::unique_ptr<FontRender> texts_[5];			//!< ゲームスタート時のテキスト
+
+
+	private: 
+		std::array < State, StartEventStep::Max > startEventStepList_;	//!< インゲームスタート時に発生するイベントの処理ステップ
+		StartEventStep::Enum currentStep_ = StartEventStep::Step1; //!< 現在のステップ
+		StartEventStep::Enum nextStep_ = StartEventStep::Invalid; //!< 次のステップ
+		GameScene* owner_; //!< ゲームシーン
+		CalcLerpValue calcValue_; //!< 経過時間
+
+		bool isFinished_ = false; //!< スタートイベントが終わったかどうか
+		uint8_t currentSentenceNum_ = 0; //!< 現在の文章のインデックス
+
+	public:
+		/* コンストラクタ */
+		StartEvent(GameScene* owner);
+		/* デストラクタ */
+		~StartEvent();
+
+		/* スタート処理 */
+		void Start();
+		/* 更新処理 */
+		void Update();
+		/* 描画処理 */
+		void Render(RenderContext& rc);
+
+
+	public:
+		bool IsFinished() const { return isFinished_; }
+
+	private:
+		/* ステップ1 */
+		static void EnterStep1(StartEvent* gameScene);
+		static void UpdateStep1(StartEvent* gameScene);
+		static void ExitStep1(StartEvent* gameScene);
+
+		/* ステップ2 */
+		static void EnterStep2(StartEvent* gameScene);
+		static void UpdateStep2(StartEvent* gameScene);
+		static void ExitStep2(StartEvent* gameScene);
+	};
 }
 
+class StartEventObject : public IGameObject {
+public:
+	StartEventObject();
+	~StartEventObject();
 
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+
+	void SetOwner(GameScene* scene) { owner_ = scene; }
+	_internal::StartEvent* GetStartEvent() { return startEvent_; }
+
+	void SetActive(const bool flg) { active_ = flg; }
+
+private:
+	_internal::StartEvent* startEvent_ = nullptr; //!< インゲーム開始イベント用
+	GameScene* owner_ = nullptr; //!< ゲームシーン
+
+	bool active_ = true;
+};
 
 
 class GameScene : public IScene
 {
 	appScene(GameScene);
 
+	friend class _internal::StartEvent;
 	friend class _internal::Result;
 	friend class _internal::ClearResult;
 	friend class _internal::FailureResult;
@@ -352,15 +446,14 @@ private:
 		Step5,
 	};
 
-
-private:
 	struct InGameState
 	{
 		enum Enum
 		{
-			InGame,			// インゲーム中
-			InGameFinish,	// インゲーム終了
-			Result,			// リザルト表示
+			InGameStartEvent,	// インゲーム開始時のイベント
+			InGame,				// インゲーム中
+			InGameFinish,		// インゲーム終了
+			Result,				// リザルト表示
 		};
 	};
 
@@ -397,16 +490,18 @@ private:
 	Sphere* sphere_ = nullptr; //!< ボール（Sphere）
 	SphereCamera* sphereCamera_ = nullptr; //!< ボール追従カメラ
 	Canvas* canvas_ = nullptr; //!< キャンバス
-	SphereInputSystem* sphereInputSystem_ = nullptr; // 塊用インプットシステム
-	InputDetection* inputDetection_ = nullptr; // 入力判定用インプットシステム
+	SphereInputSystem* sphereInputSystem_ = nullptr; //!< 塊用インプットシステム
+	InputDetection* inputDetection_ = nullptr; //!< 入力判定用インプットシステム
+	StartEventObject* startEventObject_ = nullptr; //!< スタートイベント用オブジェクト
 
-	_internal::Result* result_ = nullptr;		// リザルト表示用
+	_internal::Result* result_ = nullptr; //!< リザルト表示用
 
-	InGameState::Enum gameState_ = InGameState::InGame;	// 現在処理の段階
+	InGameState::Enum gameState_ = InGameState::InGameStartEvent;	//!< 現在処理の段階
 
-	float goalElapsedTime_ = 0.0f;	// クリアタイム
-	float whiteOutAlpha = 0.0f;		// フェード用画像のα値
 
 private:
-	bool isNextScene_ = false;		// 次のシーンに遷移するかどうか
+	float goalElapsedTime_ = 0.0f; //!< クリアタイム
+	float whiteOutAlpha = 0.0f;	//!< フェード用画像のα値
+
+	bool isNextScene_ = false; //!< 次のシーンに遷移するかどうか
 };

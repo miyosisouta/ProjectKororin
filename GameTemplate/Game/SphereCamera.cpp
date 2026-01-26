@@ -28,6 +28,8 @@ bool SphereCamera::Start()
 
 void SphereCamera::Update()
 {
+	if (!sphere_) { return; } // 塊がないなら処理をしない
+
 	/* 塊の大きさのレベルによってカメラを塊から遠ざける */
 	auto* currentSphereLevel = sphere_->GetStatus(); // 塊の現在のレベルを取得
 	if (CheckForLevelUp(currentSphereLevel->GetLevel())) // カメラを遠ざける条件が満たされている場合
