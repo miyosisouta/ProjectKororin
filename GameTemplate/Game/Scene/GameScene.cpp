@@ -23,22 +23,29 @@
 namespace
 {
 	/********* 共通の定数 *********/
-	constexpr const float FADE_OUT_START_TIME = 2.0f;			// フェードアウトが始まるまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 210.0f;				// ゲーム時間
-	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);		// クリア時のカメラの座標
+	constexpr const float FADE_OUT_START_TIME = 2.0f;								// フェードアウトが始まるまでの時間
+	constexpr const float GAME_TIMER_LIMIT = 210.0f;								// ゲーム時間
+	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);				// クリア時のカメラの座標
+	constexpr const uint8_t SENTENCE_COUNT_MAX = 4;									// テキストの最大文の数
+	constexpr const uint8_t MAX_SENTENCE_NUM = 5;									// スタートイベント用テキストの最大文の数
+
+
+	/********* インゲーム開始時のスタートイベント用の定数 *********/
+	constexpr const float FADEIN_TIME_START_EVENT = 3.0f;							// スタートイベント終了時のフェードインにかける時間
+	constexpr const float TIME_VALUE = 1.0f;
+	static const Vector3 START_EVENT_TEXT_POS = Vector3(-380.0f, 380.0f, 0.0f);		// スタートイベント用テキストの位置
 
 	/********* ゲームクリア時の定数 *********/
-	constexpr const float SPHERE_TO_DELETE_TIME = 5.0f;			// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float CLEAR_SPHERE_ROTATION_SPEED = 100.0f; // 塊の回転速度
-	constexpr const int METERS_TO_CENTIMETERS = 100;			// メートルとセンチメートルを分ける
-	constexpr const uint8_t HIGHEST_RATED_BORDER = 0;				// 最高評価ボーダーライン
-	constexpr const uint16_t SET_CAN_NUMBER_CHARACTERS = 256;	// 設定可能な文字数
-	static const Vector3 CLAER_SPHERE_INIT_POS = Vector3(0.0f, 0.0f, -10.0f); // 塊の初期座標
-	static const Vector3 CLAER_SPHERE_LAST_POS = Vector3(120.0f, 0.0f, -120.0f); // 塊の移動後の座標
+	constexpr const float SPHERE_TO_DELETE_TIME = 5.0f;								// オブジェクトが空へ飛ぶまでの時間
+	constexpr const float CLEAR_SPHERE_ROTATION_SPEED = 100.0f;						// 塊の回転速度
+	constexpr const int METERS_TO_CENTIMETERS = 100;								// メートルとセンチメートルを分ける
+	constexpr const uint8_t HIGHEST_RATED_BORDER = 0;								// 最高評価ボーダーライン
+	constexpr const uint16_t SET_CAN_NUMBER_CHARACTERS = 256;						// 設定可能な文字数
+	static const Vector3 CLAER_SPHERE_INIT_POS = Vector3(0.0f, 0.0f, -10.0f);		// 塊の初期座標
+	static const Vector3 CLAER_SPHERE_LAST_POS = Vector3(120.0f, 0.0f, -120.0f);	// 塊の移動後の座標
 
 	/********* ゲームオーバー時の定数 *********/
-	constexpr const float FLIGHT_START_DELAY = 1.5f;		// 塊がカメラの後方へ飛ぶまでの時間
-	constexpr const uint8_t SENTENCE_COUNT_MAX = 4;			// テキストの最大文の数
+	constexpr const float FLIGHT_START_DELAY = 1.5f;								// 塊がカメラの後方へ飛ぶまでの時間
 	static const Vector3 FAILER_FONT_TEXTS_POS = Vector3(150.0f, 330.0f, 0.0f);		// クリア失敗時のリザルトでのテキスト位置
 	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 1500.0f, -1000.0f);	// 黒い背景用オブジェクトの最初の位置
 	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, -1000.0f);		// 黒い背景用オブジェクトの最終的な位置
@@ -73,12 +80,9 @@ namespace _internal
 		: owner_(owner)
 	{
 	}
-
-
 	Result::~Result()
 	{
 	}
-
 
 	void Result::Start()
 	{
@@ -94,8 +98,6 @@ namespace _internal
 		owner_->sphereCamera_->Update(); // カメラの最終座標を更新
 
 	}
-
-
 	void Result::Update()
 	{
 		// 画像の更新
@@ -114,8 +116,6 @@ namespace _internal
 		// 入力判定の状態を更新
 		owner_->inputDetection_->UpdateTriggerState();
 	}
-
-
 	void Result::Render(RenderContext& rc)
 	{
 		if (blackOutObject_) {
@@ -1117,6 +1117,228 @@ namespace _internal
 			}
 		}
 	}
+
+
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*----------------------------------------------------------------  インゲームが始まった際のイベントの処理  -------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	StartEvent::StartEvent(GameScene* owner)
+		: owner_(owner)
+	{
+		// リストに登録するための関数定義
+		{
+			auto setting = [&](StartEventStep::Enum step, EnterFunc enter, UpdateFunc update, ExitFunc exit)
+				{
+
+					if (startEventStepList_[step].enter == nullptr) {
+						startEventStepList_[step].enter = enter;
+					}
+					if (startEventStepList_[step].update == nullptr) {
+						startEventStepList_[step].update = update;
+					}
+					if (startEventStepList_[step].exit == nullptr) {
+						startEventStepList_[step].exit = exit;
+					}
+					return;
+				};
+
+			// step1
+			setting(StartEventStep::Step1, EnterStep1, UpdateStep1, ExitStep1);
+			// step2
+			setting(StartEventStep::Step2, EnterStep2, UpdateStep2, ExitStep2);
+		}
+	}
+	StartEvent::~StartEvent()
+	{
+	}
+
+	void StartEvent::Start()
+	{
+		nextStep_ = StartEventStep::Step1;
+		auto& currentState = startEventStepList_[currentStep_];
+		currentState.enter(this);
+	}
+	void StartEvent::Update()
+	{
+		if (currentStep_ == StartEventStep::Max) { return; }
+		// 状態を変更
+		{
+			auto& currentState = startEventStepList_[currentStep_];
+			if (nextStep_ != StartEventStep::Invalid && nextStep_ != currentStep_)
+			{
+				currentState.exit(this);
+				if (nextStep_ == StartEventStep::Max)
+				{
+					currentStep_ = nextStep_;
+					return;
+				}
+
+				currentState = startEventStepList_[nextStep_];
+				currentStep_ = nextStep_;
+				currentState.enter(this);
+			}
+			currentState.update(this);
+		}
+	}
+	void StartEvent::Render(RenderContext& rc)
+	{
+		if (startEventTextWindow_) {
+			startEventTextWindow_->Render(rc);
+		}
+		if (instructionButtonSprite_) {
+			instructionButtonSprite_->Render(rc);
+		}
+		if (texts_[currentSentenceNum_]) {
+			texts_[currentSentenceNum_]->Draw(rc);
+		}
+	}
+
+
+
+	void StartEvent::EnterStep1(StartEvent* owner)
+	{
+		// 文字の設定
+		{
+			for (int i = 0; i < MAX_SENTENCE_NUM; ++i)
+			{
+				// フォントレンダーのユニークポインタの作成
+				owner->texts_[i] = std::make_unique<FontRender>();
+
+				// MessageTextからテキストをセット、タイプをEnglishに設定
+				owner->texts_[i]->SetText(GetMessageText(i, MessageType::MessageScene::GameStart));
+
+				// テキストの初期設定
+				owner->texts_[i]->SetPSC(
+					START_EVENT_TEXT_POS,
+					0.8f,
+					Vector4::White
+				);
+			}
+		}
+
+		// テキストウィンドウの画像の設定と指示画像の表示
+		{
+			// テキストウィンドウの画像
+			owner->startEventTextWindow_ = new UICanvas;
+			owner->startEventTextWindowIcon_ = owner->startEventTextWindow_->CreateUI<UIIcon>();
+			owner->startEventTextWindowIcon_->Initialize("Assets/sprite/Result/textWindow.DDS", 1024.0f, 768.0f, Vector3(50.0f, 320.0f, 0.0f), Vector3::One, Quaternion::Identity);
+			// ここからイージング設定
+			auto colorWindowAnimation = std::make_unique<UIColorAnimation>();
+			colorWindowAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 1.5f, EasingType::EaseIn, LoopMode::Once);
+			owner->startEventTextWindowIcon_->SetUIAnimation(std::move(colorWindowAnimation));
+			// animationの再生はテキスト読み終わった後に行う
+
+
+			// 指示画像
+			owner->instructionButtonSprite_ = new UICanvas;
+			owner->instructionIcon_ = owner->instructionButtonSprite_->CreateUI<UIIcon>();
+			owner->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(400.0f, 240.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
+			// ここからイージング設定
+			auto colorButtonAnimation = std::make_unique<UIColorAnimation>();
+			colorButtonAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.5f, EasingType::EaseInOut, LoopMode::PingPong);
+			owner->instructionIcon_->SetUIAnimation(std::move(colorButtonAnimation));
+			owner->instructionIcon_->PlayAnimation();
+
+
+			// 画像の更新
+			owner->instructionButtonSprite_->Update();
+		}
+	}
+	void StartEvent::UpdateStep1(StartEvent* owner)
+	{
+		// 更新
+		{
+			owner->owner_->inputDetection_->UpdateTriggerState(); // 入力
+			owner->instructionIcon_->Update(); // 画像のアニメーション用
+		}
+
+		// Jボタンを押したら、次の文への変更
+		{
+			if (owner->owner_->inputDetection_->IsTriggerButtonA())
+			{
+				// 次の文への移行
+				owner->currentSentenceNum_++;
+				if (owner->currentSentenceNum_ >= MAX_SENTENCE_NUM)
+				{
+					owner->currentSentenceNum_ = SENTENCE_COUNT_MAX;// 文の最大数を固定
+					owner->nextStep_ = StartEventStep::Step2;
+				}
+			}
+		}
+
+	}
+	void StartEvent::ExitStep1(StartEvent* owner)
+	{
+		// テキストの破棄
+		for (int i = 0; i < MAX_SENTENCE_NUM; ++i) {
+			owner->texts_[i].reset();
+		}
+
+		// 指示画像の破棄
+		delete owner->instructionButtonSprite_;
+		owner->instructionButtonSprite_ = nullptr;
+	}
+
+	void StartEvent::EnterStep2(StartEvent* owner)
+	{
+		owner->startEventTextWindowIcon_->PlayAnimation(); // テキストウィンドウのフェードイン
+		owner->calcValue_.InitCalcTime(FADEIN_TIME_START_EVENT);
+	}
+
+	void StartEvent::UpdateStep2(StartEvent* owner)
+	{
+		if (owner->startEventTextWindowIcon_) { owner->startEventTextWindowIcon_->Update(); } // 画像のアニメーション用
+
+		if (owner->calcValue_.CalcUpdate() >= TIME_VALUE && !owner->isFinished_)
+		{
+			// フェードイン開始
+			Fade::Get().PlayFade(FadeMode::FadeIn, FADEIN_TIME_START_EVENT);
+			// インゲームスタートイベントの処理を終わる
+			owner->isFinished_ = !owner->isFinished_;
+
+			// テキストウィンドウを削除する
+			delete owner->startEventTextWindow_;
+			owner->startEventTextWindow_ = nullptr;
+		}
+	}
+
+	void StartEvent::ExitStep2(StartEvent* owner)
+	{
+
+	}
+}
+
+/********************** StartEventを作成 ************************/
+
+StartEventObject::StartEventObject()
+{
+}
+
+StartEventObject::~StartEventObject()
+{
+	delete startEvent_;
+	startEvent_ = nullptr;
+}
+
+bool StartEventObject::Start()
+{
+	startEvent_ = new _internal::StartEvent(owner_);
+	startEvent_->Start();
+	return true;
+}
+void StartEventObject::Update()
+{
+	if (!active_) { return; }// アクティブでないなら処理しない
+
+	// スタートイベントの更新
+	startEvent_->Update();
+}
+void StartEventObject::Render(RenderContext& rc)
+{
+	if (startEvent_) {
+		startEvent_->Render(rc);
+	}
 }
 
 
@@ -1127,15 +1349,18 @@ namespace _internal
 
 GameScene::GameScene()
 {
+	// スタートイベントがないなら作成・開始
+	// 実行順番を下げることでUIが上に表示されるようにする
+	startEventObject_ = NewGO<StartEventObject>(1, "startEventObject");
+	startEventObject_->SetOwner(this);
 }
-
-
 GameScene::~GameScene()
 {
 	DeleteGO(sphere_);
 	DeleteGO(sphereCamera_);
 	DeleteGO(canvas_);
 	DeleteGO(sphereInputSystem_);
+	DeleteGO(startEventObject_); // 不要なら削除（またはメンバ変数として持ち続けるなら維持）
 
 	CollisionHitManager::Delete();
 	LateStageObjectUpdateManager::Get().UnRegisterSphere();
@@ -1147,13 +1372,11 @@ GameScene::~GameScene()
 
 }
 
-
 bool GameScene::Start()
 {
 	/* 必要なオブジェクトの作成 */
 	sphere_ = NewGO<Sphere>(0, "sphere"); // 塊
 	sphereCamera_ = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
-	canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
 	sphereInputSystem_ = NewGO<SphereInputSystem>(0, "inputSystem"); // 操作用クラスの作成と操作する物の設定
 	inputDetection_ = new InputDetection; // 入力判定用クラス
 
@@ -1175,13 +1398,8 @@ bool GameScene::Start()
 	SpacePartitioning::GetInstance()->UpdateStart();
 
 
-	/* セッター */
-	sphereInputSystem_->SetTarget(sphere_); // 操作ターゲットの指定
-	sphereCamera_->SetTarget(sphere_); // カメラのターゲットの指定
-	GameTimer::Get().SetGameTime(GAME_TIMER_LIMIT); // 時間用クラスにゲームの制限時間を伝える
-	GameTimer::Get().Init();
-
-	Fade::Get().Stop();
+	// インゲームスタートイベント実行のためコメントアウト
+	/*Fade::Get().Stop();*/
 
 	g_sceneLight->SetDirectionLight(0, Vector3(0.5f, -1.0f, -1.0f), Vector3(0.5f));
 	g_sceneLight->SetAmbinet(Vector3(0.8f));
@@ -1194,6 +1412,30 @@ void GameScene::Update()
 {
 	switch (gameState_)
 	{
+	case InGameState::InGameStartEvent:
+	{
+		// イベントが終わったらゲーム本編へ
+		if (startEventObject_->GetStartEvent()->IsFinished()) {
+			// スタートイベントの削除
+			{
+				if (startEventObject_) {
+					startEventObject_->SetActive(false);
+				}
+			}
+
+			// ゲーム開始時にしたい処理
+			{
+				canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
+
+				sphereInputSystem_->SetTarget(sphere_);			// 操作ターゲットの指定
+				sphereCamera_->SetTarget(sphere_);				// カメラのターゲットの指定
+				GameTimer::Get().SetGameTime(GAME_TIMER_LIMIT);					// 時間用クラスにゲームの制限時間を伝える
+				GameTimer::Get().Init();										// ゲーム時間を残り時間に設定
+			}
+			gameState_ = InGameState::InGame;
+		}
+		break;
+	}
 	case InGameState::InGame:
 	{
 		canvas_->SetTimer(GameTimer::Get().GetRemainingTime()); // 残り時間をUIに伝える

@@ -38,6 +38,7 @@ private:
 	Vector3 currentLoadingColor_ = fadeColorPreset::WHITE_COLOR_RGB; // 現在のローディングの色
 	bool isPlay_ = false;       //!< フェード画像の描画をするかどうか
 	bool isLoading_ = false;    //!< ローディング画面の描画をするかどうか
+	bool isDraw_ = false;		//!< フェード画像を描画するかどうか
 	float fadeOutAlpha_ = 0.0f;             //!< 最初は透明に
 	float elapsedTime_ = 0.0f;	            //!< 経過時間
 	float fadeTime_ = 0.0f;                 //!< フェードをする時間
@@ -77,6 +78,8 @@ public:
 	inline void Stop() { isPlay_ = false; }                             //!< フェード停止
 	inline bool IsLoading() { return isLoading_; }                      //!< ローディング画面を描画させているどうか
 	inline bool IsPlay() { return isPlay_; }                            //!< フェードしているかどうか
+	inline bool IsDraw() { return isDraw_; }                            //!< フェード画像を描画するかどうか
+	inline void SetIsDraw(const bool flag) { isDraw_ = flag; }			//!< フェード画像を描画するかどうかの設定
 	inline void SetAlpha(const float alpha) { fadeOutAlpha_ = alpha; }  //!< α値の設定
 	inline void SetLoading(const bool flag) { isLoading_ = flag; }      //!< ローディング画面を描画するかどうか(trueに設定するだけ)
 	inline FadeMode GetMode() { return mode_; }                         //!< 現在のモードを取得

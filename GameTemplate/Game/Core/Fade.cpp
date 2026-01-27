@@ -69,12 +69,11 @@ void Fade::Update()
 
 void Fade::Render(RenderContext& rc)
 {
-	if (isPlay_ || isLoading_)
-	{
-		fadeSprite_.Draw(rc);
-	}
+	if (!isDraw_) { return; } // 描画しない場合は処理を返す
 
-	if (isLoading_)
+	fadeSprite_.Draw(rc); // フェード画像の描画
+
+	if (isLoading_) // ローディング画面の描画
 	{
 		loadingStaticSprite_.Draw(rc);
 		loadingMoveSprite_.Draw(rc);
@@ -98,6 +97,7 @@ void Fade::PlayFade(FadeMode mode, float fadeTime, Vector3 color)
 	currentFadeColor_ = color;	// 色の設定
 	elapsedTime_ = 0.0f;		// 経過時間の初期化
 	isPlay_ = true;				// フェード開始
+	isDraw_ = true;				// フェード画像を描画
 }
 
 
@@ -117,7 +117,9 @@ void Fade::UpdateAlpha()
 	// α値が1.0以上になる場合、初期化(floatは完全一致は使わない)
 	if (fadeAlphaValue >= 1.0f || fadeAlphaValue <= 0.0f)
 	{
-		isPlay_ = false;			// フェードを停止
+		if (fadeAlphaValue <= 0.0f) { isDraw_ = false; } // フェード画像を描画しない
+
+		isPlay_ = false;			// フェード停止
 		mode_ = FadeMode::None;		// モードを初期化
 	}
 }

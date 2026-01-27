@@ -60,6 +60,7 @@ public:
 	void UpdateStart() { isUpdate_ = true; }
 	void UpdateStop() { isUpdate_ = false; }
 	void OffRender();
+	void RemmoveObject(int num);
 
 private:
 	void ListUpdate(int x, int z);

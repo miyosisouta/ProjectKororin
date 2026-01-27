@@ -67,6 +67,7 @@ void StageObjectBase::Initialize(ObjectData* objectData)
 		colliderSize_ = objectData->colliderSize;	// コライダーの大きさ
 		UIDisplayscale_ = objectData->uiObjectScal; // UIとして表示する際のオブジェクトの大きさの倍率
 		soundNum_ = objectData->soundNum;			// 吸着時のSEの番号設定
+		ID_ = objectData->ID;
 	}
 }
 

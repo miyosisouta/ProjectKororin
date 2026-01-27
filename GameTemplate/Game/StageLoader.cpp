@@ -216,6 +216,7 @@ void StageLoader::LoadObject(std::unordered_map<int, ObjectData*>& objectList)
 				objectData->colliderSize = ParseVector3(attributeJson.at("colliderSize")); // コライダーの大きさを格納
 				objectData->uiObjectScal = ParseUIDisPlayScale(attributeJson); // UIとして表示するオブジェクトの大きさを格納
 				objectData->soundNum = ParseAttachSoundNum(attributeJson);
+				objectData->ID = num;
 
 				objectList.emplace(num,objectData);
 				num++;

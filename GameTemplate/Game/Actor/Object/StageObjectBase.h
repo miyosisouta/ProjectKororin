@@ -18,6 +18,7 @@ struct ObjectData
 	Vector3		colliderSize = Vector3::Zero;		// コライダーの大きさ
 	float		uiObjectScal = 0.0f;				// UIとして表示する際のオブジェクトの大きさの倍率
 	int			soundNum = 0;						// SEの設定番号
+	int			ID = 0;								// 識別用ID
 };
 
 class StageObjectBase : public Actor
@@ -31,6 +32,8 @@ protected:
 	int grouthAmount_;			//!< 塊のサイズの増加量
 	float UIDisplayscale_;		//!< UIとして表示するときのオブジェクトの大きさの倍率
 	int	soundNum_;				//!< 効果音の番号
+	int	ID_ = 0;					//!< 識別用ID
+
 
 	PhysicsStaticObject* physicsStaticObject_ = nullptr; //!< 静的な当たり判定(物理的に当たったということをしたい用)
 	CollisionObject* collisionObject_ = nullptr; //!< ゴーストな当たり判定(物理的にあたらない)

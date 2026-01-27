@@ -43,13 +43,11 @@ void SceneManager::Update()
 		if (currentScene_->RequestID(nextId, waitTime_))
 		{
 			elapsedTime_ += g_gameTime->GetFrameDeltaTime();
-			Fade::Get().SetLoading(true);
 			if (elapsedTime_ >= waitTime_)
 			{
 				delete currentScene_; // 現在のシーンを削除
 				currentScene_ = NextScene(nextId); // 次のシーンを作成
 				currentScene_->Start(); // 初期化処理を行う
-				Fade::Get().SetLoading(false);
 			}
 		}
 	}
