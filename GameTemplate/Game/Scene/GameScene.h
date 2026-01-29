@@ -13,6 +13,9 @@ class SphereInputSystem;
 class InputDetection;
 class UICanvas;
 class UIIcon;
+class InGameUpdateObject;
+class InGameLateUpdateObject;
+class GameUIUpdate;
 
 /**
  * @brief ゲームシーン内部でのみ使用します
@@ -132,6 +135,7 @@ namespace _internal
 				Step4,
 				Step5,
 				Step6,
+				Step7,
 				Max,
 				Invalid = Max,
 			};
@@ -196,6 +200,11 @@ namespace _internal
 		static void EnterStep6(ClearResult* result);
 		static void UpdateStep6(ClearResult* result);
 		static void ExitStep6(ClearResult* result);
+
+		/** Step7 */
+		static void EnterStep7(ClearResult* result);
+		static void UpdateStep7(ClearResult* result);
+		static void ExitStep7(ClearResult* result);
 
 	private:
 		using EnterFunc = void(*)(ClearResult*);
@@ -325,7 +334,6 @@ namespace _internal
 
 		std::unique_ptr<FontRender> failureTexts_[5];			//!< 失敗時のテキスト
 		std::unique_ptr<FontRender> buttonText_ = nullptr;		//!< ボタンをおしてね！のテキスト
-
 	};
 
 
@@ -493,6 +501,9 @@ private:
 	SphereInputSystem* sphereInputSystem_ = nullptr; //!< 塊用インプットシステム
 	InputDetection* inputDetection_ = nullptr; //!< 入力判定用インプットシステム
 	StartEventObject* startEventObject_ = nullptr; //!< スタートイベント用オブジェクト
+	InGameUpdateObject* inGameUpdateObject_ = nullptr; //!< インゲーム中の更新用オブジェクト
+	InGameLateUpdateObject* inGameLateUpdateObject_ = nullptr; //!< インゲーム中の後更新用オブジェクト
+	GameUIUpdate* gameUIUpdate_ = nullptr; //!< ゲームUI更新用オブジェクト
 
 	_internal::Result* result_ = nullptr; //!< リザルト表示用
 

@@ -7,6 +7,7 @@
 #include "graphics/postEffect/Ssao.h"
 #include "graphics/postEffect/Ssr.h"
 #include "graphics/postEffect/CalcSceneLuminance.h"
+#include "graphics/postEffect/UnderLeftView.h"
 
 namespace nsK2Engine {
     /// <summary>
@@ -76,6 +77,8 @@ namespace nsK2Engine {
         {
             m_tonemap.SetMiddlegray(middlegray);
         }
+
+        void SetModel(ModelRender& model, float size);
         /// <summary>
         /// シーンの明るさの基準値を取得。
         /// </summary>
@@ -115,6 +118,8 @@ namespace nsK2Engine {
         Fxaa m_fXaa;        //FXAA。
         ToneMap m_tonemap;  //トーンマップ。
         Ssao m_ssao;        //SSAO(スクリーンスペースアンビエントオクルージョン)。
-        Ssr m_ssr;          //SSR(スクリーンスペースリフレクション)。
+        Ssr m_ssr;          //SSR(スクリーンスペースリフレクション)。z
+        UnderLeftView m_underLeftView;
+
     };
 }

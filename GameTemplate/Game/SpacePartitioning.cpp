@@ -86,6 +86,12 @@ SpacePartitioning::SpacePartitioning()
 
 SpacePartitioning::~SpacePartitioning()
 {
+	if (stageLoader_) {
+		delete stageLoader_;
+		stageLoader_ = nullptr;
+	}
+	stageObject.clear();
+	stageObjectData.clear();
 }
 
 void SpacePartitioning::Update()
@@ -216,7 +222,9 @@ void SpacePartitioning::OffRender()
 		stage->OffRender();
 	}
 	for (auto object : objectList_) {
-		object.second->OffRender();
+		if (object.second) {
+			object.second->OffRender();
+		}
 	}
 }
 

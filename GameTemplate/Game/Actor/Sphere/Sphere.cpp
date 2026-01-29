@@ -49,6 +49,13 @@ Sphere::~Sphere()
 	if (CollisionHitManager::IsAvailable()) {
 		CollisionHitManager::Get().UnregisterCollisionObject(this);
 	}
+
+	for (auto* object : m_attachableObjectList) {
+		if (object) {
+			delete object;
+		}
+	}
+	m_attachableObjectList.clear();
 }
 
 bool Sphere::Start()

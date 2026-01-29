@@ -12,9 +12,8 @@ public:
 	void Update() override;
 	void Render(RenderContext& rc) override;
 
-public:
 	/* ‰ò‚Ì‘å‚«‚³‚ğİ’è */
-	inline void SetSphereRadiusUI(const float radius) { sphereRadius_ = radius; }
+	void SetSphereRadiusUI(const float radius) { sphereRadius_ = radius; }
 
 private:
 	/* ŠÛ‚¢‰æ‘œ‚Ì‰ñ“]ˆ— */

@@ -18,6 +18,13 @@ GameEffectManager::GameEffectManager()
 	}
 }
 
+GameEffectManager::~GameEffectManager()
+{
+	if (effect_) {
+		DeleteGO(effect_);
+	}
+}
+
 
 EffectHandle GameEffectManager::Play(const int kind, const Vector3& pos, const Quaternion& rot, Vector3& scal)
 {
@@ -26,27 +33,31 @@ EffectHandle GameEffectManager::Play(const int kind, const Vector3& pos, const Q
 		K2_ASSERT(false, "エフェクトの再生が多いです。\n");
 		return INVALID_EFFECT_HANDLE;
 	}
-	EffectEmitter* effect = NewGO<EffectEmitter>(0);
-	effect->Init(kind);
-	effect->SetPosition(pos);
-	effect->SetRotation(rot);
-	effect->SetScale(scal);
+	effect_ = NewGO<EffectEmitter>(0);
+	effect_->Init(kind);
+	effect_->SetPosition(pos);
+	effect_->SetRotation(rot);
+	effect_->SetScale(scal);
+	effect_->Play();
 
-	return effectHandleCount_;
+	EffectHandle handle = effectHandleCount_;
+	effectList_[handle] = effect_;
+	effectHandleCount_++;
+	return handle;
 }
 
 
 void GameEffectManager::Stop(const EffectHandle handle)
 {
-	auto effect = FindEffect(handle);
-	if (effect_ == nullptr)
+	auto* effect = FindEffect(handle);
+	if (effect == nullptr)
 	{
 		return;
 	}
-	effect_->Stop();
+	effect->Stop();
 }
 
-/*********************************************/
+/********************** インスタンスを作成するためのクラス ***********************/
 
 GameEffectObject::~GameEffectObject()
 {

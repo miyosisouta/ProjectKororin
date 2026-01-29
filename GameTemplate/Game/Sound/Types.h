@@ -20,14 +20,14 @@ enum enSoundKind
 	enSoundKind_Decision,					//!< 決定時の音
 	enSoundKind_RateStamp,					//!< 評価スタンプの音
 	enSoundKind_SE_Max,						//!< SEの最大数
-	enSoundKind_BGM = enSoundKind_SE_Max,
-	enSoundKind_Title = enSoundKind_BGM,
+	enSoundKind_BGM = enSoundKind_SE_Max,	//!< BGMの開始位置
+	enSoundKind_Title = enSoundKind_BGM,	//!< タイトルBGM
 	/* ここからBGMを追加 */
-	enSoundKind_Game,
-	enSoundKind_ResultSuccess,				//!< 目標のサイズを達成しているとき
-	enSoundKind_ResultFailureSound,			//!< 目標のサイズを達成していないとき
+	enSoundKind_InGame,						//!< ゲーム中BGM
+	enSoundKind_GameClear_Excellent,		//!< 目標のサイズを達成しているとき
+	enSoundKind_GameFailure,				//!< 目標のサイズを達成していないとき
 	enSoundKind_Max,						//!< サウンドの最大数
-	enSoundKind_None = enSoundKind_Max,
+	enSoundKind_None = enSoundKind_Max,		//!< 総サウンド数
 };
 
 
@@ -44,7 +44,7 @@ struct SoundInformation
  *	情報を保持
  *	流すsoundファイルをSoundInformationに格納
  */
-static SoundInformation soundInformation[enSoundKind_SE_Max] =
+static SoundInformation soundInformation[enSoundKind_Max] =
 {
 	// SE
 	SoundInformation("Assets/Audio/SE/Attach_Tiny.wav"),	//!< 1番小さいSE	
@@ -54,15 +54,12 @@ static SoundInformation soundInformation[enSoundKind_SE_Max] =
 	SoundInformation("Assets/Audio/SE/AttachSuccess.wav"),	//!< テスト用SE
 	SoundInformation("Assets/Audio/SE/AttachFailure.wav"),	//!< 吸着不可SE
 	SoundInformation("Assets/Audio/SE/decision.wav"),		//!< 決定ボタン
-	SoundInformation("Assets/Audio/SE/RateStamp.wav")		//!< スタンプ音
+	SoundInformation("Assets/Audio/SE/RateStamp.wav"),		//!< スタンプ音
 
-
-	////BGM
-	//SoundInformation("Assets/Audio/BGM/TitleSound.wav"),
-	//SoundInformation("Assets/Audio/BGM/GameSound.wav"),
-	//SoundInformation("Assets/Audio/BGM/ResultSuccess.wav"),
-	//SoundInformation("Assets/Audio/BGM/ResultFailureSound.wav"),
-
-
+	//BGM
+	SoundInformation("Assets/Audio/BGM/Title.wav"),
+	SoundInformation("Assets/Audio/BGM/InGame.wav"),
+	SoundInformation("Assets/Audio/BGM/GameClear_Excellent.wav"),
+	SoundInformation("Assets/Audio/BGM/GameFailure.wav"),
 };
 

@@ -62,7 +62,7 @@ private:
 	/* コンストラクタ */
 	GameEffectManager();
 	/* デストラクタ */
-	~GameEffectManager() {}
+	~GameEffectManager();
 
 
 public:
