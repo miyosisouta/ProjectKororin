@@ -1540,6 +1540,7 @@ void GameScene::Update()
 		// クラスの更新処理
 		{
 			CollisionHitManager::Get().Update();			// 衝突判定の更新
+			InGameManager::Get().LateUpdate();				// インゲームマネージャーの後処理更新
 			GameTimer::Get().Update();						// ゲームタイマーの更新
 			LateStageObjectUpdateManager::Get().Update();	// 後処理オブジェクトの更新
 		}

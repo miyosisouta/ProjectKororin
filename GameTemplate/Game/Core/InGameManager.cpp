@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "InGameManager.h"
+#include "SpacePartitioning.h"
 #include "Actor/Sphere/Sphere.h"
 #include "Actor/Object/AttachableObject.h"
 #include "Core/GameUIManager.h"
+#include "Collision/CollisionManager.h"
 #include "Sound/SoundManager.h"
 #include "Effect/GameEffectManager.h"
 
@@ -155,6 +157,10 @@ void ::InGameManager::LateUpdate()
 			sphere->AddCurrentLevelUpNum();							// 引っ付いたオブジェクトの数を増加
 			sphere->AddTotalNum();									// 引っ付いたオブジェクトの合計の数を増加
 			sphere->GrowByRadius(attachableObject->GetGrowAmount());// オブジェクトの半径を増加・移動速度の制限
+			// 衝突した瞬間、即座に「空間管理」から除外する（これで削除されなくなる！）
+			if (SpacePartitioning::GetInstance()) {
+				SpacePartitioning::GetInstance()->ReleaseOwnership(attachableObject);
+			}
 
 
 			//オブジェクトを塊につけ、一緒に動くようにする

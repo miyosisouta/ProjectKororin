@@ -196,6 +196,16 @@ void Sphere::Move()
 	// 本当はレイキャストとか使いたい
 	{
 		if (isPlayable_) {
+			// リストから無効な（nullptrになっている）オブジェクトを削除する
+			m_attachableObjectList.erase(
+				std::remove_if(m_attachableObjectList.begin(), m_attachableObjectList.end(),
+					[](AttachableObject* obj) {
+						return obj == nullptr;
+					}
+				),
+				m_attachableObjectList.end()
+			);
+
 			float posY = transform_.m_position.y;
 			Vector3 size = Vector3::Zero;
 			for (auto* object : m_attachableObjectList) {
