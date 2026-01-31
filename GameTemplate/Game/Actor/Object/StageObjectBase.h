@@ -46,7 +46,7 @@ public:
 	/* コンストラクタ */
 	StageObjectBase() {};
 	/* デストラクタ */
-	~StageObjectBase() {};
+	virtual ~StageObjectBase() {};
 
 	/* 初期化処理 */
 	virtual bool Start() override;

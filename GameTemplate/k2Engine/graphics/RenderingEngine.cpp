@@ -39,8 +39,6 @@ namespace nsK2Engine {
             m_gBuffer[enGBufferMetaricShadowSmooth],
             m_gBuffer[enGBufferAlbedoDepth]);
 
-        underLeftView.Init();
-        
     }
     void RenderingEngine::InitDefferedLighting_Sprite()
     {
@@ -220,7 +218,7 @@ namespace nsK2Engine {
 
     void RenderingEngine::SetModel(ModelRender& model, float size)
     {
-        underLeftView.SetModel(model, size);
+        m_postEffect.SetModel(model, size);
     }
 
     void RenderingEngine::InitIBLData(const wchar_t* iblTexFilePath, float intencity)
@@ -373,8 +371,6 @@ namespace nsK2Engine {
         // ポストエフェクトを実行
         m_postEffect.Render(rc, m_mainRenderTarget);
 
-        underLeftView.MRender(rc,m_mainRenderTarget);
-
         // 2D描画
         Render2D(rc);
 
@@ -461,7 +457,6 @@ namespace nsK2Engine {
 
         m_2DSprite.Draw(rc);
 
-        underLeftView.SRender(rc);
         //RENDERTARGETからPRESENTへ。
         rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 

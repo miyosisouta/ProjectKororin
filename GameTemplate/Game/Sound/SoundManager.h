@@ -23,6 +23,7 @@ class SoundManager
 private:
 	/** BMG用のサウンドソースインスタンスを保持 */
 	SoundSource* bgm_ = nullptr;
+	SoundSource* se_ = nullptr;
 	/** SE用のサウンドソースインスタンスを保持 */
 	std::map<SoundHandle, SoundSource*> seList_;
 	/**
@@ -31,6 +32,12 @@ private:
 	 */
 	SoundHandle soundHandleCount_ = 0;
 
+
+private:
+	float elapsedTime_ = 0.0f;		//!< フェードアウト用の経過時間
+	float fadeTime_ = 0.0f;			//!< フェードアウト用の時間
+	bool isVolumeFadeOut_ = false;	//!< ボリュームフェードアウト中かどうか
+	bool isVolumeFadeIn_ = false;	//!< ボリュームフェードイン中かどうか
 
 private:
 	/* コンストラクタ */
@@ -48,10 +55,19 @@ public:
 
 
 public:
-	/** BGM再生 */
-	void PlayBGM(const int kind);
-	/** BGM停止 */
-	void StopBGM();
+	/** 
+	 * BGM再生 
+	 * 音をフェードインさせるかどうかは引数で指定(初期はfalse)
+	 * フェード時間も引数で指定(初期は5.0f)
+	 */
+
+	void PlayBGM(const int kind, bool isVolumeFadeIn = false, float fadeTime = 5.0f);
+	/** 
+	 * BGM停止
+	 * 音をフェードアウトさせるかどうかは引数で指定(初期はfalse)
+	 * フェード時間も引数で指定(初期は5.0f)
+	 */
+	void StopBGM(bool isVolumeFadeOut = false, float fadeTime = 5.0f);
 
 	/** SE再生 */
 	SoundHandle PlaySE(const int kind, const bool isLood = false, const bool is3D = false);

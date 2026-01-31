@@ -4,6 +4,7 @@
 #include "Actor/Object/AttachableObject.h"
 #include "Core/GameUIManager.h"
 #include "Sound/SoundManager.h"
+#include "Effect/GameEffectManager.h"
 
 
 void InGameUpdateObject::Update()
@@ -84,6 +85,18 @@ void ::InGameManager::LateUpdate()
 				vec.y = 0.0f;
 				vec.Normalize();
 
+
+				// エフェクト再生
+				{
+					// 塊の位置更新
+					sphere->GetTransform()->UpdateTransform();
+					auto spherePos = sphere->GetTransform();
+					auto objectPos = attachableObject->GetTransform();
+					auto effectPos = (spherePos->m_position + objectPos->m_position) / 2.0f;	// 座標
+					Quaternion effectRot = Quaternion::Identity;								// 回転
+					Vector3 effectScale = Vector3::One * 5.0f;									// 大きさ
+					GameEffectManager::Get().Play(enEffectKind_Hit_Reject, effectPos, effectRot, effectScale);	// 再生
+				}
 
 				// ノックバックの処理
 				float bouncePower = 0.0f;

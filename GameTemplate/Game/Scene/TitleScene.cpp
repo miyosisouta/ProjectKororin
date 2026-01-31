@@ -34,6 +34,17 @@ TitleScene::~TitleScene()
 
 	DeleteGO(sphere_);
 	DeleteGO(inputSystem_);
+
+	if (titleGameNameCanvas_)
+	{
+		delete titleGameNameCanvas_;
+		titleGameNameCanvas_ = nullptr;
+	}
+
+	if (pressButtonCanvas_) {
+		delete pressButtonCanvas_;
+		pressButtonCanvas_ = nullptr;
+	}
 }
 
 bool TitleScene::Start()
@@ -55,6 +66,7 @@ bool TitleScene::Start()
 
 	// 初期設定
 	{
+		SoundManager::Get().PlayBGM(enSoundKind_Title); // タイトルBGM再生
 		inputSystem_->SetTarget(sphere_); // 操作のターゲット設定
 		sphere_->SetPosition(Vector3(0.0f, 1.0f, -50.0f)); // タイトル時の塊の位置を設定
 		g_renderingEngine->SetCascadeNearAreaRates(0.01f, 0.1f, 0.5f); // カスケードシャドウのエリア率の設定
@@ -93,6 +105,13 @@ bool TitleScene::Start()
 			icon_->PlayAnimation();
 		}
 	}
+
+	// ゲームループ時フェードアウトがおこなわれているのでここでフェードインする
+	{
+		if (!Fade::Get().IsPlay()) {
+			Fade::Get().PlayFade(FadeMode::FadeIn);
+		}
+	}
 	return true;
 }
 
@@ -119,6 +138,9 @@ void TitleScene::Update()
 
 			// フェード開始
 			Fade::Get().PlayFade(FadeMode::FadeOut, NEXT_SCENE_ANIMATION_TIME, Vector3::One);
+
+			// スタートイベントの王様の会話のためBGMを停止
+			SoundManager::Get().StopBGM(true);
 		}
 	}
 	else

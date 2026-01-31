@@ -63,6 +63,7 @@ namespace nsK2Engine {
             metallicSmoothRenderTarget,
             albedoRenderTarget
         );
+		m_underLeftView.Init();
 
     }
     void PostEffect::Render(RenderContext& rc, RenderTarget& mainRenderTarget)
@@ -74,6 +75,8 @@ namespace nsK2Engine {
             // レイトレをしていないならSSRを行う。
             m_ssr.Render(rc, mainRenderTarget);
         }
+		m_underLeftView.Render(rc, mainRenderTarget);
+
         // シーンの輝度を計算する。
         m_calsSceneLuminance.Render(rc, mainRenderTarget);
 
@@ -98,5 +101,9 @@ namespace nsK2Engine {
         m_fXaa.Render(rc, mainRenderTarget);
 
         EndGPUEvent();
+    }
+    void PostEffect::SetModel(ModelRender& model, float size)
+    {
+        m_underLeftView.SetModel(model, size);
     }
 }

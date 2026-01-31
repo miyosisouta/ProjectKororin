@@ -6,6 +6,11 @@
 #include "stdafx.h"
 #include "SoundManager.h"
 
+namespace {
+	const constexpr float MIN_VOLUME = 0.01f;	// BGMの最小音量
+	const constexpr float MAX_VOLUME = 1.0f;	// BGMの最大音量
+}
+
 
 SoundManager* SoundManager::instance_ = nullptr; //初期化
 
@@ -24,50 +29,102 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
+	DeleteGO(bgm_);
+	DeleteGO(se_);
 }
 
 
 void SoundManager::Update()
 {
 	// SEリストから再生していないものがあれば削除する
-	std::vector<SoundHandle> eraseList;
-	for (auto& it : seList_) {
-		const auto key = it.first;
-		auto* se = it.second;
-		// 再生が終わっているなら削除
-		if (!se->IsPlaying())
-		{
-			eraseList.push_back(key);
+	{
+		std::vector<SoundHandle> eraseList;
+		for (auto& it : seList_) {
+			const auto key = it.first;
+			auto* se = it.second;
+			// 再生が終わっているなら削除
+			if (!se->IsPlaying())
+			{
+				eraseList.push_back(key);
+			}
+		}
+		for (const auto& key : eraseList) {
+			seList_.erase(key);
 		}
 	}
-	for (const auto& key : eraseList) {
-		seList_.erase(key);
+
+	// BGMのフェードアウト処理する場合
+	if (isVolumeFadeOut_) {
+		elapsedTime_ += g_gameTime->GetFrameDeltaTime(); // 経過時間を加算
+		float value = min(MAX_VOLUME, (elapsedTime_ / fadeTime_)); // ボリュームを計算
+		float volume = MAX_VOLUME - value; // ボリュームを1.0fから減算していく
+		bgm_->SetVolume(volume); // ボリュームを設定 
+
+		// 最小音量以下になったらBGMを停止してフラグをリセット
+		if (bgm_->GetVolume() <= MIN_VOLUME) {
+			bgm_->Stop(); // BGM停止
+			isVolumeFadeOut_ = false; // フェードアウトフラグリセット
+		}
+	}
+
+	// BGMのフェードイン処理する場合
+	if (isVolumeFadeIn_) {
+		elapsedTime_ += g_gameTime->GetFrameDeltaTime(); // 経過時間を加算
+		float volume= min(MAX_VOLUME, (elapsedTime_ / fadeTime_)); // ボリュームを計算
+		bgm_->SetVolume(volume); // ボリュームを設定
+
+		// 最小音量以下になったらBGMを停止してフラグをリセット
+		if (bgm_->GetVolume() >= MAX_VOLUME) {
+			isVolumeFadeIn_ = false; // フェードアウトフラグリセット
+		}
 	}
 }
 
 
-void SoundManager::PlayBGM(const int kind)
+void SoundManager::PlayBGM(const int kind, bool isVolumeFadeIn, float fadeTime)
 {
-	// BGMが生成されていない
+	// BGMが生成されていないなら生成
 	if (bgm_ == nullptr) {
-		// 生成
 		bgm_ = NewGO<SoundSource>(0, "bgm");
 	}
+	// すでに生成されているならBGMを停止する
 	else {
-		// すでに生成されているならBGMを停止する
 		bgm_->Stop();
 	}
-	// 初期化
-	bgm_->Init(kind);	// BGMの初期化
+	
+	// フェードインのフラグをリセット
+	if (isVolumeFadeOut_ == true) { isVolumeFadeOut_ = !isVolumeFadeOut_; }
+	// BGMの初期化
+	bgm_->Init(kind);	
+
+	// フェードインするならフラグを立てるだけ
+	if (isVolumeFadeIn) {
+		isVolumeFadeIn_ = true; // フェードインフラグを立てる
+		fadeTime_ = fadeTime; // フェードイン時間をセット
+		bgm_->SetVolume(MIN_VOLUME); // 最初は最低音量で再生開始
+		elapsedTime_ = 0.0f; // 経過時間リセット
+	}
+
 	bgm_->Play(true);	// BGMなのでループ再生する
 }
 
 
-void SoundManager::StopBGM()
+void SoundManager::StopBGM(bool isVolumeFadeOut, float fadeTime)
 {
-	if (bgm_ == nullptr) {
+	// BGMが生成されていないなら何もしない
+	if (bgm_ == nullptr) { return; }
+	// フェードインのフラグをリセット
+	if (isVolumeFadeIn_ == true) { isVolumeFadeIn_ = !isVolumeFadeIn_; }
+
+	// フェードアウトするならフラグを立てるだけ
+	if (isVolumeFadeOut) {
+		isVolumeFadeOut_ = true; // フェードアウトフラグを立てる
+		fadeTime_ = fadeTime; // フェードアウト時間をセット
+		elapsedTime_ = 0.0f; // 経過時間リセット
 		return;
 	}
+
+	// フェードアウトしないなら即座に停止
 	bgm_->Stop();
 }
 
@@ -80,11 +137,11 @@ SoundHandle SoundManager::PlaySE(const int kind, const bool isLood, const bool i
 		K2_ASSERT(false, "サウンドの再生が多いです。\n");
 		return INVALID_SOUND_HANDLE;
 	}
-	auto* se = NewGO<SoundSource>(0, "se");
-	se->Init(kind, is3D);
-	se->Play(isLood);
+	se_ = NewGO<SoundSource>(0, "se");
+	se_->Init(kind, is3D);
+	se_->Play(isLood);
 
-	seList_.emplace(soundHandleCount_++, se);
+	seList_.emplace(++soundHandleCount_, se_);
 
 	return soundHandleCount_;
 }

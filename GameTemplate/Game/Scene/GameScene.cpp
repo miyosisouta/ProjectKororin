@@ -25,6 +25,8 @@ namespace
 	/********* 共通の定数 *********/
 	constexpr const float FADE_OUT_START_TIME = 2.0f;								// フェードアウトが始まるまでの時間
 	constexpr const float GAME_TIMER_LIMIT = 210.0f;								// ゲーム時間
+	constexpr const float TIME_ZERO = 0.0f;											// タイムゼロ
+	constexpr const float SOUND_FADE_TIME = 3.0f;									// サウンドのフェード時間
 	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);				// クリア時のカメラの座標
 	constexpr const uint8_t SENTENCE_COUNT_MAX = 4;									// テキストの最大文の数
 	constexpr const uint8_t MAX_SENTENCE_NUM = 5;									// スタートイベント用テキストの最大文の数
@@ -70,6 +72,13 @@ namespace
 		clearTimeSecond = clearTime % 60; // 秒を返す
 		return 1;
 	}
+
+	void SetText(FontRender* fontRender, const std::function<void(wchar_t*)>& func)
+	{
+		wchar_t text[256];
+		func(text);
+		fontRender->SetText(text);
+	}
 }
 
 
@@ -90,6 +99,7 @@ namespace _internal
 		DeleteGO(owner_->canvas_);
 		owner_->canvas_ = nullptr;
 		DeleteGO(owner_->sphereCamera_);
+		owner_->sphereCamera_ = nullptr;
 
 		// リザルト用カメラの生成
 		owner_->sphereCamera_ = NewGO<ResultCamera>(0, "resultCamera"); // リザルト用のカメラを作成
@@ -210,11 +220,6 @@ namespace _internal
 	}
 	void Result::CommonUpdateStep6(Result* result)
 	{
-		if (!Fade::Get().IsPlay())
-		{
-			// 次の処理へ
-			result->owner_->isNextScene_ = true;
-		}
 	}
 	void Result::CommonExitStep6(Result* result)
 	{
@@ -259,11 +264,27 @@ namespace _internal
 			setting(ClearStep::Step5, EnterStep5, UpdateStep5, ExitStep5);
 			// step6
 			setting(ClearStep::Step6, EnterStep6, UpdateStep6, ExitStep6);
+			// ste7
+			setting(ClearStep::Step7, EnterStep7, UpdateStep7, ExitStep7);
 		}
 
 	}
 	ClearResult::~ClearResult()
 	{
+		if (instructionButtonSprite_) {
+			delete instructionButtonSprite_;
+			instructionButtonSprite_ = nullptr;
+		}
+
+		if (breakScreenSprite_) {
+			delete breakScreenSprite_;
+			breakScreenSprite_ = nullptr;
+		}
+
+		if (titleTransitionSprite_) {
+			delete titleTransitionSprite_;
+			titleTransitionSprite_ = nullptr;
+		}
 	}
 
 	void ClearResult::Start()
@@ -271,9 +292,13 @@ namespace _internal
 		// 共通初期化処理呼び出し
 		Result::Start();
 
+		// 最初のステップへ移行
 		nextStep_ = ClearStep::Step1;
 		auto& currentState = stepList_[currentStep_];
 		currentState.enter(this);
+
+		// BGMの再生
+		SoundManager::Get().PlayBGM(enSoundKind_Title);
 	}
 	void ClearResult::Update()
 	{
@@ -285,7 +310,11 @@ namespace _internal
 				currentState.exit(this);
 				currentState = stepList_[nextStep_];
 				currentStep_ = nextStep_;
-				currentState.enter(this);
+				if (currentStep_ != ClearStep::Step7) 
+				{
+					currentState.enter(this);
+				}
+				
 			}
 			currentState.update(this);
 		}
@@ -530,7 +559,7 @@ namespace _internal
 			// 大きさを表示
 			{
 				result->resultGuidanceSizeText_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->resultGuidanceSizeText_.get(), [&](wchar_t* text)
+				SetText(result->resultGuidanceSizeText_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"大きさ");
 					});
@@ -543,7 +572,7 @@ namespace _internal
 				const int radiusCentimeters = (int)result->information_.scale % METERS_TO_CENTIMETERS; // センチメートルを算出
 
 				result->resultSphereSizeText_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->resultSphereSizeText_.get(), [&](wchar_t* text)
+				SetText(result->resultSphereSizeText_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d m %02d cm", radiusMetersText, radiusCentimeters);
 					});
@@ -554,7 +583,7 @@ namespace _internal
 			// 目標達成を表示
 			{
 				result->resultGuidanceGoalTime_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->resultGuidanceGoalTime_.get(), [&](wchar_t* text)
+				SetText(result->resultGuidanceGoalTime_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"達成時間");
 					});
@@ -566,7 +595,7 @@ namespace _internal
 				CalcMinuteToSecond(result->information_.time, result->goalMinuteTime_, result->goalSecondTime_);
 
 				result->goalTimeText_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->goalTimeText_.get(), [&](wchar_t* text)
+				SetText(result->goalTimeText_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 分 %02d 秒", result->goalMinuteTime_, result->goalSecondTime_);
 					});
@@ -577,7 +606,7 @@ namespace _internal
 			//モノを表示
 			{
 				result->resultGuidanceAttachCountText_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->resultGuidanceAttachCountText_.get(), [&](wchar_t* text)
+				SetText(result->resultGuidanceAttachCountText_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"モノ");
 					});
@@ -587,7 +616,7 @@ namespace _internal
 			//吸着したオブジェクトの数を表示
 			{
 				result->attachableObjectCountText_ = std::make_unique<FontRender>();
-				UIUtil::SetText(result->attachableObjectCountText_.get(), [&](wchar_t* text)
+				SetText(result->attachableObjectCountText_.get(), [&](wchar_t* text)
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 個", result->information_.count);
 					});
@@ -682,8 +711,12 @@ namespace _internal
 		// 共通処理の呼び出し
 		Result::CommonUpdateStep6(result);
 
-		//dynamic_cast<TitleInputSyste*>(result->owner_->sphereInputSystem_)->SetMoveDirection(Vector3(0.0f, 1.0f, 0.5f));	// 斜め奥に行かせたい
-		//if (result->elapsedTime_ >= SPHERE_TO_DELETE_TIME) { return; } // 5秒たつまで次のシーンには移行しない
+		if (result->owner_->inputDetection_->IsTriggerButtonA()) {
+			// フェードアウト開始
+			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME);
+			SoundManager::Get().StopBGM(true, SOUND_FADE_TIME);
+			result->nextStep_ = ClearStep::Step7;
+		}
 	}
 	void ClearResult::ExitStep6(ClearResult* result)
 	{
@@ -697,6 +730,23 @@ namespace _internal
 		result->goalTimeText_.reset();
 		result->resultGuidanceAttachCountText_.reset();
 		result->attachableObjectCountText_.reset();
+		
+		DeleteGO(result->owner_->sphereCamera_);
+	}
+
+	void ClearResult::EnterStep7(ClearResult* result)
+	{
+	}
+	void ClearResult::UpdateStep7(ClearResult* result)
+	{
+		if (!Fade::Get().IsPlay())
+		{
+			// 次の処理へ
+			result->owner_->isNextScene_ = true;
+		}
+	}
+	void ClearResult::ExitStep7(ClearResult* result)
+	{
 	}
 
 
@@ -942,14 +992,16 @@ namespace _internal
 		// 共通処理呼び出し
 		Result::CommonExitStep4(result);
 
-		//result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
-		//if (result->elapsedTime_ >= FLIGHT_START_DELAY) // 2秒経過したら
-		//{
-			// 画面外に行った塊のクラスと関係するクラスの削除
-		DeleteGO(result->owner_->sphere_);
-		DeleteGO(result->owner_->sphereCamera_);
-		DeleteGO(result->owner_->sphereInputSystem_);
-		//}
+		// 塊関連のオブジェクト削除
+		if (result->owner_->sphere_) {
+			DeleteGO(result->owner_->sphere_);
+		}
+		if (result->owner_->sphereCamera_) {
+			DeleteGO(result->owner_->sphereCamera_);
+		}
+		if (result->owner_->sphereInputSystem_) {
+			DeleteGO(result->owner_->sphereInputSystem_);
+		}
 	}
 
 
@@ -998,10 +1050,9 @@ namespace _internal
 		// 画像更新
 		result->titleTransitionSprite_->Update();
 
-		if (g_pad[0]->IsPress(enButtonA))
-		{
-			//フェード開始(フェードアウト・2秒・黒)
-			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME, fadeColorPreset::BLACK_COLOR_RGB);
+		if (result->owner_->inputDetection_->IsTriggerButtonA()) {
+			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME, fadeColorPreset::BLACK_COLOR_RGB); //フェード開始(フェードアウト・2秒・黒)
+			SoundManager::Get().StopBGM(true, SOUND_FADE_TIME); // BGM停止
 			result->nextStep_ = FailureStep::Step6;	// 次のステップへ
 		}
 	}
@@ -1021,6 +1072,13 @@ namespace _internal
 	{
 		// 共通処理呼び出し
 		Result::CommonUpdateStep6(result);
+
+		// フェードが終わり次第タイトルシーンへ移行
+		if (!Fade::Get().IsPlay())
+		{
+			// 次の処理へ
+			result->owner_->isNextScene_ = true;
+		}
 	}
 	void FailureResult::ExitStep6(FailureResult* result)
 	{
@@ -1077,6 +1135,9 @@ namespace _internal
 		nextStep_ = FailureStep::Step1;
 		auto& currentState = stepList_[currentStep_];
 		currentState.enter(this);
+
+		// BGMの再生
+		SoundManager::Get().PlayBGM(enSoundKind_GameFailure,true);
 	}
 	void FailureResult::Update()
 	{
@@ -1151,6 +1212,15 @@ namespace _internal
 	}
 	StartEvent::~StartEvent()
 	{
+		if (startEventTextWindow_) {
+			delete startEventTextWindow_;
+			startEventTextWindow_ = nullptr;
+		}
+
+		if (instructionButtonSprite_) {
+			delete instructionButtonSprite_;
+			instructionButtonSprite_ = nullptr;
+		}
 	}
 
 	void StartEvent::Start()
@@ -1193,7 +1263,6 @@ namespace _internal
 			texts_[currentSentenceNum_]->Draw(rc);
 		}
 	}
-
 
 
 	void StartEvent::EnterStep1(StartEvent* owner)
@@ -1285,7 +1354,6 @@ namespace _internal
 		owner->startEventTextWindowIcon_->PlayAnimation(); // テキストウィンドウのフェードイン
 		owner->calcValue_.InitCalcTime(FADEIN_TIME_START_EVENT);
 	}
-
 	void StartEvent::UpdateStep2(StartEvent* owner)
 	{
 		if (owner->startEventTextWindowIcon_) { owner->startEventTextWindowIcon_->Update(); } // 画像のアニメーション用
@@ -1296,13 +1364,8 @@ namespace _internal
 			Fade::Get().PlayFade(FadeMode::FadeIn, FADEIN_TIME_START_EVENT);
 			// インゲームスタートイベントの処理を終わる
 			owner->isFinished_ = !owner->isFinished_;
-
-			// テキストウィンドウを削除する
-			delete owner->startEventTextWindow_;
-			owner->startEventTextWindow_ = nullptr;
 		}
 	}
-
 	void StartEvent::ExitStep2(StartEvent* owner)
 	{
 
@@ -1314,11 +1377,12 @@ namespace _internal
 StartEventObject::StartEventObject()
 {
 }
-
 StartEventObject::~StartEventObject()
 {
-	delete startEvent_;
-	startEvent_ = nullptr;
+	if (startEvent_) {
+		delete startEvent_;
+		startEvent_ = nullptr;
+	}
 }
 
 bool StartEventObject::Start()
@@ -1356,11 +1420,32 @@ GameScene::GameScene()
 }
 GameScene::~GameScene()
 {
-	DeleteGO(sphere_);
-	DeleteGO(sphereCamera_);
-	DeleteGO(canvas_);
-	DeleteGO(sphereInputSystem_);
-	DeleteGO(startEventObject_); // 不要なら削除（またはメンバ変数として持ち続けるなら維持）
+	if (sphere_) {
+		DeleteGO(sphere_);
+	}
+	if (sphereCamera_) {
+		DeleteGO(sphereCamera_);
+	}
+
+	if (canvas_) {
+		DeleteGO(canvas_);
+	}
+	if (sphereInputSystem_) {
+		DeleteGO(sphereInputSystem_);
+	}
+	if (startEventObject_) {
+		DeleteGO(startEventObject_);
+	}
+	if (inGameUpdateObject_) {
+		DeleteGO(inGameUpdateObject_);
+	}
+	if (inGameLateUpdateObject_){
+		DeleteGO(inGameLateUpdateObject_);
+	}
+	if(gameUIUpdate_){
+		DeleteGO(gameUIUpdate_);
+	}
+	
 
 	CollisionHitManager::Delete();
 	LateStageObjectUpdateManager::Get().UnRegisterSphere();
@@ -1370,6 +1455,14 @@ GameScene::~GameScene()
 	GameTimer::DestroyInstance();
 	SpacePartitioning::DeleteInstance();
 
+	if (inputDetection_) {
+		delete inputDetection_;
+		inputDetection_ = nullptr;
+	}
+	if (result_) {
+		delete result_;
+		result_ = nullptr;
+	}
 }
 
 bool GameScene::Start()
@@ -1382,9 +1475,9 @@ bool GameScene::Start()
 
 	/* アップデートの処理順番を設定 */
 	// NewGO<クラス名>(数字：実行する順番を設定できる)
-	NewGO<InGameUpdateObject>(GameObjectPriority::InGameManager);
-	NewGO<InGameLateUpdateObject>(GameObjectPriority::InGameManagerLate);
-	NewGO<GameUIUpdate>(GameObjectPriority::UI);
+	inGameUpdateObject_	= NewGO<InGameUpdateObject>(GameObjectPriority::InGameManager);
+	inGameLateUpdateObject_ = NewGO<InGameLateUpdateObject>(GameObjectPriority::InGameManagerLate);
+	gameUIUpdate_ = NewGO<GameUIUpdate>(GameObjectPriority::UI);
 
 
 	/* マネージャーのインスタンスを作成 */
@@ -1398,24 +1491,23 @@ bool GameScene::Start()
 	SpacePartitioning::GetInstance()->UpdateStart();
 
 
-	// インゲームスタートイベント実行のためコメントアウト
-	/*Fade::Get().Stop();*/
-
 	g_sceneLight->SetDirectionLight(0, Vector3(0.5f, -1.0f, -1.0f), Vector3(0.5f));
 	g_sceneLight->SetAmbinet(Vector3(0.8f));
 
 	return true;
 }
-
-
 void GameScene::Update()
 {
 	switch (gameState_)
 	{
 	case InGameState::InGameStartEvent:
 	{
+		// スタートイベントオブジェクトがない場合は処理しない
+		if (startEventObject_->GetStartEvent() == nullptr) { break; }
+
 		// イベントが終わったらゲーム本編へ
-		if (startEventObject_->GetStartEvent()->IsFinished()) {
+		if (startEventObject_->GetStartEvent()->IsFinished()) 
+		{
 			// スタートイベントの削除
 			{
 				if (startEventObject_) {
@@ -1426,11 +1518,12 @@ void GameScene::Update()
 			// ゲーム開始時にしたい処理
 			{
 				canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
+				SoundManager::Get().PlayBGM(enSoundKind_InGame); // インゲーム中のBGM再生
 
-				sphereInputSystem_->SetTarget(sphere_);			// 操作ターゲットの指定
-				sphereCamera_->SetTarget(sphere_);				// カメラのターゲットの指定
-				GameTimer::Get().SetGameTime(GAME_TIMER_LIMIT);					// 時間用クラスにゲームの制限時間を伝える
-				GameTimer::Get().Init();										// ゲーム時間を残り時間に設定
+				sphereInputSystem_->SetTarget(sphere_);	// 操作ターゲットの指定
+				sphereCamera_->SetTarget(sphere_); // カメラのターゲットの指定
+				GameTimer::Get().SetGameTime(GAME_TIMER_LIMIT);	// 時間用クラスにゲームの制限時間を伝える
+				GameTimer::Get().Init();						// ゲーム時間を残り時間に設定
 			}
 			gameState_ = InGameState::InGame;
 		}
@@ -1438,41 +1531,60 @@ void GameScene::Update()
 	}
 	case InGameState::InGame:
 	{
-		canvas_->SetTimer(GameTimer::Get().GetRemainingTime()); // 残り時間をUIに伝える
-		goalElapsedTime_ += g_gameTime->GetFrameDeltaTime();	// 塊が目標の大きさを達成したときの時間を取得
+		// 時間の更新
+		{
+			canvas_->SetTimer(GameTimer::Get().GetRemainingTime()); // 残り時間をUIに伝える
+			goalElapsedTime_ += g_gameTime->GetFrameDeltaTime();// 塊が目標の大きさを達成したときの時間を取得
+		}
 
+		// クラスの更新処理
+		{
+			CollisionHitManager::Get().Update();			// 衝突判定の更新
+			GameTimer::Get().Update();						// ゲームタイマーの更新
+			LateStageObjectUpdateManager::Get().Update();	// 後処理オブジェクトの更新
+		}
+
+		// フェードが再生されていない場合、残り時間に応じてフェードのα値を計算
 		if (!Fade::Get().IsPlay())
 		{
-			CalculateFadeAlphaByTime();								// 残り時間が20秒切ってからホワイトアウト
+			CalculateFadeAlphaByTime();
 		}
 
-		// 残り時間が無くなった場合
-		// クリアしたタイミングの情報を保持する
-		if (GameTimer::Get().GetRemainingTime() <= 0.0f)
+
+		// リザルト処理に向かうかどうかの判定
+		if (GameTimer::Get().GetRemainingTime() > 0.05f) { break; }
+		
+
+		/*************************** ここからリザルト処理 ********************************/
+
+		// インゲームのBGM停止
+		SoundManager::Get().StopBGM(true); 
+
+
+		// クリアの場合、クリアリザルトの処理が呼ばれる
+		if (sphere_->CheakGoalSize())
 		{
-			// リザルト準備
-			// クリアの場合、クリアリザルトの処理が呼ばれる
-			if (sphere_->CheakGoalSize())
-			{
-				auto* result = new _internal::ClearResult(this);
-				_internal::ClearResult::ResultInformation info;
-				info.time = goalElapsedTime_;			// クリア時間
-				info.count = sphere_->GetTotalNum();	// 吸着したオブジェクト数
-				info.scale = sphere_->GetRadius();		// 半径
-				result->SetInformation(info);
+			// クリアリザルトの作成
+			auto* result = new _internal::ClearResult(this);
 
-				result_ = result;
-			}
+			// クリアしたタイミングの情報を保持する
+			_internal::ClearResult::ResultInformation info;
+			info.time = goalElapsedTime_;			// クリア時間
+			info.count = sphere_->GetTotalNum();	// 吸着したオブジェクト数
+			info.scale = sphere_->GetRadius();		// 半径
+			result->SetInformation(info);
 
-			// 失敗の場合、失敗リザルトの処理が呼ばれる
-			else
-			{
-				auto* result = new _internal::FailureResult(this);
-				result_ = result;
-			}
-
-			gameState_ = InGameState::InGameFinish; // 次の処理へ移行
+			result_ = result;
 		}
+
+		// 失敗の場合、失敗リザルトの処理が呼ばれる
+		else
+		{
+			auto* result = new _internal::FailureResult(this);
+			result_ = result;
+		}
+
+		gameState_ = InGameState::InGameFinish; // 次の処理へ移行
 
 		break;
 	}
@@ -1486,6 +1598,8 @@ void GameScene::Update()
 	case InGameState::Result:
 	{
 		result_->Update();
+		// 結果画面が終了したらタイトルへ戻る
+		// 処理はResultクラスのCommonStep6にて行っている
 		break;
 	}
 	}
@@ -1500,22 +1614,16 @@ void GameScene::Update()
 		skyCube_->SetPosition(skyCubePosition);
 	}
 
-
-	CollisionHitManager::Get().Update();
-	LateStageObjectUpdateManager::Get().Update();
-	GameTimer::Get().Update();
+	// スタートイベント中にオブジェクトを表示するため常に更新
 	SpacePartitioning::GetInstance()->Update();
 
 }
-
-
 void GameScene::Render(RenderContext& rc)
 {
 	if (result_) {
 		result_->Render(rc);
 	}
 }
-
 
 
 bool GameScene::RequestID(uint32_t& id, float& waitTime)
