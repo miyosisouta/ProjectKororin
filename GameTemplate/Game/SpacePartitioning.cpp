@@ -302,3 +302,61 @@ void SpacePartitioning::ListUpdate(int x, int z)
 	oldPosition_.x = x;
 	oldPosition_.z = z;
 }
+
+void SpacePartitioning::ReleaseOwnership(AttachableObject* object)
+{
+	if (object == nullptr) return;
+
+	// 1. 【逆引き】ポインタが一致するID（キー）を探す
+	int targetID = -1;
+	bool found = false;
+
+	// objectList_ は map<int, AttachableObject*> なので走査して探す
+	for (auto it = objectList_.begin(); it != objectList_.end(); ) {
+		if (it->second == object) {
+			targetID = it->first; // IDを確保
+
+			// 管理リストからポインタの所有権を放棄（削除はしない）
+			it = objectList_.erase(it);
+			found = true;
+			break; // 見つかったらループ終了
+		}
+		else {
+			++it;
+		}
+	}
+
+	// 管理リストに見つからなかったら何もしない（すでに管理外）
+	if (!found) return;
+
+
+	// 2. 確保したIDを使って、他のリストからも情報を抹消する
+
+	// 削除予定リストに入っていたら救出
+	auto delIt = std::find(deleteObjectList_.begin(), deleteObjectList_.end(), targetID);
+	if (delIt != deleteObjectList_.end()) {
+		deleteObjectList_.erase(delIt);
+	}
+
+	// 生成予定リストに入っていたら削除
+	auto createIt = std::find(createObjectList_.begin(), createObjectList_.end(), targetID);
+	if (createIt != createObjectList_.end()) {
+		createObjectList_.erase(createIt);
+	}
+
+
+	// 3. グリッド配置データ(spacePartitioningList_)からの抹消
+	// IDを使って元のデータ(objectDataList_)を取得し、そこから配置場所(グリッド)を特定する
+	if (objectDataList_.count(targetID) > 0) {
+		ObjectData* data = objectDataList_[targetID];
+
+		// 元の座標からグリッド番号を計算
+		int x = static_cast<int>((data->position.x + WORLD_HALF_SIZE.x) / worldSpaceSizeX_);
+		int z = static_cast<int>((data->position.z + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
+
+		// そのグリッドの管理からデータを消す
+		if (x >= 0 && x < X_NUM_ && z >= 0 && z < Z_NUM_) {
+			spacePartitioningList_[x][z].erase(targetID);
+		}
+	}
+}

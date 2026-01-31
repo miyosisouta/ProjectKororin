@@ -61,6 +61,7 @@ public:
 	void UpdateStop() { isUpdate_ = false; }
 	void OffRender();
 	void RemmoveObject(int num);
+	void ReleaseOwnership(AttachableObject* object);
 
 private:
 	void ListUpdate(int x, int z);
