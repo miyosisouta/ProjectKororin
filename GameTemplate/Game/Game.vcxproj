@@ -229,7 +229,6 @@
     <ClCompile Include="Actor\Object\MovableObject.cpp" />
     <ClCompile Include="Actor\Object\StageObjectBase.cpp" />
     <ClCompile Include="Actor\Object\StaticObject.cpp" />
-    <ClCompile Include="Actor\Sphere\Player.cpp" />
     <ClCompile Include="Actor\Sphere\Sphere.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
@@ -278,7 +277,6 @@
     <ClInclude Include="Actor\Object\MovableObject.h" />
     <ClInclude Include="Actor\Object\StageObjectBase.h" />
     <ClInclude Include="Actor\Object\StaticObject.h" />
-    <ClInclude Include="Actor\Sphere\Player.h" />
     <ClInclude Include="Actor\Sphere\Sphere.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionManager.h" />

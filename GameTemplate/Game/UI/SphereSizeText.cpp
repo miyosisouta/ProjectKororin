@@ -43,8 +43,22 @@ namespace
 
 
 	/*** 文字の設定 ***/
-	const int METERS_TO_CENTIMETERS = 100;
+	constexpr uint16_t TEXT_COUNT_MAX = 256;
+	constexpr uint8_t METERS_TO_CENTIMETERS = 100;
+	static const Vector3 TEXT_CURRENT_SCALE_POS = Vector3(-780.0f, 340.0f, 0.0f);
+	constexpr float TEXT_CURRENT_SCALE_SCALE = 1.0f;
+	static const Vector4 TEXT_CURRENT_SCALE_COLOR = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	static const Vector3 TEXT_GOAL_SCALE_POS = Vector3(-545.0f, 430.0f, 0.0f);
+	constexpr float TEXT_GOAL_SCALE_SCALE = 0.9f;
+	static const Vector4 TEXT_GOAL_SCALE_COLOR = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
+	/** インジケーター */
+	static const Vector2 INZICOTOR_PIBOT = Vector2(0.5f, 1.0f);
+
+	/* 〇の画像 */
+	constexpr float PINK_ROTATION_SPEED = 2.5f;
+	constexpr float GREEN_ROTATION_SPEED = 1.2f;
+	constexpr float ORB_SCALE_ADD = 1.0f;
 }
 
 
@@ -138,7 +152,7 @@ bool SphereSizeText::Start()
 		indicatorSizeInfo.scale,
 		indicatorSizeInfo.color
 	);
-	indicatorSizeSprite_.SetPivot(Vector2(0.5f, 1.0f));
+	indicatorSizeSprite_.SetPivot(INZICOTOR_PIBOT);
 	indicatorSizeSprite_.Update();
 	return true;
 }
@@ -180,8 +194,8 @@ void SphereSizeText::Rotation()
 
 	// 回転速度を計算
 	rotationBuleSprite_.AddRotationDegZ(orbMoveSpeed);
-	rotationPinkSprite_.AddRotationDegZ(orbMoveSpeed * 2.5);
-	rotationGreenSprite_.AddRotationDegZ(orbMoveSpeed * (-1.2f));
+	rotationPinkSprite_.AddRotationDegZ(orbMoveSpeed * PINK_ROTATION_SPEED);
+	rotationGreenSprite_.AddRotationDegZ(orbMoveSpeed * (-GREEN_ROTATION_SPEED));
 
 	// 1フレームの回転速度をセット
 	textBlueOrbSprite_.SetRotation(rotationBuleSprite_);
@@ -192,7 +206,7 @@ void SphereSizeText::Rotation()
 
 void SphereSizeText::AdjustOrbScaleByRadius()
 {
-	float progressRate = sphereRadius_ / OBJECTIVESIZE + 1.0f;
+	float progressRate = sphereRadius_ / OBJECTIVESIZE + ORB_SCALE_ADD;
 	textGreenOrbSprite_.SetScale(progressRate);
 	textBlueOrbSprite_.SetScale(progressRate);
 	textPinkOrbSprite_.SetScale(progressRate);
@@ -205,23 +219,23 @@ void SphereSizeText::ApplyScaleToUIElement()
 	const int radiusCentimeters = (int)sphereRadius_ % METERS_TO_CENTIMETERS;	// センチメートルを算出
 
 	//塊の大きさを定義・表示
-	wchar_t currentSize[256];
-	swprintf_s(currentSize, 256, L"%02dm %02dcm", radiusMeters, radiusCentimeters);
+	wchar_t currentSize[TEXT_COUNT_MAX];
+	swprintf_s(currentSize, TEXT_COUNT_MAX, L"%02dm %02dcm", radiusMeters, radiusCentimeters);
 	sphereCurrentSizeText_.SetText(currentSize);
-	sphereCurrentSizeText_.SetPosition(-780.0f, 340.0f, 0.0f);
-	sphereCurrentSizeText_.SetScale(1.0f);
-	sphereCurrentSizeText_.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	sphereCurrentSizeText_.SetPosition(TEXT_CURRENT_SCALE_POS);
+	sphereCurrentSizeText_.SetScale(TEXT_CURRENT_SCALE_SCALE);
+	sphereCurrentSizeText_.SetColor(TEXT_CURRENT_SCALE_COLOR);
 }
 
 void SphereSizeText::SphereGoalSizeText()
 {
 
 	//塊の大きさを定義・表示
-	wchar_t goalSize[256];
-	swprintf_s(goalSize, 256, L"3m");
+	wchar_t goalSize[TEXT_COUNT_MAX];
+	swprintf_s(goalSize, TEXT_COUNT_MAX, L"3m");
 	sphereGoalSizeText_.SetText(goalSize);
-	sphereGoalSizeText_.SetPosition(-545.0f, 430.0f, 0.0f);
-	sphereGoalSizeText_.SetScale(0.9f);
-	sphereGoalSizeText_.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	sphereGoalSizeText_.SetPosition(TEXT_GOAL_SCALE_POS);
+	sphereGoalSizeText_.SetScale(TEXT_GOAL_SCALE_SCALE);
+	sphereGoalSizeText_.SetColor(TEXT_GOAL_SCALE_COLOR);
 }
 

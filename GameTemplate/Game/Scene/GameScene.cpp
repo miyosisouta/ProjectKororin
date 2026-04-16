@@ -3,7 +3,6 @@
 #include "SphereInputSystem.h"
 #include "SphereCamera.h"
 #include "SpacePartitioning.h"
-#include "Actor/Sphere/Player.h"
 #include "Actor/Sphere/Sphere.h"
 #include "Collision/CollisionManager.h"
 #include "Core/Fade.h"
@@ -23,59 +22,189 @@
 namespace
 {
 	/********* 共通の定数 *********/
-	constexpr const float FADE_OUT_START_TIME = 2.0f;								// フェードアウトが始まるまでの時間
-	constexpr const float GAME_TIMER_LIMIT = 210.0f;								// ゲーム時間
-	constexpr const float TIME_ZERO = 0.0f;											// タイムゼロ
-	constexpr const float SOUND_FADE_TIME = 3.0f;									// サウンドのフェード時間
-	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);				// クリア時のカメラの座標
-	constexpr const uint8_t SENTENCE_COUNT_MAX = 4;									// テキストの最大文の数
-	constexpr const uint8_t MAX_SENTENCE_NUM = 5;									// スタートイベント用テキストの最大文の数
+	constexpr float FADE_OUT_START_TIME = 2.0f;	// フェードアウトが始まるまでの時間
+	constexpr float GAME_TIMER_LIMIT = 210.0f; // ゲーム時間
+	constexpr float TIME_ZERO = 0.0f; // タイムゼロ
+	constexpr float SOUND_FADE_TIME = 3.0f;	// サウンドのフェード時間
+	static const Vector3 RESULT_CAMERA_POS = Vector3(0.0f, 0.0f, 0.0f);	// クリア時のカメラの座標
+	constexpr uint8_t MIN_SENTENCE_NUM = 0;
+	constexpr uint8_t SENTENCE_COUNT_MAX = 4; // テキストの最大文の数
+	constexpr uint8_t MAX_SENTENCE_NUM = 5;	// スタートイベント用テキストの最大文の数
+	constexpr uint8_t PRIOLITY_ZERO = 0; // 優先度0
+	constexpr uint16_t TEXT_COUNT_MAX = 256; // 登録可能な文字数
+
+	/* 決定ボタン */
+	constexpr float INSTRACTION_SPRITE_SIZE = 128.0f; // 決定ボタンの画像サイズ
+	static const Vector3 INSTRACTION_SPRITE_POSITION = Vector3(800.0f, 180.0f, 0.0f); // 決定ボタンの画像サイズ
+	static const Vector3 INSTRACTION_SPRITE_SCALE = Vector3(0.3f, 0.3f, 0.3f); // 決定ボタンの画像サイズ
+	static const Vector4 INSTRACTION_COLOR_ANIMATION_BEFORE = Vector4(1.0f, 1.0f, 1.0f, 1.0f); // アニメーション前の色
+	static const Vector4 INSTRACTION_COLOR_ANIMATION_AFTER = Vector4(1.0f, 1.0f, 1.0f, 0.0f); // アニメーション後の色
+	constexpr float INSTRACTION_COLOR_ANIMATION_SECOND = 2.0f; // アニメーションにかかる時間
+
 
 
 	/********* インゲーム開始時のスタートイベント用の定数 *********/
-	constexpr const float FADEIN_TIME_START_EVENT = 3.0f;							// スタートイベント終了時のフェードインにかける時間
-	constexpr const float TIME_VALUE = 1.0f;
-	static const Vector3 START_EVENT_TEXT_POS = Vector3(-380.0f, 380.0f, 0.0f);		// スタートイベント用テキストの位置
+	
+	constexpr uint8_t START_EVENT_PRIOLITY = 1; // ステートイベントクラスの優先度
+	constexpr float FADEIN_TIME_START_EVENT = 3.0f; // スタートイベント終了時のフェードインにかける時間
+	constexpr float TIME_VALUE = 1.0f; // 時間
+
+	/* テキスト */
+	static const Vector3 START_EVENT_TEXT_POS = Vector3(-380.0f, 380.0f, 0.0f);	// スタートイベント用テキストの位置
+	constexpr float START_EVENT_TEXT_SCALE = 0.8f; // スタートイベント時に表示する文字の大きさ
+
+	/* テキストウィンドウ */
+	constexpr float START_EVENT_SIZE_WIDTH = 1024.0f; // 画像サイズ：横
+	constexpr float START_EVENT_SIZE_HEIGHT = 768.0f; // 画像サイズ：高さ　
+	static const Vector3 START_EVENT_SCALE = Vector3(50.0f, 320.0f, 0.0f); // 画像の大きさ
+	static const Vector4 START_EVENT_ANIMATION_COLOR_BEFORE = Vector4(1.0f, 1.0f, 1.0f, 1.0f); // アニメーション前の色
+	static const Vector4 START_EVENT_ANIMATION_COLOR_AFTER = Vector4(1.0f, 1.0f, 1.0f, 0.0f);// アニメーション後の色
+	constexpr float START_EVENT_SIZE_ANIMATION_TIME = 1.5f; // アニメーションにかかる時間
+
+	/* 指示ボタン */
+	static const Vector3 START_EVENT_INSTRACTION_SPRITE_POSITION = Vector3(400.0f, 240.0f, 0.0f); // 決定ボタンの座標
+
+
 
 	/********* ゲームクリア時の定数 *********/
-	constexpr const float SPHERE_TO_DELETE_TIME = 5.0f;								// オブジェクトが空へ飛ぶまでの時間
-	constexpr const float CLEAR_SPHERE_ROTATION_SPEED = 100.0f;						// 塊の回転速度
-	constexpr const int METERS_TO_CENTIMETERS = 100;								// メートルとセンチメートルを分ける
-	constexpr const uint8_t HIGHEST_RATED_BORDER = 0;								// 最高評価ボーダーライン
-	constexpr const uint16_t SET_CAN_NUMBER_CHARACTERS = 256;						// 設定可能な文字数
-	static const Vector3 CLAER_SPHERE_INIT_POS = Vector3(0.0f, 0.0f, -10.0f);		// 塊の初期座標
-	static const Vector3 CLAER_SPHERE_LAST_POS = Vector3(120.0f, 0.0f, -120.0f);	// 塊の移動後の座標
+	/* 塊 */
+	constexpr float SPHERE_TO_DELETE_TIME = 5.0f; // オブジェクトが空へ飛ぶまでの時間
+	constexpr float SPHERE_MOVE_CALC_TIME = 3.0f; // 塊が移動する時間
+	constexpr float CLEAR_SPHERE_ROTATION_SPEED = 100.0f; // 塊の回転速度
+	constexpr float DELTA_POS_DIFFERENCE = 1.2f; // 座標の差異
+
+	/* テキストウィンドウ */
+	constexpr float TEXTWINDOW_SIZE_WIDTH_CLEAR = 256.0f; // ゲームクリア時のテキストウィンドウサイズ : 横
+	constexpr float TEXTWINDOW_SIZE_HEIGHT_CLEAR = 350.0f; // ゲームクリア時のテキストウィンドウサイズ : 縦
+	constexpr float TEXTWINDOW_SIZE_FAILURE = 256.0f; // クリア失敗時のテキストウィンドウサイズ
+	static const Vector3 TEXTWINDOW_CLEAR_POS = Vector3(500.0f, 300.0f, 0.0f); // クリア時の座標
+	static const Vector4 TEXTWINDOW_CLEAR_COLOR = Vector4(1.0f, 1.5f, 1.0f, 1.0f); // クリア時の色
+	static const Vector3 TEXTWINDOW_FAILURE_POS = Vector3(500.0f, 250.0f, 0.0f); // 失敗時の座標
+	static const Vector4 TEXTWINDOW_FAILURE_COLOR = Vector4(1.0f, 1.0f, 1.0f, 1.0f); // 失敗時の色
+	static const Vector3 TEXTWINDOW_SCALE = Vector3(3.0f, 3.0f, 3.0f); // 大きさ
+
+	/* フォント */
+	constexpr float TEXT_SCALE = 0.7f; // フォントの大きさ
+
+	/* スコアウィンドウ */
+	constexpr float SCORE_WINDOW_SPRITE_SIZE = 768.0f; // 画像サイズ
+	static Vector3  SCORE_WINDOW_SPRITE_POS = Vector3(350.0f, 50.0f, 0.0f); // 座標
+	static Vector3  SCORE_WINDOW_SPRITE_SCALE = Vector3(1.8f, 1.5f, 1.0f); // 色
+	static Vector4  SCORE_WINDOW_ANIMATION_COLOR_BEFORE = Vector4(1.0f,1.0f,1.0f,0.0f); // アニメーション前の色
+	static Vector4  SCORE_WINDOW_ANIMATION_COLOR_AFTER = Vector4(1.0f,1.0f,1.0f,0.8f);// アニメーション後の色
+	constexpr float SCORE_WINDOW_COLOR_ANIMATION_SECOND = 2.0f; // アニメーションにかかる時間
+
+	/* テキスト */
+	constexpr float TEXT_HEADLINE_SCALE = 1.0f;										// 見出しの大きさ
+	static Vector4  TEXT_HEADLINE_COLOR = Vector4(0.705f, 0.945f, 0.976f, 1.0f);	// 見出しのカラー
+
+	static Vector3  TEXT_HEADLINE_BIG_POS = Vector3(30.0f, 350.0f, 0.0f);			// 「大きさ」の座標
+	static Vector3  TEXT_HEADLINE_GUIDANCE_TIME_POS = Vector3(30.0f, 150.0f, 0.0f);	// 「達成時間」の座標
+	static Vector3  TEXT_HEADLINE_OBJECT_POS = Vector3(30.0f, -50.0f, 0.0f);		// 「モノ」の座標
+
+	constexpr float TEXT_VALUE_SCALE = 2.0f;								// 値の大きさ
+	static Vector4  TEXT_VALUE_COLOR = Vector4(1.0f, 1.0f, 1.0f, 0.0f);		// 値のカラー
+
+	static Vector3  TEXT_BIG_VALUE_POS = Vector3(100.0f, 300.0f, 0.0f);		// 「大きさ」の値の座標
+	static Vector3  TEXT_GOAL_TIME_POS = Vector3(100.0f, 100.0f, 0.0f);		// 「達成時間」の値の座標
+	static Vector3  TEXT_OBJECT_COUNT_POS = Vector3(100.0f, -100.0f, 0.0f);	// 「モノ」の値の座標
+
+	/* スタンプ */
+	constexpr float STAMP_SPRITE_SIZE = 512.0f;// 画像サイズ
+	static Vector3 STAMP_SPRITE_POS = Vector3(400.0f, -100.0f, 0.0f); // 座標
+	static Vector3 STAMP_SPRITE_SCALE = Vector3(1.0f, 1.0f, 1.0f); // 大きさ
+	static Vector3 STAMP_ANIMATION_SCALE_BEFORE = Vector3(1.0f); // アニメーション前のサイズ
+	static Vector3 STAMP_ANIMATION_SCALE_AFTER = Vector3(0.6f); // アニメーション後のサイズ
+	constexpr float STAMP_COLOR_ANIMATION_SECOND = 4.0f; // アニメーションにかかる時間
+
+	/* その他 */
+	constexpr uint8_t METERS_TO_CENTIMETERS = 100; // メートルとセンチメートルを分ける
+	constexpr uint8_t HIGHEST_RATED_BORDER = 0; // 最高評価ボーダーライン
+	constexpr uint16_t SET_CAN_NUMBER_CHARACTERS = 256; // 設定可能な文字数
+	static const Vector3 CLAER_SPHERE_INIT_POS = Vector3(0.0f, 0.0f, -10.0f); // 塊の初期座標
+	static const Vector3 CLAER_SPHERE_LAST_POS = Vector3(120.0f, 0.0f, -120.0f); // 塊の移動後の座標
+
 
 	/********* ゲームオーバー時の定数 *********/
-	constexpr const float FLIGHT_START_DELAY = 1.5f;								// 塊がカメラの後方へ飛ぶまでの時間
-	static const Vector3 FAILER_FONT_TEXTS_POS = Vector3(150.0f, 330.0f, 0.0f);		// クリア失敗時のリザルトでのテキスト位置
-	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 1500.0f, -1000.0f);	// 黒い背景用オブジェクトの最初の位置
-	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, -1000.0f);		// 黒い背景用オブジェクトの最終的な位置
-	static const Vector3 FAILER_SPHERE_MIN_POS = Vector3(0.0f, 100.0f, -200.0f);	// クリアしていないときの塊が一番下にいる座標
-	static const Vector3 FAILER_SPHERE_MAX_POS = Vector3(0.0f, 200.0f, -200.0f);	// クリアしていないときの塊が一番上にいる座標
-	static const Vector3 FAILER_SPHERE_LAST_POS = Vector3(0.0f, 0.0f, 180.0f);		// クリアしていないときの塊が最終的にいる位置座標
 
+	/* 黒の背景 */
+	static const Vector3 BLACK_OBJECT_INIT_POS = Vector3(0.0f, 1500.0f, -1000.0f); // 黒い背景用オブジェクトの最初の位置
+	static const Vector3 BLACK_OBJECT_LAST_POS = Vector3(0.0f, 0.0f, -1000.0f); // 黒い背景用オブジェクトの最終的な位置
+	static const Vector3 BLACK_OBEJCT_SCALE = Vector3(25.0f, 15.0f, 0.5f); // 黒い背景用オブジェクトの大きさ
+	
+	/* ディレクションライト */
+	constexpr uint8_t DIRECTION_LIGHT_NUM = 0; // ナンバー
+	static const Vector3 DIRECTION_LIGHT_DIRECTION = Vector3(1.0f, 1.0f, 1.0f); // 方向
+	static const Vector3 DIRECTION_LIGHT_COLOR = Vector3(0.0f, 0.0f, 0.0f); // 色
+
+	/* 塊 */
+	static const Vector3 FAILER_SPHERE_MIN_POS = Vector3(0.0f, 100.0f, -200.0f); // クリアしていないときの塊が一番下にいる座標
+	static const Vector3 FAILER_SPHERE_MAX_POS = Vector3(0.0f, 200.0f, -200.0f); // クリアしていないときの塊が一番上にいる座標
+	static const Vector3 FAILER_SPHERE_LAST_POS = Vector3(0.0f, 0.0f, 180.0f); // クリアしていないときの塊が最終的にいる位置座標
+	constexpr float SPHERE_FLIGHT_START_DELAY = 1.5f; // 塊がカメラの後方へ飛ぶまでの時間
+
+	/* 画面が割れた画像 */
+	constexpr float BREAK_SPRITE_SIZE_WIDTH = 1920.0f; // 画像の横のサイズ
+	constexpr float BREAK_SPRITE_SIZE_HEIGHT = 1080.0f; // 画像の縦のサイズ
+	static const Vector3 BREAK_SPRITE_POS = Vector3(0.0f); // 画像の座標
+
+	/* 「タイトルへ」の画像 */
+	constexpr float TITLE_TRANSITION_SPRITE_SIZE_WIDTH = 512.0f; // 画像の横のサイズ
+	constexpr float TITLE_TRANSITION_SPRITE_SIZE_HEIGHT = 256.0f;// 画像の縦のサイズ
+	static const Vector3 TITLE_TRANSITION_SPRITE_POS = Vector3(-100.0f,-250.0f,0.0f);// 画像の座標
+	static const Vector3 TITLE_TRANSITION_ANIMATION_SCALE_BEFORE = Vector3(1.0f); // アニメーション前の大きさ
+	static const Vector3 TITLE_TRANSITION_ANIMATION_SCALE_AFTER = Vector3(0.75f); // アニメーション後の大きさ
+	static const Vector4 TITLE_TRANSITION_ANIMATION_COLOR_BEFORE = Vector4(0.0f, 0.75f, 0.0, 1.0f); // アニメーション前の色
+	static const Vector4 TITLE_TRANSITION_ANIMATION_COLOR_AFTER = Vector4(0.0f, 1.0f, 0.0f, 1.0f); // アニメーション後の色
+	constexpr float TITLE_TRANSITION_ANIMATION_TIME = 8.0f; // アニメーションにかかる時間
+
+	/* Aボタンの画像 */
+	constexpr float BUTTON_A_SPRITE_SIZE = 100.0f; // 画像サイズ
+	static const Vector3 BUTTON_A_SPRITE_POS = Vector3(270.0f, -250.0f, 0.0f); // 画像の座標
+
+	/* その他 */
+	constexpr float LERP_TIME_STEP2 = 5.0f; // ステップ2のリープ時間
+	constexpr float LERP_VALUE_POS_STEP2 = 0.5f; // ステップ2の座標
+	constexpr float LERP_TIME_STEP3 = 1.5f; // ステップ3のリープ時間
+	constexpr float LERP_CULC_ADD = 1.0f; // リープの計算に必要な加算
+	constexpr float LERP_CULC_MULT = 0.5f; // リープの計算に必要な乗算
+	static const Vector3 FAILER_FONT_TEXTS_POS = Vector3(150.0f, 330.0f, 0.0f);		// クリア失敗時のリザルトでのテキスト位置
+	constexpr float FAILER_FONT_TEXTS_SCALE = 0.7f; // 失敗時のテキストの大きさ
 
 	/********* フェードの境界時間を定数として定義 *********/
-	constexpr const float FADE_START_TIME = 20.0f; // フェード開始 (α = 0.0f)
-	constexpr const float FADE_MID_TIME = 10.0f; // 中間点 (α = 0.3f)
-	constexpr const float FADE_END_TIME = 0.0f;  // フェード終了 (α = 1.0f)
+	constexpr float FADE_START_TIME = 20.0f; // フェード開始 (α = 0.0f)
+	constexpr float FADE_MID_TIME = 10.0f;	 // 中間点 (α = 0.3f)
+	constexpr float FADE_END_TIME = 0.0f;	 // フェード終了 (α = 1.0f)
 
-	constexpr const float STAGE_DURATION = 10.0f; // 各ステージの長さ (10秒)
-	constexpr const float ALPHA_MAX_FIRST_HALF = 0.3f;  // ステージ1の最大アルファ値
-	constexpr const float ALPHA_RANGE_SECOND_HALF = 0.7f;  // ステージ2のアルファ値の増加幅 (1.0f - 0.3f)
+	constexpr float STAGE_DURATION = 10.0f;			// 各ステージの長さ (10秒)
+	constexpr float ALPHA_MAX_FIRST_HALF = 0.3f;	// ステージ1の最大アルファ値
+	constexpr float ALPHA_RANGE_SECOND_HALF = 0.7f; // ステージ2のアルファ値の増加幅 (1.0f - 0.3f)
+
+	constexpr uint8_t MINUTE_TO_SECOND = 60; // 分から秒
+
+	/********* ゲームシーン ****************************/
+	constexpr uint8_t DIRECTION_LIGHT_NOM = 0; // ディレクションライトの番号
+	static const Vector3 DIRECTION_LIGHT_DIR = Vector3(0.5f, -1.0f, -1.0f); // ディレクションライトの方向
+	static const Vector3 DIRECTION_LIGHT_COL = Vector3(0.5f); // ディレクションライトのカラー
+	static const Vector3 AMBIENT_LIGHT = Vector3(0.8f); // 環境光
+	constexpr float CHECK_GAME_TIME = 0.05f; // ゲーム時間の条件用変数
+	constexpr float SKYCUBE_INIT_POS = 0.0f; // スカイキューブの初期値
+	constexpr float SCENE_TRANSITION_WAIT_TIME = 5.0f; // シーン遷移時の待ち時間
+	constexpr float CHECK_TWELVE_WHITE_OUT = 20.0f; // ホワイトアウトの20秒の条件用変数
+	constexpr float CHECK_TEN_WHITE_OUT = 10.0f;// ホワイトアウトの10秒の条件用変数
+
 
 	/** タイムを秒に変換 */
-	int CalcMinuteToSecond(int clearTime, int& clearTimeMinute, int& clearTimeSecond)
+	void CalcMinuteToSecond(int clearTime, int& clearTimeMinute, int& clearTimeSecond)
 	{
-		clearTimeMinute = clearTime / 60; // 分を返す
-		clearTimeSecond = clearTime % 60; // 秒を返す
-		return 1;
+		clearTimeMinute = clearTime / MINUTE_TO_SECOND; // 分を返す
+		clearTimeSecond = clearTime % MINUTE_TO_SECOND; // 秒を返す
 	}
 
+	/* テキストの設定 */
 	void SetText(FontRender* fontRender, const std::function<void(wchar_t*)>& func)
 	{
-		wchar_t text[256];
+		wchar_t text[TEXT_COUNT_MAX];
 		func(text);
 		fontRender->SetText(text);
 	}
@@ -102,7 +231,7 @@ namespace _internal
 		owner_->sphereCamera_ = nullptr;
 
 		// リザルト用カメラの生成
-		owner_->sphereCamera_ = NewGO<ResultCamera>(0, "resultCamera"); // リザルト用のカメラを作成
+		owner_->sphereCamera_ = NewGO<ResultCamera>(PRIOLITY_ZERO, "resultCamera"); // リザルト用のカメラを作成
 		owner_->sphereCamera_->SetCameraActive(false); // カメラを操作不能にする
 		owner_->sphereCamera_->SetPosition(RESULT_CAMERA_POS); // カメラの座標を設定
 		owner_->sphereCamera_->Update(); // カメラの最終座標を更新
@@ -184,7 +313,7 @@ namespace _internal
 	}
 	void Result::CommonExitStep3(Result* result)
 	{
-		result->elapsedTime_ = 0.0f;
+		result->elapsedTime_ = TIME_ZERO;
 	}
 
 
@@ -198,7 +327,7 @@ namespace _internal
 	}
 	void Result::CommonExitStep4(Result* result)
 	{
-		result->elapsedTime_ = 0.0f;
+		result->elapsedTime_ = TIME_ZERO;
 	}
 
 
@@ -271,16 +400,19 @@ namespace _internal
 	}
 	ClearResult::~ClearResult()
 	{
+		// 決定ボタン
 		if (instructionButtonSprite_) {
 			delete instructionButtonSprite_;
 			instructionButtonSprite_ = nullptr;
 		}
 
+		// 画面が割れた画像
 		if (breakScreenSprite_) {
 			delete breakScreenSprite_;
 			breakScreenSprite_ = nullptr;
 		}
 
+		// タイトル遷移
 		if (titleTransitionSprite_) {
 			delete titleTransitionSprite_;
 			titleTransitionSprite_ = nullptr;
@@ -328,33 +460,43 @@ namespace _internal
 
 		// ClearResultでのみ使うものの描画
 		{
+			// スコアウィンドウ
 			if (scoreWindow_) {
 				scoreWindow_->Render(rc);
 			}
+			// 大きさテキスト
 			if (resultGuidanceSizeText_) {
 				resultGuidanceSizeText_->Draw(rc);
 			}
+			// 塊のサイズテキスト
 			if (resultSphereSizeText_) {
 				resultSphereSizeText_->Draw(rc);
 			}
+			// 経過時間
 			if (resultGuidanceGoalTime_) {
 				resultGuidanceGoalTime_->Draw(rc);
 			}
+			// 経過時間のテキスト
 			if (goalTimeText_) {
 				goalTimeText_->Draw(rc);
 			}
+			// モノ
 			if (resultGuidanceAttachCountText_) {
 				resultGuidanceAttachCountText_->Draw(rc);
 			}
+			//引っ付いたオブジェクトの数
 			if (attachableObjectCountText_) {
 				attachableObjectCountText_->Draw(rc);
 			}
+			// クリア時のテキスト
 			if (clearTexts_[currentSentenceIndex_]) {
 				clearTexts_[currentSentenceIndex_]->Draw(rc);
 			}
+			// 通常スタンプ
 			if (normalRatingStamp_) {
 				normalRatingStamp_->Render(rc);
 			}
+			// 優秀スタンプ
 			if (goodRatingStamp_) {
 				goodRatingStamp_->Render(rc);
 			}
@@ -375,9 +517,9 @@ namespace _internal
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////result->owner_->stage_->SetVisibleAll(false);
 
 		// 経過時間の初期化
-		result->elapsedTime_ = 0.0f;
+		result->elapsedTime_ = TIME_ZERO;
 		// 塊の移動時間
-		result->calclerpValue_.InitCalcTime(3.0f);
+		result->calclerpValue_.InitCalcTime(SPHERE_MOVE_CALC_TIME);
 
 		// 塊の初期座標の設定
 		{
@@ -413,12 +555,6 @@ namespace _internal
 		Result::CommonUpdateStep2(result);
 
 
-		// 塊の常時回転
-		{
-			//// 1フレームの経過時間を取得
-			//float orbMoveSpeed = CLEAR_SPHERE_ROTATION_SPEED * g_gameTime->GetFrameDeltaTime();
-		}
-
 		// 塊の移動処理
 		{
 			const float lerpValue = result->calclerpValue_.CalcUpdate();
@@ -432,7 +568,7 @@ namespace _internal
 		// 次のステップへの移行
 		{
 			Vector3 deltaPos = CLAER_SPHERE_LAST_POS - result->owner_->sphere_->GetPosition();
-			if (deltaPos.Length() <= 1.2f) {
+			if (deltaPos.Length() <= DELTA_POS_DIFFERENCE) {
 				result->nextStep_ = ClearStep::Step3;
 			}
 		}
@@ -455,22 +591,22 @@ namespace _internal
 			{
 				result->instructionButtonSprite_ = new UICanvas;
 				result->instructionIcon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
-				result->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(800.0f, 180.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
+				result->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", INSTRACTION_SPRITE_SIZE, INSTRACTION_SPRITE_SIZE, INSTRACTION_SPRITE_POSITION, INSTRACTION_SPRITE_SCALE, Quaternion::Identity);
 				// ここからイージング設定
-				auto scaleAnimation = std::make_unique<UIColorAnimation>();
-				scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 2.0f, EasingType::EaseInOut, LoopMode::PingPong);
-				result->instructionIcon_->SetUIAnimation(std::move(scaleAnimation));
+				auto colorAnimation = std::make_unique<UIColorAnimation>();
+				colorAnimation->SetParameter(INSTRACTION_COLOR_ANIMATION_BEFORE, INSTRACTION_COLOR_ANIMATION_AFTER, INSTRACTION_COLOR_ANIMATION_SECOND, EasingType::EaseInOut, LoopMode::PingPong);
+				result->instructionIcon_->SetUIAnimation(std::move(colorAnimation));
 				result->instructionIcon_->PlayAnimation();
 			}
 
 			// テキストウィンドウの画像の設定
 			{
 				result->textWindowSprite_ = std::make_unique<SpriteRender>();
-				result->textWindowSprite_->Init("Assets/sprite/Result/textWindow.DDS", 256, 350);
+				result->textWindowSprite_->Init("Assets/sprite/Result/textWindow.DDS", TEXTWINDOW_SIZE_WIDTH_CLEAR, TEXTWINDOW_SIZE_HEIGHT_CLEAR);
 				result->textWindowSprite_->SetPSM(
-					Vector3(500.0f, 300.0f, 0.0f),
-					3.0f,
-					Vector4(1.0f, 1.5f, 1.0f, 1.0f)
+					TEXTWINDOW_CLEAR_POS,
+					TEXTWINDOW_SCALE,
+					TEXTWINDOW_CLEAR_COLOR
 				);
 				result->textWindowSprite_->Update(); // 更新
 			}
@@ -479,7 +615,7 @@ namespace _internal
 		// テキストの設定
 		{
 			// 文字の設定
-			for (int i = 0; i < 5; ++i)
+			for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i)
 			{
 				// フォントレンダーのユニークポインタの作成
 				result->clearTexts_[i] = std::make_unique<FontRender>();
@@ -490,7 +626,7 @@ namespace _internal
 				// テキストの初期設定
 				result->clearTexts_[i]->SetPSC(
 					FAILER_FONT_TEXTS_POS,
-					0.7f,
+					TEXT_SCALE ,
 					Vector4::White
 				);
 			}
@@ -528,7 +664,7 @@ namespace _internal
 		Result::CommonExitStep3(result);
 
 		// テキストの削除
-		for (int i = 0; i < 5; ++i)
+		for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i)
 		{
 			result->clearTexts_[i].reset();
 		}
@@ -546,10 +682,10 @@ namespace _internal
 		{
 			result->scoreWindow_ = new UICanvas;
 			result->scoreWindowIcon_ = result->scoreWindow_->CreateUI<UIIcon>();
-			result->scoreWindowIcon_->Initialize("Assets/sprite/Result/scoreWindow.DDS", 768, 768, Vector3(350.0f, 50.0f, 0.0f), Vector3(1.8f, 1.5f, 1.0f), Quaternion::Identity);
+			result->scoreWindowIcon_->Initialize("Assets/sprite/Result/scoreWindow.DDS", SCORE_WINDOW_SPRITE_SIZE, SCORE_WINDOW_SPRITE_SIZE, SCORE_WINDOW_SPRITE_POS, SCORE_WINDOW_SPRITE_SCALE, Quaternion::Identity);
 			// ここからイージング設定
 			auto scaleAnimation = std::make_unique<UIColorAnimation>();
-			scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 0.8f), 2.0f, EasingType::EaseInOut, LoopMode::PingPong);
+			scaleAnimation->SetParameter(SCORE_WINDOW_ANIMATION_COLOR_BEFORE, SCORE_WINDOW_ANIMATION_COLOR_AFTER, SCORE_WINDOW_COLOR_ANIMATION_SECOND, EasingType::EaseInOut, LoopMode::PingPong);
 			result->scoreWindowIcon_->SetUIAnimation(std::move(scaleAnimation));
 			result->scoreWindowIcon_->PlayAnimation();
 		}
@@ -563,7 +699,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"大きさ");
 					});
-				result->resultGuidanceSizeText_->SetPSC(Vector3(30.0f, 350.0f, 0.0f), 1.0f, Vector4(180.0f / 255.0f, 241.0f / 255.0f, 249.0f / 255.0f, 1.0f));
+				result->resultGuidanceSizeText_->SetPSC(TEXT_HEADLINE_BIG_POS, TEXT_HEADLINE_SCALE, TEXT_HEADLINE_COLOR);
 			}
 
 			// 塊の大きさの表示
@@ -576,7 +712,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d m %02d cm", radiusMetersText, radiusCentimeters);
 					});
-				result->resultSphereSizeText_->SetPSC(Vector3(100.0f, 300.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+				result->resultSphereSizeText_->SetPSC(TEXT_BIG_VALUE_POS, TEXT_VALUE_SCALE, TEXT_VALUE_COLOR);
 			}
 
 
@@ -587,7 +723,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"達成時間");
 					});
-				result->resultGuidanceGoalTime_->SetPSC(Vector3(30.0f, 150.0f, 0.0f), 1.0f, Vector4(180.0f / 255.0f, 241.0f / 255.0f, 249.0f / 255.0f, 1.0f));
+				result->resultGuidanceGoalTime_->SetPSC(TEXT_HEADLINE_GUIDANCE_TIME_POS, TEXT_HEADLINE_SCALE, TEXT_HEADLINE_COLOR);
 			}
 
 			// 目標サイズ達成時間の表示
@@ -599,7 +735,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 分 %02d 秒", result->goalMinuteTime_, result->goalSecondTime_);
 					});
-				result->goalTimeText_->SetPSC(Vector3(100.0f, 100.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+				result->goalTimeText_->SetPSC(TEXT_GOAL_TIME_POS, TEXT_VALUE_SCALE, TEXT_VALUE_COLOR);
 			}
 
 
@@ -610,7 +746,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"モノ");
 					});
-				result->resultGuidanceAttachCountText_->SetPSC(Vector3(30.0f, -50.0f, 0.0f), 1.0f, Vector4(180.0f / 255.0f, 241.0f / 255.0f, 249.0f / 255.0f, 1.0f));
+				result->resultGuidanceAttachCountText_->SetPSC(TEXT_HEADLINE_OBJECT_POS, TEXT_HEADLINE_SCALE, TEXT_HEADLINE_COLOR);
 			}
 
 			//吸着したオブジェクトの数を表示
@@ -620,7 +756,7 @@ namespace _internal
 					{
 						swprintf_s(text, SET_CAN_NUMBER_CHARACTERS, L"%02d 個", result->information_.count);
 					});
-				result->attachableObjectCountText_->SetPSC(Vector3(100.0f, -100.0f, 0.0f), 2.0f, Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+				result->attachableObjectCountText_->SetPSC(TEXT_OBJECT_COUNT_POS, TEXT_VALUE_SCALE, TEXT_VALUE_COLOR);
 			}
 		}
 		// テキストのアルファ値を上げる時間の設定
@@ -633,7 +769,7 @@ namespace _internal
 
 		// スコア表示されてから少し待つ
 		float value = result->calclerpValue_.CalcUpdate();
-		if (value >= 1.0f)
+		if (value >= TIME_VALUE)
 		{
 			result->nextStep_ = ClearStep::Step5;
 		}
@@ -659,10 +795,10 @@ namespace _internal
 			// 評価用印鑑の設定
 			result->goodRatingStamp_ = new UICanvas;
 			result->goodRatingStampIcon_ = result->goodRatingStamp_->CreateUI<UIIcon>();
-			result->goodRatingStampIcon_->Initialize("Assets/sprite/Result/sphereLank_Good.DDS", 512, 512, Vector3(400.0f, -100.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+			result->goodRatingStampIcon_->Initialize("Assets/sprite/Result/sphereLank_Good.DDS", STAMP_SPRITE_SIZE, STAMP_SPRITE_SIZE, Vector3(400.0f, -100.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
 			// ここからイージング設定
 			auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-			scaleAnimation->SetParameter(Vector3(1.0f), Vector3(0.6f), 4.0f, EasingType::EaseInOut, LoopMode::PingPong);
+			scaleAnimation->SetParameter(STAMP_ANIMATION_SCALE_BEFORE, STAMP_ANIMATION_SCALE_AFTER, STAMP_COLOR_ANIMATION_SECOND, EasingType::EaseInOut, LoopMode::PingPong);
 			result->goodRatingStampIcon_->SetUIAnimation(std::move(scaleAnimation));
 			result->goodRatingStampIcon_->PlayAnimation();
 		}
@@ -671,10 +807,10 @@ namespace _internal
 			// 評価用印鑑の設定
 			result->normalRatingStamp_ = new UICanvas;
 			result->normalRatingStampIcon_ = result->normalRatingStamp_->CreateUI<UIIcon>();
-			result->normalRatingStampIcon_->Initialize("Assets/sprite/Result/sphereLank_Normal.DDS", 512, 512, Vector3(400.0f, -100.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+			result->normalRatingStampIcon_->Initialize("Assets/sprite/Result/sphereLank_Normal.DDS", STAMP_SPRITE_SIZE, STAMP_SPRITE_SIZE, STAMP_SPRITE_POS, STAMP_SPRITE_SCALE, Quaternion::Identity);
 			// ここからイージング設定
 			auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-			scaleAnimation->SetParameter(Vector3(1.0f), Vector3(0.6f), 4.0f, EasingType::EaseInOut, LoopMode::PingPong);
+			scaleAnimation->SetParameter(STAMP_ANIMATION_SCALE_BEFORE, STAMP_ANIMATION_SCALE_AFTER, STAMP_COLOR_ANIMATION_SECOND, EasingType::EaseInOut, LoopMode::PingPong);
 			result->normalRatingStampIcon_->SetUIAnimation(std::move(scaleAnimation));
 			result->normalRatingStampIcon_->PlayAnimation();
 		}
@@ -688,7 +824,7 @@ namespace _internal
 
 		// 時間経過
 		const float value = result->calclerpValue_.CalcUpdate();
-		if (value >= 1.0f)
+		if (value >= TIME_VALUE)
 		{
 			SoundManager::Get().PlaySE(enSoundKind_RateStamp);
 			result->nextStep_ = ClearStep::Step6;
@@ -754,339 +890,6 @@ namespace _internal
 	/*----------------------------------------------------------------  失敗時の処理  ---------------------------------------------------------------------------*/
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-	void FailureResult::EnterStep1(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep1(result);
-
-		// 背景用オブジェクトの作成・設定
-		{
-			result->blackOutObject_ = std::make_unique<ModelRender>();
-			result->blackOutObject_->Init("Assets/modelData/stage/result/blackOutObject_second.tkm");
-			result->blackOutObject_->SetPosition(BLACK_OBJECT_INIT_POS);
-			result->blackOutObject_->SetScale(Vector3(25.0f, 15.0f, 0.5f));
-			result->blackOutObject_->Update();
-		}
-
-		// 塊の設定
-		{
-			result->owner_->sphere_->SetIsDraw(false);
-			result->owner_->sphere_->SetPosition(FAILER_SPHERE_MIN_POS);
-			result->owner_->sphere_->Update();
-		}
-
-		// オブジェクト非表示
-		SpacePartitioning::GetInstance()->OffRender();
-
-		// ディレクションンライトのパラメーター設定
-		g_sceneLight->SetDirectionLight(0, Vector3(1.0f, 1.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
-
-		// スカイキューブを非アクティブ
-		result->owner_->skyCube_->Deactivate();
-	}
-	void FailureResult::UpdateStep1(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep1(result);
-
-
-		// ホワイトイン完了した場合
-		if (!Fade::Get().IsPlay())
-		{
-			result->isMoveBlackOutObject_ = true;
-			result->nextStep_ = FailureStep::Step2;
-		}
-	}
-	void FailureResult::ExitStep1(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep1(result);
-	}
-
-
-	void FailureResult::EnterStep2(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep2(result);
-
-		// リープで使用する時間の設定
-		result->calclerpValue_.InitCalcTime(5.0f);
-	}
-	void FailureResult::UpdateStep2(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep2(result);
-
-		// オブジェクトのリープ
-		if (result->blackOutObject_) {
-			Vector3 deltaPosition = BLACK_OBJECT_LAST_POS - result->blackOutObject_->GetPosition(); // 移動先と今の座標の差
-			if (deltaPosition.Length() >= 0.5f)  // まだ移動させたい場合
-			{
-				const float lerpValue = result->calclerpValue_.CalcUpdate();
-
-				Vector3 currentPos = result->blackOutObject_->GetPosition(); // 今いる座標
-				currentPos.Lerp(lerpValue, BLACK_OBJECT_INIT_POS, BLACK_OBJECT_LAST_POS); // 移動先の座標を線形補完
-				result->blackOutObject_->SetPosition(currentPos); // 移動先のポジションを設定
-				result->blackOutObject_->Update();
-
-				return;
-			}
-			else
-			{
-				result->nextStep_ = FailureStep::Step3;
-			}
-		}
-	}
-	void FailureResult::ExitStep2(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep2(result);
-	}
-
-
-	void FailureResult::EnterStep3(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep3(result);
-
-		// リープ先の設定
-		result->SetUpToLerp(FAILER_SPHERE_MIN_POS, FAILER_SPHERE_MAX_POS);
-
-		// リープで使用する時間の設定
-		result->calclerpValue_.InitCalcTime(1.5f);
-
-		// 塊を描画
-		result->owner_->sphere_->SetIsDraw(true);
-
-		// 文字の設定
-		for (int i = 0; i < 5; ++i)
-		{
-			// フォントレンダーのユニークポインタの作成
-			result->failureTexts_[i] = std::make_unique<FontRender>();
-
-			// MessageTextからテキストをセット、タイプをEnglishに設定
-			result->failureTexts_[i]->SetText(GetMessageText(i, MessageType::MessageScene::GameFailure));
-
-			// テキストの初期設定
-			result->failureTexts_[i]->SetPSC(
-				FAILER_FONT_TEXTS_POS,
-				0.7f,
-				Vector4::White
-			);
-		}
-
-
-		// 画像の表示
-		result->instructionButtonSprite_ = new UICanvas;
-		result->instructionIcon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
-		result->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(800.0f, 180.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
-		// ここからイージング設定
-		auto scaleAnimation = std::make_unique<UIColorAnimation>();
-		scaleAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 2.0f, EasingType::EaseInOut, LoopMode::PingPong);
-		result->instructionIcon_->SetUIAnimation(std::move(scaleAnimation));
-		result->instructionIcon_->PlayAnimation();
-
-
-		// テキストウィンドウの画像の設定
-		result->textWindowSprite_ = std::make_unique<SpriteRender>();
-		result->textWindowSprite_->Init("Assets/sprite/Result/textWindow.DDS", 256, 256);
-		result->textWindowSprite_->SetPSM(
-			Vector3(500.0f, 250.0f, 0.0f),
-			3.0f,
-			Vector4(1.0f, 1.0f, 1.0f, 1.0f)
-		);
-		result->textWindowSprite_->Update();
-
-		// 画像の更新
-		result->instructionButtonSprite_->Update();
-	}
-	void FailureResult::UpdateStep3(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep3(result);
-
-		// 塊を上下にふよふよさせる
-		{
-			result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
-			// リープ処理
-			//  初期位置を0.5とし0.0～1.0を何度も増減する、
-			const float lerpValue = (sinf(result->elapsedTime_) + 1.0f) * 0.5f;
-
-			Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
-			currentPos.Lerp(lerpValue, result->sphereResultGoalPos, result->sphereResultInitPos); // 移動先の座標を線形補完
-			result->owner_->sphere_->SetPosition(currentPos); // 移動先のポジションを設定
-			result->owner_->sphere_->Update();
-		}
-
-
-		// 指示画像の点滅
-		{
-			result->instructionButtonSprite_->Update();
-		}
-
-
-		// Jボタンを押したら、次の文への変更
-		{
-			if (result->owner_->inputDetection_->IsTriggerButtonA())
-			{
-				// 次の文への移行
-				result->currentSentenceIndex_++;
-				if (result->currentSentenceIndex_ > SENTENCE_COUNT_MAX)
-				{
-					result->currentSentenceIndex_ = SENTENCE_COUNT_MAX;// 文の最大数を固定
-					result->nextStep_ = FailureStep::Step4;	// 次のステップへ
-				}
-			}
-		}
-	}
-	void FailureResult::ExitStep3(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep3(result);
-
-		for (int i = 0; i < 5; ++i) { result->failureTexts_[i].reset(); } // テキストを削除
-
-		result->instructionIcon_->isDraw = false;
-		result->textWindowSprite_.reset();
-	}
-
-
-	void FailureResult::EnterStep4(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep4(result);
-
-		// リープで使用する時間の設定
-		result->calclerpValue_.InitCalcTime(FLIGHT_START_DELAY);
-		// リープさせるための座標を設定
-		result->SetUpToLerp(result->owner_->sphere_->GetPosition(), FAILER_SPHERE_LAST_POS);
-	}
-	void FailureResult::UpdateStep4(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep4(result);
-
-		//塊がカメラに向かって飛んでいく動き
-		{
-			const float lerpValue = result->calclerpValue_.CalcUpdate();
-
-			Vector3 spherePos = result->owner_->sphere_->GetPosition(); // 今の座標を取得
-			spherePos.Lerp(lerpValue, result->sphereResultInitPos, result->sphereResultGoalPos); // 線形補間
-			result->owner_->sphere_->SetPosition(spherePos); // 移動先のポジションを設定
-			result->owner_->sphere_->Update(); // 座標を更新
-		}
-
-		// 次のステップへの移行
-		{
-			Vector3 hoge = result->owner_->sphere_->GetPosition();
-			Vector3 deltaPos = result->sphereResultGoalPos - result->owner_->sphere_->GetPosition();
-			if (deltaPos.Length() <= 1.2f) {
-				result->nextStep_ = FailureStep::Step5;	// 次のステップへ
-			}
-		}
-
-	}
-	void FailureResult::ExitStep4(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep4(result);
-
-		// 塊関連のオブジェクト削除
-		if (result->owner_->sphere_) {
-			DeleteGO(result->owner_->sphere_);
-		}
-		if (result->owner_->sphereCamera_) {
-			DeleteGO(result->owner_->sphereCamera_);
-		}
-		if (result->owner_->sphereInputSystem_) {
-			DeleteGO(result->owner_->sphereInputSystem_);
-		}
-	}
-
-
-	void FailureResult::EnterStep5(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep5(result);
-
-		// カメラレンズが割れた画像
-		{
-			result->breakScreenSprite_ = new UICanvas;
-			auto* icon = result->breakScreenSprite_->CreateUI<UIIcon>();
-			icon->Initialize("Assets/sprite/Result/breakScreen.DDS", 1920.0f, 1080.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
-		}
-
-		// 「タイトル」へ画像
-		{
-			// 画像の初期設定
-			result->titleTransitionSprite_ = new UICanvas;
-			result->titleTransitionWindowIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
-			result->titleTransitionWindowIcon_->Initialize("Assets/sprite/Result/titleTransitionButton.DDS", 512.0f, 256.0f, Vector3(-100.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
-
-			// ここからイージング設定
-			auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-			scaleAnimation->SetParameter(Vector3(1.0f), Vector3(0.75f), 8.0f, EasingType::EaseInOut, LoopMode::PingPong);
-			result->titleTransitionSprite_->SetUIAnimation(std::move(scaleAnimation));
-			result->titleTransitionWindowIcon_->PlayAnimation();
-
-			auto colorAnimation = std::make_unique<UIColorAnimation>();
-			colorAnimation->SetParameter(Vector4(0.0f, 0.75f, 0.0, 1.0f), Vector4(0.0f, 1.0f, 0.0f, 1.0f), 8.0f, EasingType::EaseInOut, LoopMode::PingPong);
-			result->titleTransitionWindowIcon_->SetUIAnimation(std::move(colorAnimation));
-			result->titleTransitionWindowIcon_->PlayAnimation();
-
-			// Aボタン画像
-			result->buttonAIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
-			result->buttonAIcon_->Initialize("Assets/sprite/UI/Button_A.DDS", 100.0f, 100.0f, Vector3(270.0f, -250.0f, 0.0f), Vector3::One, Quaternion::Identity);
-
-			// 画像を更新
-			result->titleTransitionSprite_->Update();
-		}
-	}
-	void FailureResult::UpdateStep5(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep5(result);
-		// 画像更新
-		result->titleTransitionSprite_->Update();
-
-		if (result->owner_->inputDetection_->IsTriggerButtonA()) {
-			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME, fadeColorPreset::BLACK_COLOR_RGB); //フェード開始(フェードアウト・2秒・黒)
-			SoundManager::Get().StopBGM(true, SOUND_FADE_TIME); // BGM停止
-			result->nextStep_ = FailureStep::Step6;	// 次のステップへ
-		}
-	}
-	void FailureResult::ExitStep5(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep5(result);
-	}
-
-
-	void FailureResult::EnterStep6(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonEnterStep6(result);
-	}
-	void FailureResult::UpdateStep6(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonUpdateStep6(result);
-
-		// フェードが終わり次第タイトルシーンへ移行
-		if (!Fade::Get().IsPlay())
-		{
-			// 次の処理へ
-			result->owner_->isNextScene_ = true;
-		}
-	}
-	void FailureResult::ExitStep6(FailureResult* result)
-	{
-		// 共通処理呼び出し
-		Result::CommonExitStep6(result);
-	}
-
-
 	FailureResult::FailureResult(GameScene* owner)
 		: Result(owner)
 	{
@@ -1137,7 +940,7 @@ namespace _internal
 		currentState.enter(this);
 
 		// BGMの再生
-		SoundManager::Get().PlayBGM(enSoundKind_GameFailure,true);
+		SoundManager::Get().PlayBGM(enSoundKind_GameFailure, true);
 	}
 	void FailureResult::Update()
 	{
@@ -1177,6 +980,339 @@ namespace _internal
 				titleTransitionSprite_->Render(rc);
 			}
 		}
+	}
+
+
+
+	void FailureResult::EnterStep1(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep1(result);
+
+		// 背景用オブジェクトの作成・設定
+		{
+			result->blackOutObject_ = std::make_unique<ModelRender>();
+			result->blackOutObject_->Init("Assets/modelData/stage/result/blackOutObject_second.tkm");
+			result->blackOutObject_->SetPosition(BLACK_OBJECT_INIT_POS);
+			result->blackOutObject_->SetScale(BLACK_OBEJCT_SCALE);
+			result->blackOutObject_->Update();
+		}
+
+		// 塊の設定
+		{
+			result->owner_->sphere_->SetIsDraw(false);
+			result->owner_->sphere_->SetPosition(FAILER_SPHERE_MIN_POS);
+			result->owner_->sphere_->Update();
+		}
+
+		// オブジェクト非表示
+		SpacePartitioning::GetInstance()->OffRender();
+
+		// ディレクションンライトのパラメーター設定
+		g_sceneLight->SetDirectionLight(DIRECTION_LIGHT_NUM, DIRECTION_LIGHT_DIRECTION, DIRECTION_LIGHT_COLOR);
+
+		// スカイキューブを非アクティブ
+		result->owner_->skyCube_->Deactivate();
+	}
+	void FailureResult::UpdateStep1(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep1(result);
+
+
+		// ホワイトイン完了した場合
+		if (!Fade::Get().IsPlay())
+		{
+			result->isMoveBlackOutObject_ = true;
+			result->nextStep_ = FailureStep::Step2;
+		}
+	}
+	void FailureResult::ExitStep1(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep1(result);
+	}
+
+
+	void FailureResult::EnterStep2(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep2(result);
+
+		// リープで使用する時間の設定
+		result->calclerpValue_.InitCalcTime(LERP_TIME_STEP2);
+	}
+	void FailureResult::UpdateStep2(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep2(result);
+
+		// オブジェクトのリープ
+		if (result->blackOutObject_) {
+			Vector3 deltaPosition = BLACK_OBJECT_LAST_POS - result->blackOutObject_->GetPosition(); // 移動先と今の座標の差
+			if (deltaPosition.Length() >= LERP_VALUE_POS_STEP2)  // まだ移動させたい場合
+			{
+				const float lerpValue = result->calclerpValue_.CalcUpdate();
+
+				Vector3 currentPos = result->blackOutObject_->GetPosition(); // 今いる座標
+				currentPos.Lerp(lerpValue, BLACK_OBJECT_INIT_POS, BLACK_OBJECT_LAST_POS); // 移動先の座標を線形補完
+				result->blackOutObject_->SetPosition(currentPos); // 移動先のポジションを設定
+				result->blackOutObject_->Update();
+
+				return;
+			}
+			else
+			{
+				result->nextStep_ = FailureStep::Step3;
+			}
+		}
+	}
+	void FailureResult::ExitStep2(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep2(result);
+	}
+
+
+	void FailureResult::EnterStep3(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep3(result);
+
+		// リープ先の設定
+		result->SetUpToLerp(FAILER_SPHERE_MIN_POS, FAILER_SPHERE_MAX_POS);
+
+		// リープで使用する時間の設定
+		result->calclerpValue_.InitCalcTime(LERP_TIME_STEP3);
+
+		// 塊を描画
+		result->owner_->sphere_->SetIsDraw(true);
+
+		// 文字の設定
+		for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i)
+		{
+			// フォントレンダーのユニークポインタの作成
+			result->failureTexts_[i] = std::make_unique<FontRender>();
+
+			// MessageTextからテキストをセット、タイプをEnglishに設定
+			result->failureTexts_[i]->SetText(GetMessageText(i, MessageType::MessageScene::GameFailure));
+
+			// テキストの初期設定
+			result->failureTexts_[i]->SetPSC(
+				FAILER_FONT_TEXTS_POS,
+				FAILER_FONT_TEXTS_SCALE,
+				Vector4::White
+			);
+		}
+
+
+		// 画像の表示
+		result->instructionButtonSprite_ = new UICanvas;
+		result->instructionIcon_ = result->instructionButtonSprite_->CreateUI<UIIcon>();
+		result->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", INSTRACTION_SPRITE_SIZE, INSTRACTION_SPRITE_SIZE, INSTRACTION_SPRITE_POSITION, INSTRACTION_SPRITE_SCALE, Quaternion::Identity);
+		// ここからイージング設定
+		auto scaleAnimation = std::make_unique<UIColorAnimation>();
+		scaleAnimation->SetParameter(INSTRACTION_COLOR_ANIMATION_BEFORE, INSTRACTION_COLOR_ANIMATION_AFTER, INSTRACTION_COLOR_ANIMATION_SECOND, EasingType::EaseInOut, LoopMode::PingPong);
+		result->instructionIcon_->SetUIAnimation(std::move(scaleAnimation));
+		result->instructionIcon_->PlayAnimation();
+
+
+		// テキストウィンドウの画像の設定
+		result->textWindowSprite_ = std::make_unique<SpriteRender>();
+		result->textWindowSprite_->Init("Assets/sprite/Result/textWindow.DDS", TEXTWINDOW_SIZE_FAILURE, TEXTWINDOW_SIZE_FAILURE);
+		result->textWindowSprite_->SetPSM(
+			TEXTWINDOW_FAILURE_POS,
+			TEXTWINDOW_SCALE,
+			TEXTWINDOW_FAILURE_COLOR
+		);
+		result->textWindowSprite_->Update();
+
+		// 画像の更新
+		result->instructionButtonSprite_->Update();
+	}
+	void FailureResult::UpdateStep3(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep3(result);
+
+		// 塊を上下にふよふよさせる
+		{
+			result->elapsedTime_ += g_gameTime->GetFrameDeltaTime();
+			// リープ処理
+			//  初期位置を0.5とし0.0～1.0を何度も増減する、
+			const float lerpValue = (sinf(result->elapsedTime_) + LERP_CULC_ADD) * LERP_CULC_MULT;
+
+			Vector3 currentPos = result->owner_->sphere_->GetPosition(); // 今いる座標
+			currentPos.Lerp(lerpValue, result->sphereResultGoalPos, result->sphereResultInitPos); // 移動先の座標を線形補完
+			result->owner_->sphere_->SetPosition(currentPos); // 移動先のポジションを設定
+			result->owner_->sphere_->Update();
+		}
+
+
+		// 指示画像の点滅
+		{
+			result->instructionButtonSprite_->Update();
+		}
+
+
+		// Jボタンを押したら、次の文への変更
+		{
+			if (result->owner_->inputDetection_->IsTriggerButtonA())
+			{
+				// 次の文への移行
+				result->currentSentenceIndex_++;
+				if (result->currentSentenceIndex_ > SENTENCE_COUNT_MAX)
+				{
+					result->currentSentenceIndex_ = SENTENCE_COUNT_MAX;// 文の最大数を固定
+					result->nextStep_ = FailureStep::Step4;	// 次のステップへ
+				}
+			}
+		}
+	}
+	void FailureResult::ExitStep3(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep3(result);
+
+		for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i) { result->failureTexts_[i].reset(); } // テキストを削除
+
+		result->instructionIcon_->isDraw = false;
+		result->textWindowSprite_.reset();
+	}
+
+
+	void FailureResult::EnterStep4(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep4(result);
+
+		// リープで使用する時間の設定
+		result->calclerpValue_.InitCalcTime(SPHERE_FLIGHT_START_DELAY);
+		// リープさせるための座標を設定
+		result->SetUpToLerp(result->owner_->sphere_->GetPosition(), FAILER_SPHERE_LAST_POS);
+	}
+	void FailureResult::UpdateStep4(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep4(result);
+
+		//塊がカメラに向かって飛んでいく動き
+		{
+			const float lerpValue = result->calclerpValue_.CalcUpdate();
+
+			Vector3 spherePos = result->owner_->sphere_->GetPosition(); // 今の座標を取得
+			spherePos.Lerp(lerpValue, result->sphereResultInitPos, result->sphereResultGoalPos); // 線形補間
+			result->owner_->sphere_->SetPosition(spherePos); // 移動先のポジションを設定
+			result->owner_->sphere_->Update(); // 座標を更新
+		}
+
+		// 次のステップへの移行
+		{
+			Vector3 hoge = result->owner_->sphere_->GetPosition();
+			Vector3 deltaPos = result->sphereResultGoalPos - result->owner_->sphere_->GetPosition();
+			if (deltaPos.Length() <= DELTA_POS_DIFFERENCE) {
+				result->nextStep_ = FailureStep::Step5;	// 次のステップへ
+			}
+		}
+
+	}
+	void FailureResult::ExitStep4(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep4(result);
+
+		// 塊関連のオブジェクト削除
+		if (result->owner_->sphere_) {
+			DeleteGO(result->owner_->sphere_);
+		}
+		if (result->owner_->sphereCamera_) {
+			DeleteGO(result->owner_->sphereCamera_);
+		}
+		if (result->owner_->sphereInputSystem_) {
+			DeleteGO(result->owner_->sphereInputSystem_);
+		}
+	}
+
+
+	void FailureResult::EnterStep5(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep5(result);
+
+		// カメラレンズが割れた画像
+		{
+			result->breakScreenSprite_ = new UICanvas;
+			auto* icon = result->breakScreenSprite_->CreateUI<UIIcon>();
+			icon->Initialize("Assets/sprite/Result/breakScreen.DDS", BREAK_SPRITE_SIZE_WIDTH, BREAK_SPRITE_SIZE_HEIGHT, BREAK_SPRITE_POS, Vector3::One, Quaternion::Identity);
+		}
+
+		// 「タイトル」へ画像
+		{
+			// 画像の初期設定
+			result->titleTransitionSprite_ = new UICanvas;
+			result->titleTransitionWindowIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
+			result->titleTransitionWindowIcon_->Initialize("Assets/sprite/Result/titleTransitionButton.DDS", TITLE_TRANSITION_SPRITE_SIZE_WIDTH, TITLE_TRANSITION_SPRITE_SIZE_HEIGHT, TITLE_TRANSITION_SPRITE_POS, Vector3::One, Quaternion::Identity);
+
+			// ここからイージング設定
+			auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+			scaleAnimation->SetParameter(TITLE_TRANSITION_ANIMATION_SCALE_BEFORE, TITLE_TRANSITION_ANIMATION_SCALE_AFTER, TITLE_TRANSITION_ANIMATION_TIME, EasingType::EaseInOut, LoopMode::PingPong);
+			result->titleTransitionSprite_->SetUIAnimation(std::move(scaleAnimation));
+			result->titleTransitionWindowIcon_->PlayAnimation();
+
+			auto colorAnimation = std::make_unique<UIColorAnimation>();
+			colorAnimation->SetParameter(TITLE_TRANSITION_ANIMATION_COLOR_BEFORE, TITLE_TRANSITION_ANIMATION_COLOR_AFTER, TITLE_TRANSITION_ANIMATION_TIME, EasingType::EaseInOut, LoopMode::PingPong);
+			result->titleTransitionWindowIcon_->SetUIAnimation(std::move(colorAnimation));
+			result->titleTransitionWindowIcon_->PlayAnimation();
+
+			// Aボタン画像
+			result->buttonAIcon_ = result->titleTransitionSprite_->CreateUI<UIIcon>();
+			result->buttonAIcon_->Initialize("Assets/sprite/UI/Button_A.DDS", BUTTON_A_SPRITE_SIZE, BUTTON_A_SPRITE_SIZE, BUTTON_A_SPRITE_POS, Vector3::One, Quaternion::Identity);
+
+			// 画像を更新
+			result->titleTransitionSprite_->Update();
+		}
+	}
+	void FailureResult::UpdateStep5(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep5(result);
+		// 画像更新
+		result->titleTransitionSprite_->Update();
+
+		if (result->owner_->inputDetection_->IsTriggerButtonA()) {
+			Fade::Get().PlayFade(FadeMode::FadeOut, FADE_OUT_START_TIME, fadeColorPreset::BLACK_COLOR_RGB); //フェード開始(フェードアウト・2秒・黒)
+			SoundManager::Get().StopBGM(true, SOUND_FADE_TIME); // BGM停止
+			result->nextStep_ = FailureStep::Step6;	// 次のステップへ
+		}
+	}
+	void FailureResult::ExitStep5(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep5(result);
+	}
+
+
+	void FailureResult::EnterStep6(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonEnterStep6(result);
+	}
+	void FailureResult::UpdateStep6(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonUpdateStep6(result);
+
+		// フェードが終わり次第タイトルシーンへ移行
+		if (!Fade::Get().IsPlay())
+		{
+			// 次の処理へ
+			result->owner_->isNextScene_ = true;
+		}
+	}
+	void FailureResult::ExitStep6(FailureResult* result)
+	{
+		// 共通処理呼び出し
+		Result::CommonExitStep6(result);
 	}
 
 
@@ -1269,7 +1405,7 @@ namespace _internal
 	{
 		// 文字の設定
 		{
-			for (int i = 0; i < MAX_SENTENCE_NUM; ++i)
+			for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i)
 			{
 				// フォントレンダーのユニークポインタの作成
 				owner->texts_[i] = std::make_unique<FontRender>();
@@ -1280,7 +1416,7 @@ namespace _internal
 				// テキストの初期設定
 				owner->texts_[i]->SetPSC(
 					START_EVENT_TEXT_POS,
-					0.8f,
+					START_EVENT_TEXT_SCALE,
 					Vector4::White
 				);
 			}
@@ -1291,10 +1427,10 @@ namespace _internal
 			// テキストウィンドウの画像
 			owner->startEventTextWindow_ = new UICanvas;
 			owner->startEventTextWindowIcon_ = owner->startEventTextWindow_->CreateUI<UIIcon>();
-			owner->startEventTextWindowIcon_->Initialize("Assets/sprite/Result/textWindow.DDS", 1024.0f, 768.0f, Vector3(50.0f, 320.0f, 0.0f), Vector3::One, Quaternion::Identity);
+			owner->startEventTextWindowIcon_->Initialize("Assets/sprite/Result/textWindow.DDS", START_EVENT_SIZE_WIDTH, START_EVENT_SIZE_HEIGHT, START_EVENT_SCALE, Vector3::One, Quaternion::Identity);
 			// ここからイージング設定
 			auto colorWindowAnimation = std::make_unique<UIColorAnimation>();
-			colorWindowAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 1.5f, EasingType::EaseIn, LoopMode::Once);
+			colorWindowAnimation->SetParameter(START_EVENT_ANIMATION_COLOR_BEFORE, START_EVENT_ANIMATION_COLOR_AFTER, START_EVENT_SIZE_ANIMATION_TIME, EasingType::EaseIn, LoopMode::Once);
 			owner->startEventTextWindowIcon_->SetUIAnimation(std::move(colorWindowAnimation));
 			// animationの再生はテキスト読み終わった後に行う
 
@@ -1302,10 +1438,10 @@ namespace _internal
 			// 指示画像
 			owner->instructionButtonSprite_ = new UICanvas;
 			owner->instructionIcon_ = owner->instructionButtonSprite_->CreateUI<UIIcon>();
-			owner->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", 128, 128, Vector3(400.0f, 240.0f, 0.0f), Vector3(0.3f, 0.3f, 0.3f), Quaternion::Identity);
+			owner->instructionIcon_->Initialize("Assets/sprite/Result/instructionButton.DDS", INSTRACTION_SPRITE_SIZE, INSTRACTION_SPRITE_SIZE, START_EVENT_INSTRACTION_SPRITE_POSITION, INSTRACTION_SPRITE_SCALE, Quaternion::Identity);
 			// ここからイージング設定
 			auto colorButtonAnimation = std::make_unique<UIColorAnimation>();
-			colorButtonAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.5f, EasingType::EaseInOut, LoopMode::PingPong);
+			colorButtonAnimation->SetParameter(INSTRACTION_COLOR_ANIMATION_BEFORE, INSTRACTION_COLOR_ANIMATION_AFTER, START_EVENT_SIZE_ANIMATION_TIME, EasingType::EaseInOut, LoopMode::PingPong);
 			owner->instructionIcon_->SetUIAnimation(std::move(colorButtonAnimation));
 			owner->instructionIcon_->PlayAnimation();
 
@@ -1340,7 +1476,7 @@ namespace _internal
 	void StartEvent::ExitStep1(StartEvent* owner)
 	{
 		// テキストの破棄
-		for (int i = 0; i < MAX_SENTENCE_NUM; ++i) {
+		for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i) {
 			owner->texts_[i].reset();
 		}
 
@@ -1415,7 +1551,7 @@ GameScene::GameScene()
 {
 	// スタートイベントがないなら作成・開始
 	// 実行順番を下げることでUIが上に表示されるようにする
-	startEventObject_ = NewGO<StartEventObject>(1, "startEventObject");
+	startEventObject_ = NewGO<StartEventObject>(START_EVENT_PRIOLITY, "startEventObject");
 	startEventObject_->SetOwner(this);
 }
 GameScene::~GameScene()
@@ -1468,9 +1604,9 @@ GameScene::~GameScene()
 bool GameScene::Start()
 {
 	/* 必要なオブジェクトの作成 */
-	sphere_ = NewGO<Sphere>(0, "sphere"); // 塊
-	sphereCamera_ = NewGO<SphereCamera>(0, "sphereCamera"); // 塊のカメラ
-	sphereInputSystem_ = NewGO<SphereInputSystem>(0, "inputSystem"); // 操作用クラスの作成と操作する物の設定
+	sphere_ = NewGO<Sphere>(PRIOLITY_ZERO, "sphere"); // 塊
+	sphereCamera_ = NewGO<SphereCamera>(PRIOLITY_ZERO, "sphereCamera"); // 塊のカメラ
+	sphereInputSystem_ = NewGO<SphereInputSystem>(PRIOLITY_ZERO, "inputSystem"); // 操作用クラスの作成と操作する物の設定
 	inputDetection_ = new InputDetection; // 入力判定用クラス
 
 	/* アップデートの処理順番を設定 */
@@ -1491,8 +1627,8 @@ bool GameScene::Start()
 	SpacePartitioning::GetInstance()->UpdateStart();
 
 
-	g_sceneLight->SetDirectionLight(0, Vector3(0.5f, -1.0f, -1.0f), Vector3(0.5f));
-	g_sceneLight->SetAmbinet(Vector3(0.8f));
+	g_sceneLight->SetDirectionLight(DIRECTION_LIGHT_NOM, DIRECTION_LIGHT_DIR , DIRECTION_LIGHT_COL);
+	g_sceneLight->SetAmbinet(AMBIENT_LIGHT);
 
 	return true;
 }
@@ -1517,7 +1653,7 @@ void GameScene::Update()
 
 			// ゲーム開始時にしたい処理
 			{
-				canvas_ = NewGO<Canvas>(0, "canvas"); // キャンバス
+				canvas_ = NewGO<Canvas>(PRIOLITY_ZERO, "canvas"); // キャンバス
 				SoundManager::Get().PlayBGM(enSoundKind_InGame); // インゲーム中のBGM再生
 
 				sphereInputSystem_->SetTarget(sphere_);	// 操作ターゲットの指定
@@ -1553,7 +1689,7 @@ void GameScene::Update()
 
 
 		// リザルト処理に向かうかどうかの判定
-		if (GameTimer::Get().GetRemainingTime() > 0.05f) { break; }
+		if (GameTimer::Get().GetRemainingTime() > CHECK_GAME_TIME) { break; }
 		
 
 		/*************************** ここからリザルト処理 ********************************/
@@ -1600,18 +1736,16 @@ void GameScene::Update()
 	{
 		result_->Update();
 		// 結果画面が終了したらタイトルへ戻る
-		// 処理はResultクラスのCommonStep6にて行っている
 		break;
 	}
 	}
 
 	// スカイキューブをプレイヤー追従にする
-	// 例外でFindGOする
 	skyCube_ = FindGO<SkyCube>("skyCube");
 	if (skyCube_)
 	{
 		Vector3 skyCubePosition = sphere_->GetPosition();
-		skyCubePosition.y = 0.0f;
+		skyCubePosition.y = SKYCUBE_INIT_POS;
 		skyCube_->SetPosition(skyCubePosition);
 	}
 
@@ -1631,7 +1765,7 @@ bool GameScene::RequestID(uint32_t& id, float& waitTime)
 {
 	if (isNextScene_) {
 		id = TitleScene::ID();
-		waitTime = 5.0f;
+		waitTime = SCENE_TRANSITION_WAIT_TIME;
 		return true;
 	}
 	return false;
@@ -1640,17 +1774,17 @@ bool GameScene::RequestID(uint32_t& id, float& waitTime)
 
 void GameScene::CalculateFadeAlphaByTime()
 {
-	if (GameTimer::Get().GetRemainingTime() > 20.0f) { return; } // 残り時間が20秒切っていない場合は処理を返す
+	if (GameTimer::Get().GetRemainingTime() > CHECK_TWELVE_WHITE_OUT) { return; } // 残り時間が20秒切っていない場合は処理を返す
 
 	// 20秒から10秒までの処理
-	if (GameTimer::Get().GetRemainingTime() >= 10.0f)
+	if (GameTimer::Get().GetRemainingTime() >= CHECK_TEN_WHITE_OUT)
 	{
 		Fade::Get().PlayFade(FadeMode::FadeOut, FADE_START_TIME);
 		// 10秒でα値を0.3まであげたい
 	}
 
 	// 10秒からタイムアップまで
-	else if (GameTimer::Get().GetRemainingTime() <= 10.0f)
+	else if (GameTimer::Get().GetRemainingTime() <= CHECK_TEN_WHITE_OUT)
 	{
 		Fade::Get().PlayFade(FadeMode::FadeOut, FADE_START_TIME);
 		// 残り10秒でα値を1.0まで上げる

@@ -8,9 +8,20 @@
 
 namespace
 {
-	const float ALWAYS_SPEED = 400.0f;	// 固定移動速度
-	const float INITIAL_RADIUS = 15.0f;	// 初期半径
-	const float GOAL_RADIUS = 300.0f;	// 目標サイズ
+	/** 外部から与える力 */
+	constexpr float MIN_FORCE_LENGTH = 0.1f; // 加える力が一定以上か
+	constexpr float APPLY_FORCE = 0.8f;		 // 力を加える量
+
+	/** 動き */
+	constexpr float ALWAYS_SPEED = 400.0f;	// 固定移動速度
+	constexpr float MOVE_THRESHOLD = 0.0001f; // 移動しているか
+	constexpr uint8_t CULCULATE_ROTATION = 200; // 回転の計算
+
+	/** 初期化 */
+	constexpr float INIT_RIGIT_BODY_MASS = 0.0f; // 質量
+	constexpr float INITIAL_LEVEL_UP_NUM = 0.0f; // レベルアップに必要な個数の初期化
+	constexpr float INITIAL_RADIUS = 15.0f;	// 初期半径
+	constexpr float GOAL_RADIUS = 300.0f;	// 目標サイズ
 }
 
 
@@ -108,7 +119,7 @@ bool Sphere::Start()
 		//剛体のデータを生成・設定
 		RigidBodyInitData rbInfo;
 		rbInfo.collider = m_collider;
-		rbInfo.mass = 0.0f;
+		rbInfo.mass = INIT_RIGIT_BODY_MASS;
 
 		// 剛体クラスの生成・設定
 		m_rigidBody = new RigidBody();
@@ -118,8 +129,9 @@ bool Sphere::Start()
 		//剛体の位置を更新。
 		trans.setOrigin(btVector3(transform_.m_position.x, transform_.m_position.y + radius_, transform_.m_position.z));
 
-
+		// 属性を設定
 		m_rigidBody->GetBody()->setUserIndex(enCollisionAttr_Character);
+		// フラグ設定
 		m_rigidBody->GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 	}
 
@@ -157,13 +169,13 @@ void Sphere::Render(RenderContext& rc)
 	if (GetIsDraw())
 	{
 		sphereRender_.Draw(rc);
-
 	}
 }
 
 
 bool Sphere::CheakGoalSize()
 {
+	// 目標サイズかどうか
 	if (radius_ >= GOAL_RADIUS) {
 		return true;
 	}
@@ -181,9 +193,9 @@ void Sphere::Move()
 	moveSpeed_.y = moveDirection_.y * moveSpeedMultiply_;
 	moveSpeed_.z = moveDirection_.z * moveSpeedMultiply_;
 
-	if (addForce_.Length() > 0.1f) {
+	if (addForce_.Length() > MIN_FORCE_LENGTH) {
 		moveSpeed_ = addForce_;
-		addForce_ *= 0.8f;
+		addForce_ *= APPLY_FORCE;
 	}
 	else {
 		addForce_ = Vector3::Zero;
@@ -252,7 +264,7 @@ void Sphere::Rotation()
 	Vector3 move = transform_.m_position - beforePosition_;
 
 	// 移動が全くされていない場合、処理を返す
-	if (fabsf(move.x) < 0.001f && fabsf(move.z) < 0.001f) { return; }
+	if (fabsf(move.x) < MOVE_THRESHOLD && fabsf(move.z) < MOVE_THRESHOLD) { return; }
 
 	// 移動量を求める
 	float length = move.Length();
@@ -264,7 +276,7 @@ void Sphere::Rotation()
 	vertical_ = Cross(Vector3::AxisY, move);
 	// 外積ベクトルをもとに回転量を求める
 	Quaternion rot;
-	rot.SetRotationDeg(vertical_, length * rotationSpeed / 200);
+	rot.SetRotationDeg(vertical_, length * rotationSpeed / CULCULATE_ROTATION);
 
 	//求めたクォータニオンを乗算する
 	transform_.m_localRotation.Multiply(transform_.m_localRotation, rot);
@@ -280,20 +292,15 @@ void Sphere::SetParent(AttachableObject* attachableObject)
 {
 	// トランスフォームの親子関係を設定
 	attachableObject->GetTransform()->SetParent(&transform_);
-
-	// 上のコードをわかりやすくしたもの
-	//Transform* parentTransform = this->GetTransform(); // Sphereのトランスフォームを取得
-	//Transform* childTransform = attachableObject->GetTransform(); // AttachableObjectのトランスフォームを取得
-
-	//childTransform->SetParent(parentTransform);
 }
 
 
 void Sphere::UpdateLevelUp(const bool isInit)
 {
+	// 現在巻き込んだ数がレベルアップに必要な数を越えているか
 	if (currentLevelUpNum_ >= status_->GetLevelUpNum()) {
 
-		currentLevelUpNum_ = 0; // オブジェクトの取得数の初期化
+		currentLevelUpNum_ = INITIAL_LEVEL_UP_NUM; // オブジェクトの取得数の初期化
 
 		// ステータスセットアップ : レベルアップするかどうかのフラグ
 		const MasterSphereStatusParameter* parameter = ParameterManager::Get().FindParameter<MasterSphereStatusParameter>([&](const MasterSphereStatusParameter& parameter)

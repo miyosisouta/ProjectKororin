@@ -37,18 +37,18 @@ public:
 private:
 	SpriteRender gameTitleNameSprite_; //!< ゲームタイトル
 
-	Sphere* sphere_ = nullptr;					//!< 塊
-	TitleInputSyste* inputSystem_ = nullptr;	//!< タイトル操作
-	CalcLerpValue calcTime_;					//!< 時間計算
+	Sphere* sphere_ = nullptr; //!< 塊
+	TitleInputSyste* inputSystem_ = nullptr; //!< タイトル操作
+	CalcLerpValue calcTime_; //!< 時間計算
 
-	UICanvas* pressButtonCanvas_ = nullptr;		//!< ボタン画像
-	UICanvas* titleGameNameCanvas_ = nullptr;	//!< ゲーム名
-	UIIcon* icon_ = nullptr;					//!< ボタンアニメーション
+	UICanvas* pressButtonCanvas_ = nullptr; //!< ボタン画像
+	UICanvas* titleGameNameCanvas_ = nullptr; //!< ゲーム名
+	UIIcon* icon_ = nullptr; //!< ボタンアニメーション
 
-	bool isPlayAnimation = false;	//!< シーン切り替えの演出を再生する
-	float elapsedTime_ = 0.0f;		//!< 経過時間
+	bool isPlayAnimation = false; //!< シーン切り替えの演出を再生する
+	float elapsedTime_ = 0.0f; //!< 経過時間
 
 private:
-	bool isNextScene_ = false;		//!< 次のシーンに移るかのフラグ
+	bool isNextScene_ = false; //!< 次のシーンに移るかのフラグ
 };
 

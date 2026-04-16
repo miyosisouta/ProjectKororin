@@ -34,11 +34,11 @@ EffectHandle GameEffectManager::Play(const int kind, const Vector3& pos, const Q
 		return INVALID_EFFECT_HANDLE;
 	}
 	effect_ = NewGO<EffectEmitter>(0);
-	effect_->Init(kind);
-	effect_->SetPosition(pos);
-	effect_->SetRotation(rot);
-	effect_->SetScale(scal);
-	effect_->Play();
+	effect_->Init(kind); // ì«Ç›çûÇ›
+	effect_->SetPosition(pos); // ç¿ïWÇê›íË
+	effect_->SetRotation(rot); // âÒì]Çê›íË
+	effect_->SetScale(scal);   // ëÂÇ´Ç≥Çê›íË
+	effect_->Play(); // çƒê∂
 
 	EffectHandle handle = effectHandleCount_;
 	effectList_[handle] = effect_;

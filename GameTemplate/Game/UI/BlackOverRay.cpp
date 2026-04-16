@@ -6,9 +6,9 @@
 
 namespace
 {
-	const std::string FAILPATH = "BackGroundCircle.DDS";
-	const int PIXEL_SIZE = 128;
-	const Vector4 SPRITE_MULCOLOR = Vector4(1.0f, 1.0f, 1.0f, 0.35f);
+	const std::string FAILPATH = "BackGroundCircle.DDS"; //ファイルパス
+	const int PIXEL_SIZE = 128; // 画像サイズ
+	const Vector4 SPRITE_MULCOLOR = Vector4(1.0f, 1.0f, 1.0f, 0.35f); // 色
 }
 
 void BlackOverRay::RenderDarkOverlay(SpriteRender* spriteRender, Vector3 pos, Vector3 scale)

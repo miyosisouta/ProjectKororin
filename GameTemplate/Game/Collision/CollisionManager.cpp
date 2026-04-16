@@ -6,7 +6,17 @@
 #include "Core/LateStageObjectUpdateManager.h"
 #include "Core/InGameManager.h"
 
-/*********************************** 空間分割 ***************************************/
+namespace
+{
+	constexpr uint8_t START_INDEX = 0; // リストの始まり
+	constexpr uint8_t LAST_ELEMENT_OFFSET = 1; // 調べたいリストの最後のほうの調整
+	constexpr uint8_t START_ELEMENT_OFFSET = 1; // 調べたいリストの最初のほうの調整
+}
+
+
+/**=================================*/
+/** 空間分割						*/
+/**=================================*/
 
 void SplitSpace::Update()
 {
@@ -30,8 +40,10 @@ void SplitSpace::Update()
 void SplitSpace::ForEach(const AABBBox& aabb, const std::function<void(int, int)>& hitFunc)
 {
 	// 分割した空間の左下から見ていく
-	for (int x = 0; x < X_NUM_; ++x) {
-		for (int z = 0; z < Z_NUM_; ++z) {
+	for (int x = 0; x < X_NUM_; ++x) 
+	{
+		for (int z = 0; z < Z_NUM_; ++z) 
+		{
 			// 分割したAABBBoxの中心座標の設定
 			Vector3 centerPosition;
 			centerPosition.x = baseX_ + (x * worldSpaceSizeX_);
@@ -40,7 +52,8 @@ void SplitSpace::ForEach(const AABBBox& aabb, const std::function<void(int, int)
 
 			// 空間のAABB生成
 			AABBBox spaceAABB = AABBBox(centerPosition, Vector3(worldSpaceHalfSizeX_, 1.0f, worldSpaceHalfSizeZ_));
-			if (spaceAABB.IsHit(aabb)) {
+			if (spaceAABB.IsHit(aabb)) 
+			{
 				hitFunc(x, z);
 			}
 		}
@@ -49,8 +62,9 @@ void SplitSpace::ForEach(const AABBBox& aabb, const std::function<void(int, int)
 }
 
 
-/*********************************** CollisionHitManager ***************************************/
-
+/**=================================*/
+/** コリジョンヒットマネージャー	*/
+/**=================================*/
 
 CollisionHitManager* CollisionHitManager::instance_ = nullptr;
 
@@ -78,9 +92,9 @@ void CollisionHitManager::Update()
 	const uint32_t colSize = static_cast<uint32_t>(m_collisionInfoList.size());
 
 	// リストの中にあるデータの最後から2番目までをはかる : 最後の一つはペアを作れないため
-	for (uint32_t i = 0; i < colSize - 1; ++i)
+	for (uint32_t i = START_INDEX; i < colSize - LAST_ELEMENT_OFFSET; ++i)
 	{
-		for (uint32_t j = i + 1; j < colSize; ++j)
+		for (uint32_t j = i + START_ELEMENT_OFFSET; j < colSize; ++j)
 		{
 			// オブジェクト情報を格納
 			CollisionInfo* infoA = m_collisionInfoList[i];

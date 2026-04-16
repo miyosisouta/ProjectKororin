@@ -4,21 +4,29 @@
 
 namespace
 {
-	Vector3 INIT_POSITION = Vector3::Zero;							// 初期座標
-	Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 50.0f, 150.0f);	// 塊との距離
-	float TARGET_DISTANCE = 200.0f;									// ターゲットとの距離
-	float TARGET_HEIGHT = 50.0f;									// 塊との高さの差
-	float ZOOM_OUT_TIME = 2.0f;										// ズームアウトにかける時間
+	static const Vector3 INIT_POSITION = Vector3::Zero;							// 初期座標
+	static const Vector3 CAMERA_LEVEL_UP_OFFSET = Vector3(0.0f, 50.0f, 150.0f);	// 塊との距離
+	constexpr float INIT_POS_X = 0.0f;
+	constexpr float INIT_POS_Y = 0.0f;
+	constexpr float TARGET_DISTANCE = 200.0f;									// ターゲットとの距離
+	constexpr float TARGET_HEIGHT = 50.0f;									// 塊との高さの差
+	constexpr float ZOOM_OUT_TIME = 2.0f;										// ズームアウトにかける時間
+	constexpr float NEAR_CLIP = 1.0f;
+	constexpr float FAR_CLIP = 100000.0f;
+	constexpr float ROT_DEG_MULT = 2.0f;
+	constexpr float CAMERA_LOW_LIMIT = 0.2f;
+	constexpr float CAMERA_UPPOR_LIMIT = 0.9f;
+	constexpr float DELTA_POS_MIN = 0.01f;
 }
 
 bool SphereCamera::Start()
 {
 	// カメラの初期設定
-	transform_.m_localPosition = Vector3(0.0f, TARGET_HEIGHT, TARGET_DISTANCE);
+	transform_.m_localPosition = Vector3(INIT_POS_X, TARGET_HEIGHT, TARGET_DISTANCE);
 
 	//近平面・遠平面の設定
-	g_camera3D->SetNear(1.0f);
-	g_camera3D->SetFar(1000000.0f);
+	g_camera3D->SetNear(NEAR_CLIP);
+	g_camera3D->SetFar(FAR_CLIP);
 
 	// トランスフォームを更新
 	transform_.UpdateTransform();
@@ -53,13 +61,13 @@ void SphereCamera::Update()
 
 		// Y軸の回転
 		Quaternion qRot;
-		qRot.SetRotationDeg(Vector3::AxisY, 2.0f * x);
+		qRot.SetRotationDeg(Vector3::AxisY, ROT_DEG_MULT * x);
 		qRot.Apply(transform_.m_localPosition);
 		// X軸の回転
 		Vector3 axisX;
 		axisX.Cross(Vector3::AxisY, transform_.m_localPosition);
 		axisX.Normalize();
-		qRot.SetRotationDeg(axisX, 2.0f * y);
+		qRot.SetRotationDeg(axisX, ROT_DEG_MULT * y);
 		qRot.Apply(transform_.m_localPosition);
 
 	}
@@ -69,8 +77,8 @@ void SphereCamera::Update()
 	toPosDir.Normalize();
 
 	// カメラの回転の上限をチェック
-	if (toPosDir.y < -0.2f) { transform_.m_localPosition = toCameraPosOld; } // カメラが上向きすぎ
-	else if (toPosDir.y > 0.9f) { transform_.m_localPosition = toCameraPosOld; } // カメラが下向きすぎ
+	if (toPosDir.y < -CAMERA_LOW_LIMIT) { transform_.m_localPosition = toCameraPosOld; } // カメラが上向きすぎ
+	else if (toPosDir.y > CAMERA_UPPOR_LIMIT) { transform_.m_localPosition = toCameraPosOld; } // カメラが下向きすぎ
 
 	CalcZoomOut();
 
@@ -100,7 +108,7 @@ void SphereCamera::CalcZoomOut()
 	deltaPosition.Normalize(); // 正規化
 	deltaPosition.Length(); // 正規化
 
-	if (deltaPosition.y < 0.01f && deltaPosition.z < 0.01f)
+	if (deltaPosition.y < DELTA_POS_MIN && deltaPosition.z < DELTA_POS_MIN)
 	{
 		const float calcValue = calclerpValue_.CalcUpdate();
 		// nextPositionの設定がされたとき、処理がされる
@@ -120,11 +128,11 @@ bool ResultCamera::Start()
 {
 	Vector3 target = Vector3::Zero;
 
-	Vector3 pos = target + Vector3(0.0f, 0.0f, TARGET_DISTANCE);
+	Vector3 pos = target + Vector3(INIT_POS_X, INIT_POS_Y, TARGET_DISTANCE);
 
 	//近平面・遠平面の設定
-	g_camera3D->SetNear(1.0f);
-	g_camera3D->SetFar(1000000.0f);
+	g_camera3D->SetNear(NEAR_CLIP);
+	g_camera3D->SetFar(FAR_CLIP);
 
 	// カメラの注視点・視点の設定
 	g_camera3D->SetTarget(target);

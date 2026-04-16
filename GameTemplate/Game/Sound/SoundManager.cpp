@@ -7,8 +7,10 @@
 #include "SoundManager.h"
 
 namespace {
-	const constexpr float MIN_VOLUME = 0.01f;	// BGMの最小音量
-	const constexpr float MAX_VOLUME = 1.0f;	// BGMの最大音量
+	constexpr float MIN_VOLUME = 0.01f;	// BGMの最小音量
+	constexpr float MAX_VOLUME = 1.0f;	// BGMの最大音量
+	constexpr uint8_t MIN_SOUND_COUNT = 0;
+	constexpr float LISET_ELAPSED_TIME = 0.0f;
 }
 
 
@@ -21,7 +23,7 @@ SoundManager::SoundManager()
 	seList_.clear();
 
 	// サウンドの登録
-	for (int i = 0; i < ARRAYSIZE(soundInformation); ++i) {
+	for (int i = MIN_SOUND_COUNT; i < ARRAYSIZE(soundInformation); ++i) {
 		const auto& info = soundInformation[i];
 		g_soundEngine->ResistWaveFileBank(i, info.assetPath.c_str());
 	}
@@ -102,7 +104,7 @@ void SoundManager::PlayBGM(const int kind, bool isVolumeFadeIn, float fadeTime)
 		isVolumeFadeIn_ = true; // フェードインフラグを立てる
 		fadeTime_ = fadeTime; // フェードイン時間をセット
 		bgm_->SetVolume(MIN_VOLUME); // 最初は最低音量で再生開始
-		elapsedTime_ = 0.0f; // 経過時間リセット
+		elapsedTime_ = LISET_ELAPSED_TIME; // 経過時間リセット
 	}
 
 	bgm_->Play(true);	// BGMなのでループ再生する
@@ -120,7 +122,7 @@ void SoundManager::StopBGM(bool isVolumeFadeOut, float fadeTime)
 	if (isVolumeFadeOut) {
 		isVolumeFadeOut_ = true; // フェードアウトフラグを立てる
 		fadeTime_ = fadeTime; // フェードアウト時間をセット
-		elapsedTime_ = 0.0f; // 経過時間リセット
+		elapsedTime_ = LISET_ELAPSED_TIME; // 経過時間リセット
 		return;
 	}
 

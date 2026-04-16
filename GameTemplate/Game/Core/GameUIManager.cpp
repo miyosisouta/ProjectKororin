@@ -21,18 +21,18 @@ GameUIManager::GameUIManager()
 {
 	// リストの要素を削除
 	notifyList_.clear();
-
 }
-
 
 GameUIManager::~GameUIManager()
 {
+	// リストからすべての削除
 	ClearNotify();
 }
 
 
 void GameUIManager::Update()
 {
+	// すべての通知を更新
 	for (auto* notify : notifyList_)
 	{
 		// 型をNotifySphereSizeTextに変更

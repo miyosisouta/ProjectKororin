@@ -57,9 +57,9 @@ static SoundInformation soundInformation[enSoundKind_Max] =
 	SoundInformation("Assets/Audio/SE/RateStamp.wav"),		//!< スタンプ音
 
 	//BGM
-	SoundInformation("Assets/Audio/BGM/Title.wav"),
-	SoundInformation("Assets/Audio/BGM/InGame.wav"),
-	SoundInformation("Assets/Audio/BGM/GameClear_Excellent.wav"),
-	SoundInformation("Assets/Audio/BGM/GameFailure.wav"),
+	SoundInformation("Assets/Audio/BGM/Title.wav"), // タイトル
+	SoundInformation("Assets/Audio/BGM/InGame.wav"), // インゲーム
+	SoundInformation("Assets/Audio/BGM/GameClear_Excellent.wav"), // ゲームクリア
+	SoundInformation("Assets/Audio/BGM/GameFailure.wav"), // ゲームオーバー
 };
 

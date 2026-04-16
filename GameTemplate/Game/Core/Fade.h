@@ -4,7 +4,7 @@
  */
 #pragma once
 
- /* 現在のフェード状態 */
+ /** 現在のフェード状態 */
 enum class FadeMode
 {
 	FadeOut,        //!< 明るくなる
@@ -14,7 +14,7 @@ enum class FadeMode
 
 };
 
-/* 色の事前設定 */
+/** 色の事前設定 */
 namespace fadeColorPreset
 {
 	static const Vector4 WHITE_COLOR_INVISIBLE = Vector4(1.0f, 1.0f, 1.0f, 0.0f);		//!< 白色、透明
@@ -85,7 +85,9 @@ public:
 	inline FadeMode GetMode() { return mode_; }                         //!< 現在のモードを取得
 
 
-	/******* シングルトン用 **********/
+	/*==================================*/
+	/** シングルトン用					*/
+	/*==================================*/
 
 private:
 	static Fade* instance_; //!< インスタンス

@@ -7,12 +7,20 @@
 
 namespace {
 	// グリッドの分割数（Z方向、X方向）
-	static const int Z_NUM_ = 8;
-	static const int X_NUM_ = 8;
+	constexpr uint8_t Z_NUM_ = 8;
+	constexpr uint8_t X_NUM_ = 8;
 	// ベクターのメモリ確保用（再確保を防ぐための初期容量）
-	static const int SECURE_INITIAL_CAPACITY = 500;
+	constexpr uint8_t SECURE_INITIAL_CAPACITY = 500;
 	// ワールドの半径（中心から端までの距離）
-	const Vector3 WORLD_HALF_SIZE = Vector3(14000.0f, 0.0f, 5000.0f);
+	static const Vector3 WORLD_HALF_SIZE = Vector3(14000.0f, 0.0f, 5000.0f);
+	// 配列の最初
+	constexpr uint8_t MIN_ARRAY_SIZE = 1;
+	// 条件式
+	constexpr uint8_t CHECK_ZERO = 0;
+	// 優先度
+	constexpr uint8_t PRIOLITY_ZERO = 0;
+	// 半分にする
+	constexpr float HALF_SIZE = 2.0f;
 }
 
 SpacePartitioning* SpacePartitioning::instance = nullptr;
@@ -20,16 +28,16 @@ SpacePartitioning* SpacePartitioning::instance = nullptr;
 SpacePartitioning::SpacePartitioning()
 {
 	/* ステージ全体のサイズ（直径）を計算 */
-	worldSizeX_ = WORLD_HALF_SIZE.x * 2.0f;
-	worldSizeZ_ = WORLD_HALF_SIZE.z * 2.0f;
+	worldSizeX_ = WORLD_HALF_SIZE.x * HALF_SIZE;
+	worldSizeZ_ = WORLD_HALF_SIZE.z * HALF_SIZE;
 
 	/* 1個のグリッド空間（セル）のサイズを計算 */
 	worldSpaceSizeX_ = worldSizeX_ / static_cast<float>(X_NUM_);
 	worldSpaceSizeZ_ = worldSizeZ_ / static_cast<float>(Z_NUM_);
 
 	/* 1個の空間の半分のサイズ（中心位置計算用など） */
-	worldSpaceHalfSizeX_ = worldSpaceSizeX_ / 2.0f;
-	worldSpaceHalfSizeZ_ = worldSpaceSizeZ_ / 2.0f;
+	worldSpaceHalfSizeX_ = worldSpaceSizeX_ / HALF_SIZE;
+	worldSpaceHalfSizeZ_ = worldSpaceSizeZ_ / HALF_SIZE;
 
 	/**
 	 * グリッド座標計算の基準点。
@@ -60,18 +68,18 @@ SpacePartitioning::SpacePartitioning()
 	oldPosition_.z = z;
 
 	// 初期位置の周辺（3x3マス）にあるオブジェクトを生成リストに追加
-	for (int i = -1; i <= 1; i++) {
+	for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
 		int positionX = x + i;
 
 		// グリッド外の参照を防ぐ
-		if (positionX < 0) {
+		if (positionX < CHECK_ZERO) {
 			continue;
 		}
 
-		for (int j = -1; j <= 1; j++) {
+		for (int j = -MIN_ARRAY_SIZE; j <= MIN_ARRAY_SIZE; j++) {
 			int positionZ = z + j;
 
-			if (positionZ < 0) {
+			if (positionZ < CHECK_ZERO) {
 				continue;
 			}
 
@@ -178,7 +186,7 @@ void SpacePartitioning::AddCreateist(Cell& position)
 // 削除リストから1つ取り出し、ゲームオブジェクトを削除する
 void SpacePartitioning::DeleteObject()
 {
-	if (deleteObjectList_.size() == 0) {
+	if (deleteObjectList_.size() == CHECK_ZERO) {
 		return;
 	}
 	// リストの末尾から削除
@@ -189,14 +197,14 @@ void SpacePartitioning::DeleteObject()
 // 生成リストから1つ取り出し、ゲームオブジェクトを生成する
 void SpacePartitioning::CreateObject()
 {
-	if (createObjectList_.size() == 0) {
+	if (createObjectList_.size() == CHECK_ZERO) {
 		return;
 	}
 	// リストの末尾にあるIDを取得
 	int number = createObjectList_.back();
 
 	// ゲームオブジェクトの実体を生成
-	auto* attachableObject = NewGO<AttachableObject>(0, "AttachableObject");
+	auto* attachableObject = NewGO<AttachableObject>(PRIOLITY_ZERO, "AttachableObject");
 	attachableObject->Initialize(objectDataList_[number]);
 
 	// 管理用マップに登録
@@ -209,7 +217,7 @@ void SpacePartitioning::CreateObject()
 void SpacePartitioning::CreateStage()
 {
 	for (auto data : stageObjectData) {
-		auto* staticObject = NewGO<StaticObject>(0, "StaticObject");
+		auto* staticObject = NewGO<StaticObject>(PRIOLITY_ZERO, "StaticObject");
 		staticObject->Initialize(data);
 		stageObject.push_back(staticObject);
 	}
@@ -250,23 +258,23 @@ void SpacePartitioning::ListUpdate(int x, int z)
 	int moveZ = z - oldPosition_.z; // Z方向の移動量
 
 	// X方向に移動があった場合
-	if (moveX != 0) {
+	if (moveX != CHECK_ZERO) {
 		int newColX = x + moveX;          // 新しく視界に入る列（1マス先）
 		int oldColX = oldPosition_.x - moveX; // 視界から外れる列（後ろ）
 
 		// Z方向の幅（3マス分）に対して更新をかける
-		for (int i = -1; i <= 1; i++) {
+		for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
 			int targetZ = z + i;
 
 			// Z方向の範囲チェック
-			if (targetZ >= 0 && targetZ < Z_NUM_) {
+			if (targetZ >= CHECK_ZERO && targetZ < Z_NUM_) {
 				// 進行方向の新しい列を「生成」対象にする
-				if (newColX >= 0 && newColX < X_NUM_) {
+				if (newColX >= CHECK_ZERO && newColX < X_NUM_) {
 					Cell c = { newColX, targetZ };
 					AddCreateist(c);
 				}
 				// 通り過ぎた古い列を「削除」対象にする
-				if (oldColX >= 0 && oldColX < X_NUM_) {
+				if (oldColX >= CHECK_ZERO && oldColX < X_NUM_) {
 					Cell c = { oldColX, targetZ };
 					AddDeleteList(c);
 				}
@@ -274,23 +282,23 @@ void SpacePartitioning::ListUpdate(int x, int z)
 		}
 	}
 	// Z方向に移動があった場合
-	else if (moveZ != 0) {
+	else if (moveZ != CHECK_ZERO) {
 		int newColZ = z + moveZ;          // 新しく視界に入る行
 		int oldColZ = oldPosition_.z - moveZ; // 視界から外れる行
 
 		// X方向の幅（3マス分）に対して更新をかける
-		for (int i = -1; i <= 1; i++) {
+		for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
 			int targetX = x + i;
 
 			// X方向の範囲チェック
-			if (targetX >= 0 && targetX < X_NUM_) {
+			if (targetX >= CHECK_ZERO && targetX < X_NUM_) {
 				// 進行方向の新しい行を「生成」
-				if (newColZ >= 0 && newColZ < Z_NUM_) {
+				if (newColZ >= CHECK_ZERO && newColZ < Z_NUM_) {
 					Cell c = { newColZ, targetX };
 					AddCreateist(c);
 				}
 				// 通り過ぎた古い行を「削除」
-				if (oldColZ >= 0 && oldColZ < Z_NUM_) {
+				if (oldColZ >= CHECK_ZERO && oldColZ < Z_NUM_) {
 					Cell c = { oldColZ, targetX };
 					AddDeleteList(c);
 				}
@@ -307,7 +315,7 @@ void SpacePartitioning::ReleaseOwnership(AttachableObject* object)
 {
 	if (object == nullptr) return;
 
-	// 1. 【逆引き】ポインタが一致するID（キー）を探す
+	// 1. ポインタが一致するID（キー）を探す
 	int targetID = -1;
 	bool found = false;
 
@@ -347,7 +355,7 @@ void SpacePartitioning::ReleaseOwnership(AttachableObject* object)
 
 	// 3. グリッド配置データ(spacePartitioningList_)からの抹消
 	// IDを使って元のデータ(objectDataList_)を取得し、そこから配置場所(グリッド)を特定する
-	if (objectDataList_.count(targetID) > 0) {
+	if (objectDataList_.count(targetID) > CHECK_ZERO) {
 		ObjectData* data = objectDataList_[targetID];
 
 		// 元の座標からグリッド番号を計算
@@ -355,7 +363,7 @@ void SpacePartitioning::ReleaseOwnership(AttachableObject* object)
 		int z = static_cast<int>((data->position.z + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
 
 		// そのグリッドの管理からデータを消す
-		if (x >= 0 && x < X_NUM_ && z >= 0 && z < Z_NUM_) {
+		if (x >= CHECK_ZERO && x < X_NUM_ && z >= CHECK_ZERO && z < Z_NUM_) {
 			spacePartitioningList_[x][z].erase(targetID);
 		}
 	}

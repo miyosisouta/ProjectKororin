@@ -5,8 +5,8 @@
 #pragma once
 
 
-class Sphere; // 塊
-class StageObjectBase; // オブジェクト管理
+class Sphere;
+class StageObjectBase;
 class AABBBox;
 
 
@@ -87,11 +87,7 @@ public:
 		worldSpaceHalfSizeX_ = worldSpaceSizeX_ / 2.0f;
 		worldSpaceHalfSizeZ_ = worldSpaceSizeZ_ / 2.0f;
 
-		/**
-		 * グリッドの左上（または左下）の基準開始位置
-		 * worldSpaceHalfSizeX : 作ったAABBboxの中心地に座標を調整
-		 * ※ AABBの中心座標として扱いやすいように調整
-		 */
+		/* グリッドの左上の基準開始位置 */
 		baseX_ = -worldHalfSize_.x + worldSpaceHalfSizeX_;
 		baseZ_ = -worldHalfSize_.z + worldSpaceHalfSizeZ_;
 	}
@@ -105,10 +101,9 @@ public:
 
 
 
-/**
- * 当たり判定処理を一括で行うクラス
- * NOTE:シングルトンでインスタンスを一つにしてアクセスポイントを提供する
- */
+/*===========================================*/
+/* 当たり判定処理を一括で行うクラス			 */
+/*===========================================*/
 class CollisionHitManager
 {
 private:
@@ -125,7 +120,7 @@ private:
 
 
 private:
-	// 空間配列用変数 : Sphereがどの空間にいるかを保存する変数
+	/* 空間配列用変数 : Sphereがどの空間にいるかを保存する変数 */ 
 	int sphereGridX_ = 0;
 	int sphereGridZ_ = 0;
 
@@ -143,7 +138,6 @@ public:
 
 public:
 	/** 判定処理をしたいオブジェクトを登録 */
-	//void RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, CollisionObject* collision);
 	void RegisterCollisionObject(GameObjectType::Enum type, IGameObject* object, ICollision* collision);
 	void UnregisterCollisionObject(IGameObject* object);
 
@@ -154,10 +148,7 @@ private:
 
 
 private:
-	/**
-	 * 指定したクラスを取得する
-	 * NOTE: 指定したクラスが存在しない場合はnullptrを返す
-	 */
+	/** 指定したクラスを取得する */
 	template <typename T>
 	T* GetTargetObject(CollisionPair& pair, const GameObjectType::Enum targetType)
 	{
