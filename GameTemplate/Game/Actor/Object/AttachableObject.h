@@ -57,8 +57,8 @@ public:
 
 
 private:
-	bool isPlayedSE_ = false;				// SEをならしたかフラグ(初期はfalse)
-	bool isVisibleAttachedObject_ = false;	// くっついたオブジェクトの表示
+	bool isPlayedSE_ = false; //!< SEをならしたかフラグ
+	bool isVisibleAttachedObject_ = false; //!< くっついたオブジェクトの表示
 
 };
 

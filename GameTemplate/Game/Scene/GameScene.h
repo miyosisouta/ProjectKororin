@@ -86,9 +86,9 @@ namespace _internal
 		UIIcon* titleTransitionWindowIcon_ = nullptr;		//!< タイトルへウィンドウ
 		UIIcon* buttonAIcon_ = nullptr;						//!< Aボタン
 
-		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;					//!< Aボタンの画像
-		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;				//!< テキストウィンドウの画像
-		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;					//!< 失敗時の背景用オブジェクト
+		std::unique_ptr<SpriteRender> buttonSprite_ = nullptr;		//!< Aボタンの画像
+		std::unique_ptr<SpriteRender> textWindowSprite_ = nullptr;	//!< テキストウィンドウの画像
+		std::unique_ptr<ModelRender> blackOutObject_ = nullptr;		//!< 失敗時の背景用オブジェクト
 
 
 		Vector3 sphereResultGoalPos = Vector3::Zero; //!< リザルト時の塊が移動する座標を格納
@@ -97,10 +97,10 @@ namespace _internal
 		bool isResultTextRender_ = false;	//!< リザルトテキストを表示するか
 		bool isSphereMoveUp_ = true;		//!< リザルト時塊を上に動かすかどうかのフラグ
 		bool isGoNextText_ = true;			//!< 次のテキストを映してよいか
-		uint8_t currentSentenceIndex_ = 0;	//!< 文の数
-		int goalMinuteTime_ = 0.0f;			//!< クリアタイム : 分
-		int goalSecondTime_ = 0.0f;			//!< クリアタイム : 秒
-		float elapsedTime_ = 0.0f;		//!< 経過時間
+		uint8_t currentSentenceIndex_ = 0; //!< 文の数
+		int goalMinuteTime_ = 0.0f;	//!< クリアタイム : 分
+		int goalSecondTime_ = 0.0f;	//!< クリアタイム : 秒
+		float elapsedTime_ = 0.0f; //!< 経過時間
 
 
 	public:
@@ -221,30 +221,30 @@ namespace _internal
 
 
 	private:
-		ResultInformation information_;					//!< リザルト時に必要な情報を持つ構造体
-		std::array<State, ClearStep::Max> stepList_;	//!< クリア時の処理の流れ
+		ResultInformation information_; //!< リザルト時に必要な情報を持つ構造体
+		std::array<State, ClearStep::Max> stepList_; //!< クリア時の処理の流れ
 
-		ClearStep::Enum currentStep_ = ClearStep::Step1;			//!< 現在のステップ
-		ClearStep::Enum nextStep_ = ClearStep::Invalid;				//!< 次のステップ
+		ClearStep::Enum currentStep_ = ClearStep::Step1; //!< 現在のステップ
+		ClearStep::Enum nextStep_ = ClearStep::Invalid; //!< 次のステップ
 
-		UICanvas* scoreWindow_ = nullptr;			//!< スコア表示時の背景画像
-		UICanvas* goodRatingStamp_ = nullptr;		//!< 最高評価スタンプの画像
-		UICanvas* normalRatingStamp_ = nullptr;		//!< 通常評価スタンプの画像
-		UIIcon* scoreWindowIcon_ = nullptr;			//!< スコア表示時の背景画像のアイコン
-		UIIcon* goodRatingStampIcon_ = nullptr;		//!< 最高評価スタンプの画像のアイコン
-		UIIcon* normalRatingStampIcon_ = nullptr;	//!< 通常評価スタンプの画像のアイコン
+		UICanvas* scoreWindow_ = nullptr; //!< スコア表示時の背景画像
+		UICanvas* goodRatingStamp_ = nullptr; //!< 最高評価スタンプの画像
+		UICanvas* normalRatingStamp_ = nullptr; //!< 通常評価スタンプの画像
+		UIIcon* scoreWindowIcon_ = nullptr; //!< スコア表示時の背景画像のアイコン
+		UIIcon* goodRatingStampIcon_ = nullptr; //!< 最高評価スタンプの画像のアイコン
+		UIIcon* normalRatingStampIcon_ = nullptr; //!< 通常評価スタンプの画像のアイコン
 
 
-		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr;			//!< 「大きさ」の表示
-		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr;			//!< 「経過時間」の表示
-		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr;	//!< 「モノ」の表示
-		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr;			//!< 塊の大きさのテキスト
-		std::unique_ptr<FontRender> goalTimeText_ = nullptr;					//!< 塊の目標サイズ達成時の時間のテキスト
-		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr;		//!< 吸着したオブジェクトの個数のテキスト
-		std::unique_ptr<FontRender> clearTexts_[5];								//!< 成功時のテキスト
+		std::unique_ptr<FontRender> resultGuidanceSizeText_ = nullptr; //!< 「大きさ」の表示
+		std::unique_ptr<FontRender> resultGuidanceGoalTime_ = nullptr; //!< 「経過時間」の表示
+		std::unique_ptr<FontRender> resultGuidanceAttachCountText_ = nullptr; //!< 「モノ」の表示
+		std::unique_ptr<FontRender> resultSphereSizeText_ = nullptr; //!< 塊の大きさのテキスト
+		std::unique_ptr<FontRender> goalTimeText_ = nullptr; //!< 塊の目標サイズ達成時の時間のテキスト
+		std::unique_ptr<FontRender> attachableObjectCountText_ = nullptr; //!< 吸着したオブジェクトの個数のテキスト
+		std::unique_ptr<FontRender> clearTexts_[5]; //!< 成功時のテキスト
 
-		uint8_t scoreDrawStep_ = 1;
-		uint8_t scaleRate_ = 0;
+		uint8_t scoreDrawStep_ = 1; //!< スコア描画ステップ
+		uint8_t scaleRate_ = 0; //!< スコアレート
 	};
 
 
@@ -327,13 +327,13 @@ namespace _internal
 
 
 	private:
-		std::array<State, FailureStep::Max> stepList_;	//!< クリア時の処理の流れ
+		std::array<State, FailureStep::Max> stepList_; //!< クリア時の処理の流れ
 
-		FailureStep::Enum currentStep_ = FailureStep::Step1;	//!< 現在のステップ
-		FailureStep::Enum nextStep_ = FailureStep::Invalid;		//!< 次のステップ
+		FailureStep::Enum currentStep_ = FailureStep::Step1; //!< 現在のステップ
+		FailureStep::Enum nextStep_ = FailureStep::Invalid; //!< 次のステップ
 
-		std::unique_ptr<FontRender> failureTexts_[5];			//!< 失敗時のテキスト
-		std::unique_ptr<FontRender> buttonText_ = nullptr;		//!< ボタンをおしてね！のテキスト
+		std::unique_ptr<FontRender> failureTexts_[5]; //!< 失敗時のテキスト
+		std::unique_ptr<FontRender> buttonText_ = nullptr; //!< ボタンをおしてね！のテキスト
 	};
 
 
@@ -366,15 +366,15 @@ namespace _internal
 
 	private: // スタートイベント用UI
 
-		UICanvas* startEventTextWindow_ = nullptr;		//!< スタートイベント用テキストウィンドウ
-		UICanvas* instructionButtonSprite_ = nullptr;	//!< 指示ボタンの画像
-		UIIcon* startEventTextWindowIcon_ = nullptr;	//!< スタートイベント用テキストウィンドウアイコン
-		UIIcon* instructionIcon_ = nullptr;				//!< 指示ボタンアイコン
-		std::unique_ptr<FontRender> texts_[5];			//!< ゲームスタート時のテキスト
+		UICanvas* startEventTextWindow_ = nullptr; //!< スタートイベント用テキストウィンドウ
+		UICanvas* instructionButtonSprite_ = nullptr; //!< 指示ボタンの画像
+		UIIcon* startEventTextWindowIcon_ = nullptr; //!< スタートイベント用テキストウィンドウアイコン
+		UIIcon* instructionIcon_ = nullptr; //!< 指示ボタンアイコン
+		std::unique_ptr<FontRender> texts_[5]; //!< ゲームスタート時のテキスト
 
 
 	private: 
-		std::array < State, StartEventStep::Max > startEventStepList_;	//!< インゲームスタート時に発生するイベントの処理ステップ
+		std::array < State, StartEventStep::Max > startEventStepList_; //!< インゲームスタート時に発生するイベントの処理ステップ
 		StartEventStep::Enum currentStep_ = StartEventStep::Step1; //!< 現在のステップ
 		StartEventStep::Enum nextStep_ = StartEventStep::Invalid; //!< 次のステップ
 		GameScene* owner_; //!< ゲームシーン

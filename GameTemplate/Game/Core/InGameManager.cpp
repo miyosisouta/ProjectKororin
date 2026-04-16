@@ -9,6 +9,19 @@
 #include "Effect/GameEffectManager.h"
 
 
+namespace
+{
+	constexpr float INIT_KNOCK_BACK = 0.0f; // 初期ノックバック量
+	constexpr float ADJUSTMENT_HEIGHT = 0.0f; // 高さの調整
+	constexpr float ADJUSTMENT_EFFECT_POS = 2.0f; // 座標の調整
+	constexpr float ADJUSTMENT_EFFECT_SCALE = 5.0f; // 大きさの調整
+	constexpr uint8_t ADJUSTMENT_KNOCK_BACK = 1; // ノックバック量の調整
+	constexpr float ADJUSTMENT_KNOCK_BACK_TIME = 0.8f; // ノックバックする時間の調整
+	constexpr float ADJUSTMENT_MATRIX_VALUE = 1.0f; // 行列の調整
+	constexpr float CHECK_OBJECT_SIZE = 0.0f; // オブジェクトのサイズ確認
+}
+
+
 void InGameUpdateObject::Update()
 {
 	// 更新処理
@@ -66,10 +79,12 @@ void InGameManager::Update()
 void ::InGameManager::LateUpdate()
 {
 	// 通知が入ったら実行される
-	for (auto& notify : notifyList_) { // Listの中から通知を一つずつ実行
+	// Listの中から通知を一つずつ実行
+	for (auto& notify : notifyList_) { 
 		switch (notify->type)
 		{
-		case NotifyType::CollisionHit: // 通知の種類がCollisionHitだった場合
+		// 通知の種類がCollisionHitだった場合
+		case NotifyType::CollisionHit: 
 		{
 			NotifyCollisionHit* hitNotify = static_cast<NotifyCollisionHit*>(notify);
 
@@ -84,7 +99,7 @@ void ::InGameManager::LateUpdate()
 			{
 				// レベルに達していないので飛ばす
 				Vector3 vec = sphere->GetTransform()->m_position - attachableObject->GetTransform()->m_position;
-				vec.y = 0.0f;
+				vec.y = ADJUSTMENT_HEIGHT;
 				vec.Normalize();
 
 
@@ -92,29 +107,31 @@ void ::InGameManager::LateUpdate()
 				{
 					// 塊の位置更新
 					sphere->GetTransform()->UpdateTransform();
-					auto spherePos = sphere->GetTransform();
-					auto objectPos = attachableObject->GetTransform();
-					auto effectPos = (spherePos->m_position + objectPos->m_position) / 2.0f;	// 座標
-					Quaternion effectRot = Quaternion::Identity;								// 回転
-					Vector3 effectScale = Vector3::One * 5.0f;									// 大きさ
-					GameEffectManager::Get().Play(enEffectKind_Hit_Reject, effectPos, effectRot, effectScale);	// 再生
+					auto spherePos = sphere->GetTransform(); // 塊の座標
+					auto objectPos = attachableObject->GetTransform(); // オブジェクトの座標
+					auto effectPos = (spherePos->m_position + objectPos->m_position) / ADJUSTMENT_EFFECT_POS;	// エフェクトの座標
+					Quaternion effectRot = Quaternion::Identity; // エフェクトの回転
+					Vector3 effectScale = Vector3::One * ADJUSTMENT_EFFECT_SCALE; // エフェクトの大きさ
+					GameEffectManager::Get().Play(enEffectKind_Hit_Reject, effectPos, effectRot, effectScale);	// エフェクトを再生
 				}
 
 				// ノックバックの処理
-				float bouncePower = 0.0f;
+				float bouncePower = INIT_KNOCK_BACK;
 				{
 					// はじけとぶ強さ
 					const auto* param = ParameterManager::Get().GetParameter<MasterInGameParameter>();
-					int objectSize = attachableObject->GetObjectSize();
-					const int bouncePowerSize = ARRAYSIZE(param->BouncePower);
+					int objectSize = attachableObject->GetObjectSize(); // 当たったオブジェクトのサイズを取得
+					const int bouncePowerSize = ARRAYSIZE(param->BouncePower); // 配列数
+					
+					// オブジェクトのサイズが足りていなければ
 					if (objectSize >= bouncePowerSize) {
-						objectSize = bouncePowerSize - 1;
+						objectSize = bouncePowerSize - ADJUSTMENT_KNOCK_BACK;
 					}
 					bouncePower = param->BouncePower[objectSize];
 
 					// コントローラー振動
 					const float vibrationPower = objectSize / static_cast<float>(bouncePowerSize);				// 強さ
-					const float vibrationDurationSec = objectSize / static_cast<float>(bouncePowerSize) * 0.8f;	// 長さ
+					const float vibrationDurationSec = objectSize / static_cast<float>(bouncePowerSize) * ADJUSTMENT_KNOCK_BACK_TIME;	// 長さ
 					g_pad[0]->SetVibration(vibrationDurationSec, vibrationPower);
 				}
 				sphere->AddForce(vec * bouncePower); // 加える力の計算
@@ -131,18 +148,19 @@ void ::InGameManager::LateUpdate()
 			// pairが引っ付いたとき一度だけSEを流す
 			if (!attachableObject->IsPlayedSE())
 			{
+				// オブジェクトのサイズに応じて鳴らすSEを変更
 				switch (attachableObject->GetAttachSoundNum())
 				{
-				case 0:
+				case enSoundKind::enSoundKind_Attach_Tiny:
 					SoundManager::Get().PlaySE(enSoundKind_Attach_Tiny);
 					break;
-				case 1:
+				case enSoundKind::enSoundKind_Attach_Small:
 					SoundManager::Get().PlaySE(enSoundKind_Attach_Small);
 					break;
-				case 2:
+				case enSoundKind::enSoundKind_Attach_Medium:
 					SoundManager::Get().PlaySE(enSoundKind_Attach_Medium);
 					break;
-				case 3:
+				case enSoundKind::enSoundKind_Attach_Large:
 					SoundManager::Get().PlaySE(enSoundKind_Attach_Large);
 					break;
 				default:
@@ -157,6 +175,7 @@ void ::InGameManager::LateUpdate()
 			sphere->AddCurrentLevelUpNum();							// 引っ付いたオブジェクトの数を増加
 			sphere->AddTotalNum();									// 引っ付いたオブジェクトの合計の数を増加
 			sphere->GrowByRadius(attachableObject->GetGrowAmount());// オブジェクトの半径を増加・移動速度の制限
+			
 			// 衝突した瞬間、即座に「空間管理」から除外する（これで削除されなくなる！）
 			if (SpacePartitioning::GetInstance()) {
 				SpacePartitioning::GetInstance()->ReleaseOwnership(attachableObject);
@@ -191,9 +210,9 @@ void ::InGameManager::LateUpdate()
 
 			Vector3& localPos = attachableObject->GetTransform()->m_localPosition;		// オブジェクトのローカル座標を取得
 			Quaternion& localRot = attachableObject->GetTransform()->m_localRotation;	// オブジェクトのローカル回転を取得
-			localPos.x = computeMatrix.m[3][0] * 1.0f;
-			localPos.y = computeMatrix.m[3][1] * 1.0f;
-			localPos.z = computeMatrix.m[3][2] * 1.0f;
+			localPos.x = computeMatrix.m[3][0] * ADJUSTMENT_MATRIX_VALUE;
+			localPos.y = computeMatrix.m[3][1] * ADJUSTMENT_MATRIX_VALUE;
+			localPos.z = computeMatrix.m[3][2] * ADJUSTMENT_MATRIX_VALUE;
 
 			localPos.Normalize();					// 正規化
 			localPos.Scale(sphereSize);				// 大きさを設定
@@ -236,7 +255,7 @@ void InGameManager::Notify(INotify* notify)
 bool InGameManager::CanAttach(AttachableObject& target, Sphere& sphere)
 {
 	// 吸着可能オブジェクトかどうかの判定
-	if (target.GetObjectSize() == 0)
+	if (target.GetObjectSize() == CHECK_OBJECT_SIZE)
 	{
 		return true;
 	}

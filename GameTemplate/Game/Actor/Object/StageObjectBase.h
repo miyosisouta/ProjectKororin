@@ -7,18 +7,18 @@
 
 struct ObjectData
 {
-	std::string	assetName = "";						// アセットの名前
-	Vector3		position = Vector3::Zero;			// 座標
-	Quaternion	rotation = Quaternion::Identity;	// 回転
-	Vector3		scale = Vector3::One;				// 大きさ
-	int			attachValue = 0;					// オブジェクトタイプ
-	int			size = 0;							// オブジェクトの吸着可能サイズレベル
-	uint8_t		grouthAmount = 0;					// 塊のサイズの増加量
-	Vector3		colliderPivot = Vector3::Zero;		// コライダーの起点の座標
-	Vector3		colliderSize = Vector3::Zero;		// コライダーの大きさ
-	float		uiObjectScal = 0.0f;				// UIとして表示する際のオブジェクトの大きさの倍率
-	int			soundNum = 0;						// SEの設定番号
-	int			ID = 0;								// 識別用ID
+	std::string	assetName = "";						//!< アセットの名前
+	Vector3		position = Vector3::Zero;			//!< 座標
+	Quaternion	rotation = Quaternion::Identity;	//!< 回転
+	Vector3		scale = Vector3::One;				//!< 大きさ
+	int			attachValue = 0;					//!< オブジェクトタイプ
+	int			size = 0;							//!< オブジェクトの吸着可能サイズレベル
+	uint8_t		grouthAmount = 0;					//!< 塊のサイズの増加量
+	Vector3		colliderPivot = Vector3::Zero;		//!< コライダーの起点の座標
+	Vector3		colliderSize = Vector3::Zero;		//!< コライダーの大きさ
+	float		uiObjectScal = 0.0f;				//!< UIとして表示する際のオブジェクトの大きさの倍率
+	int			soundNum = 0;						//!< SEの設定番号
+	int			ID = 0;								//!< 識別用ID
 };
 
 class StageObjectBase : public Actor
@@ -32,7 +32,7 @@ protected:
 	int grouthAmount_;			//!< 塊のサイズの増加量
 	float UIDisplayscale_;		//!< UIとして表示するときのオブジェクトの大きさの倍率
 	int	soundNum_;				//!< 効果音の番号
-	int	ID_ = 0;					//!< 識別用ID
+	int	ID_ = 0;				//!< 識別用ID
 
 
 	PhysicsStaticObject* physicsStaticObject_ = nullptr; //!< 静的な当たり判定(物理的に当たったということをしたい用)

@@ -9,32 +9,21 @@
 class AABBBox
 {
 private:
-	Vector3 min_ = Vector3::Zero; // AABBの最小座標
-	Vector3 max_ = Vector3::Zero; // AABBの最大座標
+	Vector3 min_ = Vector3::Zero; //!< AABBの最小座標
+	Vector3 max_ = Vector3::Zero; //!< AABBの最大座標
 
 public:
-	/**
-	 * 1. 空のAABBを作成するデフォルトコンストラクタ
-	 */
+	/** 空のAABBを作成するデフォルトコンストラクタ */
 	AABBBox() {}
 
-	/**
-	 * 2. 中心座標とサイズ（半幅/半高/半奥行き）を渡してAABBを作成する
-	 * @param center 中心座標
-	 * @param size_half 各軸の長さの半分 (例: {幅/2, 高さ/2, 奥行き/2})
-	 */
+	/** 中心座標とサイズ（半幅/半高/半奥行き）を渡してAABBを作成する */
 	AABBBox(const Vector3& center, const Vector3& size_half)
 	{
 		min_ = center - size_half;
 		max_ = center + size_half;
 	}
 
-	/**
-	 * 3. 中心座標と半径を渡して球体を内包する最小のAABBを作成する
-	 * この場合、size_halfは {radius, radius, radius} となる
-	 * @param center 球の中心座標
-	 * @param radius 球の半径
-	 */
+	/** 中心座標と半径を渡して球体を内包する最小のAABBを作成する */
 	AABBBox(const Vector3& center, float radius)
 	{
 		Vector3 r_vec = Vector3(radius);
@@ -42,22 +31,15 @@ public:
 		max_ = center + r_vec;
 	}
 
-	// -----------------------------------------------------------------
-	// 当たり判定関数
-	// -----------------------------------------------------------------
+	/*=========================================*/
+	/* 当たり判定用関数 */
+	/*=========================================*/
 
-	/**
-	 * 4. 引数で渡されたAABBとこのAABBが衝突しているかを判定する
-	 * AABB同士の衝突判定は、各軸(x, y, z)で重なりがあるかをチェックする
-	 * @param other 比較対象のAABB
-	 * @return 衝突していれば true
-	 */
+	/** 引数で渡されたAABBとこのAABBが衝突しているかを判定する */
 	bool IsHit(const AABBBox& other) const
 	{
 		if (min_.x > other.max_.x) return false;
 		if (max_.x < other.min_.x) return false;
-		//if (min_.y > other.max_.y) return false;
-		//if (max_.y < other.min_.y) return false;
 		if (min_.z > other.max_.z) return false;
 		if (max_.z < other.min_.z) return false;
 		return true;
@@ -70,8 +52,8 @@ struct CollisionType
 {
 	enum Enum
 	{
-		Sphere,
-		Box
+		Sphere,	//!< 球
+		Box		//!< 箱
 	};
 };
 
@@ -157,6 +139,7 @@ public:
 	bool IsHit(ICollision* other) override;
 
 public:
+	/* 大きさを取得 */
 	Vector3 GetSize() const { return size_; }
 };
 

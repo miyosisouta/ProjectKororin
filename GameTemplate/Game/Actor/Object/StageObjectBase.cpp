@@ -6,8 +6,10 @@
 
 namespace
 {
-	const float COLLISION_POSITIONADJUSTMENT = 35.0f;	// コリジョンの起点の座標を調整する
-	const float COLLISION_CORRECTION = 20.0f;			// コリジョンの大きさを調整する
+	constexpr float COLLISION_POSITIONADJUSTMENT = 35.0f;	// コリジョンの起点の座標を調整する
+	constexpr float COLLISION_CORRECTION = 20.0f;			// コリジョンの大きさを調整する
+	constexpr float ADJUSTMENT_VALUE = 1.0f;				// コリジョンの調整値
+	constexpr float MIN_VALID_SIZE = 0.0f;					// 最小値
 }
 
 
@@ -67,22 +69,24 @@ void StageObjectBase::Initialize(ObjectData* objectData)
 		colliderSize_ = objectData->colliderSize;	// コライダーの大きさ
 		UIDisplayscale_ = objectData->uiObjectScal; // UIとして表示する際のオブジェクトの大きさの倍率
 		soundNum_ = objectData->soundNum;			// 吸着時のSEの番号設定
-		ID_ = objectData->ID;
+		ID_ = objectData->ID; // オブジェクトのid
 	}
 }
 
 Vector3 StageObjectBase::ApplyCollisionSizeDelta(Vector3 scale)
 {
-	Vector3 adjusted_size = Vector3(scale.x - 1.0f, scale.y - 1.0f, scale.z - 1.0f);
+	// コリジョンのサイズの差異を調整
+	float value = ADJUSTMENT_VALUE;
+	Vector3 adjusted_size = Vector3(scale.x - value, scale.y - value, scale.z - value);
 
 	// xの差異を調整
-	if (adjusted_size.x <= 0.0f) { adjusted_size.x = 1.0f; }
+	if (adjusted_size.x <= MIN_VALID_SIZE) { adjusted_size.x = value; }
 
 	// yの差異を調整
-	if (adjusted_size.y <= 0.0f) { adjusted_size.y = 1.0f; }
+	if (adjusted_size.y <= MIN_VALID_SIZE) { adjusted_size.y = value; }
 
 	// zの差異を調整
-	if (adjusted_size.z <= 0.0f) { adjusted_size.z = 1.0f; }
+	if (adjusted_size.z <= MIN_VALID_SIZE) { adjusted_size.z = value; }
 
 	return adjusted_size;
 }

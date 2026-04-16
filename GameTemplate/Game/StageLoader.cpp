@@ -8,49 +8,6 @@
 // また、他のファイルからアクセスできないため名前の競合も防ぐ
 namespace
 {
-
-	// 判定したいオブジェクト名のリスト
-	// (1)や(2)入れず、オブジェクトの名前だけを入れる
-	// array<型,データの数>
-	/*const std::array<std::string, 35> objectNamePatterns = {
-		"BHouse_01_color01",
-		"BHouse_02_color01",
-		"BHouse_02_color02",
-		"BHouse_02_color03",
-		"BHouse_03_color02",
-		"BHouse_04_color02",
-		"BHouse_04_color03",
-		"NBush01",
-		"NCubeTree",
-		"NFirTree",
-		"NGrassFence",
-		"NGrassTile",
-		"NHouseFloor",
-		"NRock_Big",
-		"PBench_01",
-		"PBusStop",
-		"PHydrant",
-		"PStreetLight",
-		"PTrafficSignal_Big",
-		"PLaneBusStop",
-		"RIntersection",
-		"RLane01",
-		"RLane04",
-		"RLaneBusStop",
-		"VBus_color01",
-		"VContainer_color03",
-		"VPickUpTruck_color01",
-		"VPickUpTruck_color03",
-		"VSUV_color01",
-		"VSUV_color02",
-		"VTaxi",
-		"Donut",
-		"ChessBoard",
-		"Burger",
-		"Wine",
-	};*/
-
-	// todo for test
 	const std::array<std::string, 51> objectNamePatterns = {
 		"BHouse_01_color01",
 		"BHouse_02_color01",

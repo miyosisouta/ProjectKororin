@@ -126,7 +126,8 @@ public:
 	static void DeleteInstance()
 	{
 		if (instance_) {
-
+			delete instance_;
+			instance_ = nullptr;
 		}
 	}
 };

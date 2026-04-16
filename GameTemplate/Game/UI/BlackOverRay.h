@@ -24,11 +24,11 @@ namespace SpriteConstans
 		{
 		}
 
-		std::string filePath;	//!< ファイルパス
-		int size;				//!< ピクセルサイズ
-		Vector3 pos;			//!< 座標
-		Vector3 scale;			//!< 画像サイズの倍率
-		Vector4 color;			//!< 乗算カラー
+		std::string filePath; //!< ファイルパス
+		int size;			  //!< ピクセルサイズ
+		Vector3 pos;		  //!< 座標
+		Vector3 scale;		  //!< 画像サイズの倍率
+		Vector4 color;		  //!< 乗算カラー
 	};
 }
 
@@ -41,9 +41,6 @@ public:
 	/* デストラクタ */
 	virtual ~BlackOverRay() {}
 
-	//*< IGameObjectにてStart、Update、Renderを仮想関数にしているため
-	//*< 継承元は絶対にStart、Update、Renderはヘッダーにて書きoverrideをかく
-	//*< またこのクラスも継承されているのでvirtualをかく
 	/* スタート処理 */
 	virtual bool Start() override { return true; }
 	/* 更新処理 */
@@ -53,8 +50,7 @@ public:
 
 
 protected:
-	/* コンパイル時にUIのファイルパスを定数化 */
-	static constexpr const char* UIAseetsFilePath = "Assets/Sprite/Game/";
+	static constexpr const char* UIAseetsFilePath = "Assets/Sprite/Game/"; // ファイルパスの定数化
 
 
 protected:
@@ -83,7 +79,5 @@ protected:
 	{
 		return std::string(UIAseetsFilePath) + spriteName;
 	}
-
-
 };
 

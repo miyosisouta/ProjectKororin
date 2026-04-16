@@ -78,9 +78,6 @@
     <ClCompile Include="Sound\SoundManager.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Sphere\Player.cpp">
-      <Filter>Actor\Sphere</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\Sphere\Sphere.cpp">
       <Filter>Actor\Sphere</Filter>
     </ClCompile>
@@ -199,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="Sound\SoundManager.h">
       <Filter>Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor\Sphere\Player.h">
-      <Filter>Actor\Sphere</Filter>
     </ClInclude>
     <ClInclude Include="Core\LateStageObjectUpdateManager.h">
       <Filter>Core</Filter>

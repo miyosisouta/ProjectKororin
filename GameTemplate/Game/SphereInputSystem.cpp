@@ -2,6 +2,11 @@
 #include "SphereInputSystem.h"
 #include "Actor/Sphere/Sphere.h"
 
+namespace
+{
+	constexpr float INIT_POS = 0.0f;
+	constexpr float CHECK_DIR = 0.01f;
+}
 
 bool SphereInputSystem::Start()
 {
@@ -39,8 +44,8 @@ Vector3 SphereInputSystem::GetStickL()
 	Vector3 right = g_camera3D->GetRight(); //!<カメラの右方向のベクトル
 
 	/*プレイヤーは地面上でのみ移動する*/
-	forward.y = 0.0f;
-	right.y = 0.0f;
+	forward.y = INIT_POS;
+	right.y = INIT_POS;
 
 	/*移動速度の計算*/
 	forward *= stickL.y;
@@ -69,7 +74,7 @@ void TitleInputSyste::Update()
 		return;
 	}
 
-	if (moveDirection_.LengthSq() > 0.01f) {
+	if (moveDirection_.LengthSq() > CHECK_DIR) {
 		target_->SetMoveDirection(moveDirection_);
 	} else {
 		target_->SetMoveDirection(Vector3::Zero);
