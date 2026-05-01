@@ -45,6 +45,9 @@ public:
 	/* SEを鳴らしたかのフラグ */
 	inline bool IsPlayedSE() const { return isPlayedSE_; }
 
+	/* スタート処理が呼ばれたか否か */
+	inline bool IsStarted() const { return isStarted_; }
+	
 	/* 吸着しているオブジェクトを描画するかどうかのフラグ */
 	inline void SetVisibleAttachedObject(const bool flg) { isVisibleAttachedObject_ = flg; }
 
@@ -59,6 +62,6 @@ public:
 private:
 	bool isPlayedSE_ = false; //!< SEをならしたかフラグ
 	bool isVisibleAttachedObject_ = false; //!< くっついたオブジェクトの表示
-
+	bool isStarted_ = false; //!< スタート処理が呼ばれたか
 };
 

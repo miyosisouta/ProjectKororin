@@ -152,6 +152,7 @@ void StageLoader::LoadObject(std::unordered_map<int, ObjectData*>& objectList)
 			if (IsForwardMatchObjectsName(name.c_str()))	// 確認したいオブジェクトの名前がリストの中にあるかを調べる
 			{
 				ObjectData* objectData = new ObjectData;
+
 				// JSONデータの "Transform" フィールド（位置・回転・スケール情報）を
 				// ParseTransformComponents 関数でパースし、transform 変数に格納します。
 				// パース:データ（文字列やファイルなど）をプログラムで“分解・解析”して、使いやすい形（構造体やクラスなど）に変換すること

@@ -1,95 +1,122 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "SpacePartitioning.h"
 #include "Actor/Object/AttachableObject.h"
 #include "Actor/Sphere/Sphere.h"
 #include "StageLoader.h"
 #include "Actor/Object/StaticObject.h"
+#include "StageCullingSystem.h"
 
-namespace {
-	// ƒOƒŠƒbƒh‚Ì•ªŠ„”iZ•ûŒüAX•ûŒüj
-	constexpr uint8_t Z_NUM_ = 8;
-	constexpr uint8_t X_NUM_ = 8;
-	// ƒxƒNƒ^[‚Ìƒƒ‚ƒŠŠm•Û—piÄŠm•Û‚ğ–h‚®‚½‚ß‚Ì‰Šú—e—Êj
-	constexpr uint8_t SECURE_INITIAL_CAPACITY = 500;
-	// ƒ[ƒ‹ƒh‚Ì”¼Œai’†S‚©‚ç’[‚Ü‚Å‚Ì‹——£j
+namespace
+{
+	// ã‚°ãƒªãƒƒãƒ‰ã®åˆ†å‰²æ•°
+	constexpr int Z_NUM = 8;
+	constexpr int X_NUM = 8;
+
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰ã®åŠå¾„ï¼ˆä¸­å¿ƒã‹ã‚‰ç«¯ã¾ã§ã®è·é›¢ï¼‰
 	static const Vector3 WORLD_HALF_SIZE = Vector3(14000.0f, 0.0f, 5000.0f);
-	// ”z—ñ‚ÌÅ‰
-	constexpr uint8_t MIN_ARRAY_SIZE = 1;
-	// ğŒ®
-	constexpr uint8_t CHECK_ZERO = 0;
-	// —Dæ“x
-	constexpr uint8_t PRIOLITY_ZERO = 0;
-	// ”¼•ª‚É‚·‚é
-	constexpr float HALF_SIZE = 2.0f;
+
+	// å‘¨å›²1ãƒã‚¹åˆ†ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆï¼ˆ3x3 = -1ã€œ+1ï¼‰
+	constexpr int NEIGHBOR_RANGE = 1;
+
+	// NewGOã®å„ªå…ˆåº¦
+	constexpr int PRIORITY_ZERO = 0;
+
+	// ç›´å¾„ã‚’æ±‚ã‚ã‚‹ãŸã‚ã®é™¤æ•°
+	constexpr float HALF_DIVISOR = 2.0f;
+
+	// ã‚°ãƒªãƒƒãƒ‰ç¯„å›²ãƒã‚§ãƒƒã‚¯ç”¨
+	constexpr int GRID_MIN = 0;
+
+	// ã‚°ãƒªãƒƒãƒ‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å®‰å…¨ãªç¯„å›²ã«åã‚ã‚‹ï¼ˆC++14å¯¾å¿œï¼‰
+	inline int Clamp(int value, int minVal, int maxVal)
+	{
+		if (value < minVal) return minVal;
+		if (value > maxVal) return maxVal;
+		return value;
+	}
 }
 
-SpacePartitioning* SpacePartitioning::instance = nullptr;
+SpacePartitioning* SpacePartitioning::instance_ = nullptr;
 
 SpacePartitioning::SpacePartitioning()
 {
-	/* ƒXƒe[ƒW‘S‘Ì‚ÌƒTƒCƒYi’¼Œaj‚ğŒvZ */
-	worldSizeX_ = WORLD_HALF_SIZE.x * HALF_SIZE;
-	worldSizeZ_ = WORLD_HALF_SIZE.z * HALF_SIZE;
+	// ã‚¹ãƒ†ãƒ¼ã‚¸å…¨ä½“ã®ã‚µã‚¤ã‚ºã‚’è¨ˆç®—
+	worldSizeX_ = WORLD_HALF_SIZE.x * HALF_DIVISOR;
+	worldSizeZ_ = WORLD_HALF_SIZE.z * HALF_DIVISOR;
 
-	/* 1ŒÂ‚ÌƒOƒŠƒbƒh‹óŠÔiƒZƒ‹j‚ÌƒTƒCƒY‚ğŒvZ */
-	worldSpaceSizeX_ = worldSizeX_ / static_cast<float>(X_NUM_);
-	worldSpaceSizeZ_ = worldSizeZ_ / static_cast<float>(Z_NUM_);
+	// 1ã‚»ãƒ«ã®ã‚µã‚¤ã‚ºã‚’è¨ˆç®—
+	worldSpaceSizeX_ = worldSizeX_ / static_cast<float>(X_NUM);
+	worldSpaceSizeZ_ = worldSizeZ_ / static_cast<float>(Z_NUM);
 
-	/* 1ŒÂ‚Ì‹óŠÔ‚Ì”¼•ª‚ÌƒTƒCƒYi’†SˆÊ’uŒvZ—p‚È‚Çj */
-	worldSpaceHalfSizeX_ = worldSpaceSizeX_ / HALF_SIZE;
-	worldSpaceHalfSizeZ_ = worldSpaceSizeZ_ / HALF_SIZE;
-
-	/**
-	 * ƒOƒŠƒbƒhÀ•WŒvZ‚ÌŠî€“_B
-	 * ƒ[ƒ‹ƒhÀ•Wi-14000‚È‚Çj‚ğ”z—ñƒCƒ“ƒfƒbƒNƒXi0`7j‚É•ÏŠ·‚·‚é‚½‚ß‚Ég—pB
-	 */
-	baseX_ = -WORLD_HALF_SIZE.x + worldSpaceHalfSizeX_;
-	baseZ_ = -WORLD_HALF_SIZE.z + worldSpaceHalfSizeZ_;
-
-	// ”z—ñ‚Ìƒƒ‚ƒŠ‚ğ‚ ‚ç‚©‚¶‚ßŠm•Û‚µ‚ÄƒpƒtƒH[ƒ}ƒ“ƒX‚ğÅ“K‰»
-	objectList_.reserve(SECURE_INITIAL_CAPACITY);
-	createObjectList_.reserve(SECURE_INITIAL_CAPACITY / 3);
-	deleteObjectList_.reserve(SECURE_INITIAL_CAPACITY / 3);
-
-	// ƒXƒe[ƒWƒf[ƒ^‚ğŠO•”ƒtƒ@ƒCƒ‹“™‚©‚ç“Ç‚İ‚İ
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 	stageLoader_ = new StageLoader();
-	stageLoader_->LoadObject(objectDataList_);
 
-	// “Ç‚İ‚ñ‚¾ƒf[ƒ^‚ğ‹óŠÔŠÇ—ƒVƒXƒeƒ€iƒOƒŠƒbƒhj‚É“o˜^
-	for (auto list : objectDataList_) {
-		AddObject(list.first, list.second);
-	}
+	// ã‚«ãƒªãƒ³ã‚°ã‚·ã‚¹ãƒ†ãƒ ã‚’ç”Ÿæˆã™ã‚‹
+	cullingSystem_ = std::make_unique<StageCullingSystem>();
 
-	// Œ»İ‚ÌƒvƒŒƒCƒ„[i‚Ü‚½‚ÍŠî€“_j‚ª‚¢‚éƒOƒŠƒbƒhÀ•W‚ğŒvZ
-	float x = WORLD_HALF_SIZE.x / worldSpaceSizeX_;
-	float z = WORLD_HALF_SIZE.z / worldSpaceSizeZ_;
+	// objectDataList ã«èª­ã¿è¾¼ã‚€
+	std::unordered_map<int, ObjectData*> objectDataList;
+	stageLoader_->LoadObject(objectDataList);
 
-	oldPosition_.x = x;
-	oldPosition_.z = z;
+	// èª­ã¿è¾¼ã‚“ã ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦å®Ÿä½“åŒ–ã—ã€ã‚°ãƒªãƒƒãƒ‰ã«ç™»éŒ²ã™ã‚‹
+	for (auto& pair : objectDataList)
+	{
+		ObjectData* data = pair.second;
 
-	// ‰ŠúˆÊ’u‚Ìü•Ói3x3ƒ}ƒXj‚É‚ ‚éƒIƒuƒWƒFƒNƒg‚ğ¶¬ƒŠƒXƒg‚É’Ç‰Á
-	for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
-		int positionX = x + i;
-
-		// ƒOƒŠƒbƒhŠO‚ÌQÆ‚ğ–h‚®
-		if (positionX < CHECK_ZERO) {
+		// èƒŒæ™¯ãªã©å¸¸é§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆattachValue==1ï¼‰ã¯ãã®ã¾ã¾å¸¸æ™‚è¡¨ç¤ºã§ç”Ÿæˆ
+		if (data->attachValue == 1)
+		{
+			auto* staticObject = NewGO<StaticObject>(PRIORITY_ZERO, "StaticObject");
+			staticObject->Initialize(data);
+			// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ DeleteGO ã™ã‚‹ãŸã‚ã«ç™»éŒ²ã—ã¦ãŠã
+			staticObjects_.push_back(staticObject);
+			// [FIX] ObjectData ã¯ Initialize ã§ã‚³ãƒ”ãƒ¼æ¸ˆã¿ãªã®ã§ä½¿ç”¨å¾Œã« delete ã™ã‚‹
+			delete data;
 			continue;
 		}
 
-		for (int j = -MIN_ARRAY_SIZE; j <= MIN_ARRAY_SIZE; j++) {
-			int positionZ = z + j;
+		// ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã‚’è¨ˆç®—
+		const int gx = ToGridX(data->position.x);
+		const int gz = ToGridZ(data->position.z);
 
-			if (positionZ < CHECK_ZERO) {
-				continue;
+		// ã‚°ãƒªãƒƒãƒ‰ç¯„å›²å¤–ã¯ç”Ÿæˆã—ãªã„
+		if (gx < GRID_MIN || gx >= X_NUM || gz < GRID_MIN || gz >= Z_NUM) {
+			// [FIX] ç¯„å›²å¤–ã§ã‚‚ ObjectData ã¯ delete ã™ã‚‹
+			delete data;
+			continue;
+		}
+
+		// å®Ÿä½“ã‚’ç”Ÿæˆã—ã€æœ€åˆã¯éè¡¨ç¤ºã«ã—ã¦ãŠã
+		auto* obj = NewGO<AttachableObject>(PRIORITY_ZERO, "AttachableObject");
+		obj->Initialize(data);
+		obj->SetVisible(false);
+
+		// ã‚°ãƒªãƒƒãƒ‰ã«ç™»éŒ²
+		grid_[gx][gz].push_back(obj);
+
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å®‰å…¨ã«å‰Šé™¤ã™ã‚‹ãŸã‚ã«å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆã«ã‚‚ç™»éŒ²ã™ã‚‹
+		// grid_ã¯åˆ¥é€”ç®¡ç†ãŒå¿…è¦
+		allObjects_.push_back(obj);
+
+		// ãƒ‡ãƒ¼ã‚¿ã¯ã‚³ãƒ”ãƒ¼ã—ã¦ã„ã‚‹ã®ã§å‰Šé™¤
+		delete data;
+	}
+
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åˆæœŸã‚°ãƒªãƒƒãƒ‰åº§æ¨™ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰ä¸­å¿ƒï¼‰ã‚’è¨­å®š
+	oldPosition_.x = ToGridX(0.0f);
+	oldPosition_.z = ToGridZ(0.0f);
+
+	// åˆæœŸä½ç½®ã®å‘¨è¾ºï¼ˆ3x3ãƒã‚¹ï¼‰ã‚’è¡¨ç¤ºã™ã‚‹
+	for (int i = -NEIGHBOR_RANGE; i <= NEIGHBOR_RANGE; i++) {
+		for (int j = -NEIGHBOR_RANGE; j <= NEIGHBOR_RANGE; j++) {
+			const int px = oldPosition_.x + i;
+			const int pz = oldPosition_.z + j;
+			if (px >= GRID_MIN && px < X_NUM && pz >= GRID_MIN && pz < Z_NUM) {
+				// ShowCell ã‚’å‘¼ã¶ã“ã¨ã§ visibleCellObjects_ ã«ã‚‚ç™»éŒ²ã•ã‚Œã‚‹
+				ShowCell(px, pz);
 			}
-
-			// ¶¬ƒŠƒXƒg‚Ö“o˜^
-			Cell c = { positionX, positionZ };
-			AddCreateist(c);
 		}
 	}
-	// ”wŒi‚È‚Ç‚ÌÃ“IƒIƒuƒWƒFƒNƒg‚ÍÅ‰‚ÉˆêŠ‡¶¬
-	CreateStage();
 }
 
 SpacePartitioning::~SpacePartitioning()
@@ -98,273 +125,182 @@ SpacePartitioning::~SpacePartitioning()
 		delete stageLoader_;
 		stageLoader_ = nullptr;
 	}
-	stageObject.clear();
-	stageObjectData.clear();
+
+	// å¸ç€å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦å‰Šé™¤
+	for (auto* obj : allObjects_) {
+		if (obj) {
+			DeleteGO(obj);
+		}
+	}
+	allObjects_.clear();
+
+	// StaticObjectã‚’ã™ã¹ã¦å‰Šé™¤
+	for (auto* obj : staticObjects_) {
+		if (obj) {
+			DeleteGO(obj);
+		}
+	}
+	staticObjects_.clear();
+
+	// grid_ ã®ãƒã‚¤ãƒ³ã‚¿ã¯ã™ã§ã« DeleteGO æ¸ˆã¿ãªã®ã§ã‚¯ãƒªã‚¢ã ã‘ã™ã‚‹
+	for (int x = GRID_MIN; x < X_NUM; x++) {
+		for (int z = GRID_MIN; z < Z_NUM; z++) {
+			grid_[x][z].clear();
+		}
+	}
+
+	attachedObjects_.clear();
+	visibleCellObjects_.clear();
 }
 
 void SpacePartitioning::Update()
 {
-	// ƒvƒŒƒCƒ„[iSpherej‚ÌˆÊ’u‚ğæ“¾
-	// ¦–ˆƒtƒŒ[ƒ€FindGO‚·‚é‚Ì‚Íd‚¢‚½‚ßAƒƒ“ƒo•Ï”‚ÉƒLƒƒƒbƒVƒ…‚·‚é‚±‚Æ‚ğ„§
-	Sphere* spher = FindGO<Sphere>("sphere");
-
-	if (spher == nullptr) {
+	if (!isUpdate_) {
 		return;
 	}
 
-	// ƒvƒŒƒCƒ„[‚ÌŒ»İˆÊ’u‚©‚çAŠ‘®‚·‚éƒOƒŠƒbƒhÀ•WiƒCƒ“ƒfƒbƒNƒXj‚ğZo
-	// ƒ[ƒ‹ƒhÀ•W‚ğ³‚Ì’l‚É•â³‚µ‚Ä‚©‚çƒZƒ‹ƒTƒCƒY‚ÅŠ„‚é
-	int x = static_cast<int>((spher->GetPosition().x + WORLD_HALF_SIZE.x) / worldSpaceSizeX_);
-	int z = static_cast<int>((spher->GetPosition().z + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
+	Sphere* sphere = FindGO<Sphere>("sphere");
+	if (sphere == nullptr) {
+		return;
+	}
 
-	// Š‘®‚·‚éƒOƒŠƒbƒh‚ª•Ï‚í‚Á‚½ê‡‚Ì‚İAƒ[ƒh/ƒAƒ“ƒ[ƒhˆ—‚ÌƒŠƒXƒgXV‚ğs‚¤
-	if (oldPosition_.x != x ||
-		oldPosition_.z != z)
-	{
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã‚’è¨ˆç®—
+	int x = ToGridX(sphere->GetPosition().x);
+	int z = ToGridZ(sphere->GetPosition().z);
+
+	// ã‚°ãƒªãƒƒãƒ‰ç¯„å›²å†…ã«ã‚¯ãƒ©ãƒ³ãƒ—
+	x = Clamp(x, GRID_MIN, X_NUM - 1);
+	z = Clamp(z, GRID_MIN, Z_NUM - 1);
+
+	// ã‚°ãƒªãƒƒãƒ‰ãŒå¤‰ã‚ã£ãŸå ´åˆã®ã¿è¡¨ç¤ºã‚’æ›´æ–°ã™ã‚‹
+	if (oldPosition_.x != x || oldPosition_.z != z) {
 		ListUpdate(x, z);
 	}
 
-	// ƒŠƒXƒg‚ÉŠî‚Ã‚«AÀÛ‚ÉƒIƒuƒWƒFƒNƒg‚Ì¶¬Eíœ‚ğs‚¤
-	// 1ƒtƒŒ[ƒ€‚É1‚Â‚¸‚Âˆ—‚·‚é‚±‚Æ‚ÅƒXƒpƒCƒNiƒJƒN‚Â‚«j‚ğ–h‚¢‚Å‚¢‚é
-	CreateObject();
-	DeleteObject();
+	// AttachableObject ã®ãƒ•ãƒ©ã‚¹ã‚¿ãƒ ã‚«ãƒªãƒ³ã‚°ã‚’æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å®Ÿè¡Œã™ã‚‹
+	cullingSystem_->Update(visibleCellObjects_);
 }
 
-// ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ğ“KØ‚ÈƒŠƒXƒgií’“orƒOƒŠƒbƒhŠÇ—j‚ÉU‚è•ª‚¯‚é
-void SpacePartitioning::AddObject(int num, ObjectData* object)
+void SpacePartitioning::HideAll()
 {
-	// attachValue‚ª1‚Ìê‡‚Íuí‚É•\¦‚·‚é”wŒiƒIƒuƒWƒFƒNƒgv‚Æ‚µ‚Äˆµ‚¤
-	if (object->attachValue == 1) {
-		stageObjectData.push_back(object);
-		return;
-	}
-
-	// ‚»‚êˆÈŠO‚ÍˆÊ’u‚ÉŠî‚Ã‚¢‚ÄƒOƒŠƒbƒhÀ•W‚ğŒvZ
-	int x = static_cast<int>((object->position.x + WORLD_HALF_SIZE.x) / worldSpaceSizeX_);
-	int z = static_cast<int>((object->position.z + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
-
-	// ƒOƒŠƒbƒh‚²‚Æ‚Ìƒf[ƒ^ƒŠƒXƒg‚ÉŠi”[i‚±‚Ì“_‚Å‚Í‚Ü‚¾À‘Ì‰»‚³‚ê‚È‚¢j
-	spacePartitioningList_.at(x).at(z).emplace(num, object);
-}
-
-// w’è‚³‚ê‚½ƒZƒ‹‚ÌƒIƒuƒWƒFƒNƒg‚ğuíœ—\’èƒŠƒXƒgv‚É’Ç‰Á‚·‚é
-void SpacePartitioning::AddDeleteList(Cell& position)
-{
-	// ‚»‚ÌƒZƒ‹‚ÉŠ‘®‚·‚é‘SƒIƒuƒWƒFƒNƒg‚É‚Â‚¢‚Äˆ—
-	for (auto it : spacePartitioningList_.at(position.x).at(position.z)) {
-
-		// ‚à‚µu¶¬—\’èƒŠƒXƒgv‚É‚Ü‚¾c‚Á‚Ä‚¢‚é‚È‚çA¶¬‚ğæ‚èÁ‚·‚¾‚¯‚Å—Ç‚¢iíœƒŠƒXƒg‚É‚Í“ü‚ê‚È‚¢j
-		auto createObjectListIt = std::find(createObjectList_.begin(), createObjectList_.end(), it.first);
-		if (createObjectListIt != createObjectList_.end()) {
-			createObjectList_.erase(createObjectListIt);
-		}
-		else {
-			// ¶¬Ï‚İ‚Å‚ ‚ê‚ÎAíœƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			deleteObjectList_.push_back(it.first);
-		}
-	}
-}
-
-// w’è‚³‚ê‚½ƒZƒ‹‚ÌƒIƒuƒWƒFƒNƒg‚ğu¶¬—\’èƒŠƒXƒgv‚É’Ç‰Á‚·‚é
-void SpacePartitioning::AddCreateist(Cell& position)
-{
-	// ‚»‚ÌƒZƒ‹‚ÉŠ‘®‚·‚é‘SƒIƒuƒWƒFƒNƒg‚É‚Â‚¢‚Äˆ—
-	for (auto it : spacePartitioningList_.at(position.x).at(position.z)) {
-
-		// ‚à‚µuíœ—\’èƒŠƒXƒgv‚É“ü‚Á‚Ä‚¢‚é‚È‚çAíœ‚ğæ‚èÁ‚·‚¾‚¯‚Å—Ç‚¢iÄ¶¬‚ÌƒRƒXƒgíŒ¸j
-		auto deleteObjectListIt = std::find(deleteObjectList_.begin(), deleteObjectList_.end(), it.first);
-		if (deleteObjectListIt != deleteObjectList_.end()) {
-			deleteObjectList_.erase(deleteObjectListIt);
-		}
-		else {
-			// ‚Ü‚¾‘¶İ‚µ‚È‚¢‚È‚çA¶¬ƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			createObjectList_.push_back(it.first);
-		}
-	}
-}
-
-// íœƒŠƒXƒg‚©‚ç1‚Âæ‚èo‚µAƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğíœ‚·‚é
-void SpacePartitioning::DeleteObject()
-{
-	if (deleteObjectList_.size() == CHECK_ZERO) {
-		return;
-	}
-	// ƒŠƒXƒg‚Ì––”ö‚©‚çíœ
-	DeleteGO(objectList_[deleteObjectList_.back()]);
-	deleteObjectList_.pop_back();
-}
-
-// ¶¬ƒŠƒXƒg‚©‚ç1‚Âæ‚èo‚µAƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
-void SpacePartitioning::CreateObject()
-{
-	if (createObjectList_.size() == CHECK_ZERO) {
-		return;
-	}
-	// ƒŠƒXƒg‚Ì––”ö‚É‚ ‚éID‚ğæ“¾
-	int number = createObjectList_.back();
-
-	// ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌÀ‘Ì‚ğ¶¬
-	auto* attachableObject = NewGO<AttachableObject>(PRIOLITY_ZERO, "AttachableObject");
-	attachableObject->Initialize(objectDataList_[number]);
-
-	// ŠÇ——pƒ}ƒbƒv‚É“o˜^
-	objectList_.emplace(number, attachableObject);
-
-	createObjectList_.pop_back();
-}
-
-// Ã“I‚È”wŒiƒIƒuƒWƒFƒNƒg‚È‚Ç‚ğˆêŠ‡¶¬i‰Šú‰»‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚éj
-void SpacePartitioning::CreateStage()
-{
-	for (auto data : stageObjectData) {
-		auto* staticObject = NewGO<StaticObject>(PRIOLITY_ZERO, "StaticObject");
-		staticObject->Initialize(data);
-		stageObject.push_back(staticObject);
-	}
-}
-
-// ‘SƒIƒuƒWƒFƒNƒg‚Ì•`‰æ‚ğƒIƒt‚É‚·‚é
-void SpacePartitioning::OffRender()
-{
-	for (auto stage : stageObject) {
-		stage->OffRender();
-	}
-	for (auto object : objectList_) {
-		if (object.second) {
-			object.second->OffRender();
-		}
-	}
-}
-
-void SpacePartitioning::RemmoveObject(int num)
-{
-	deleteObjectList_.erase(
-		std::remove(deleteObjectList_.begin(), deleteObjectList_.end(), num),
-		deleteObjectList_.end()
-	);
-
-
-	{
-		auto it = objectDataList_.find(num);
-		objectDataList_.erase(it);
-	}
-}
-
-// ƒOƒŠƒbƒhˆÚ“®‚ÌXVˆ—
-// ƒvƒŒƒCƒ„[‚ªˆÚ“®‚µ‚½•ûŒü‚É‰‚¶‚ÄAV‚µ‚¢ƒGƒŠƒA‚ğ¶¬‚µAŒÃ‚¢ƒGƒŠƒA‚ğíœ‚·‚é
-void SpacePartitioning::ListUpdate(int x, int z)
-{
-	int moveX = x - oldPosition_.x; // X•ûŒü‚ÌˆÚ“®—Ê
-	int moveZ = z - oldPosition_.z; // Z•ûŒü‚ÌˆÚ“®—Ê
-
-	// X•ûŒü‚ÉˆÚ“®‚ª‚ ‚Á‚½ê‡
-	if (moveX != CHECK_ZERO) {
-		int newColX = x + moveX;          // V‚µ‚­‹ŠE‚É“ü‚é—ñi1ƒ}ƒXæj
-		int oldColX = oldPosition_.x - moveX; // ‹ŠE‚©‚çŠO‚ê‚é—ñiŒã‚ëj
-
-		// Z•ûŒü‚Ì•i3ƒ}ƒX•ªj‚É‘Î‚µ‚ÄXV‚ğ‚©‚¯‚é
-		for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
-			int targetZ = z + i;
-
-			// Z•ûŒü‚Ì”ÍˆÍƒ`ƒFƒbƒN
-			if (targetZ >= CHECK_ZERO && targetZ < Z_NUM_) {
-				// is•ûŒü‚ÌV‚µ‚¢—ñ‚ğu¶¬v‘ÎÛ‚É‚·‚é
-				if (newColX >= CHECK_ZERO && newColX < X_NUM_) {
-					Cell c = { newColX, targetZ };
-					AddCreateist(c);
-				}
-				// ’Ê‚è‰ß‚¬‚½ŒÃ‚¢—ñ‚ğuíœv‘ÎÛ‚É‚·‚é
-				if (oldColX >= CHECK_ZERO && oldColX < X_NUM_) {
-					Cell c = { oldColX, targetZ };
-					AddDeleteList(c);
-				}
-			}
-		}
-	}
-	// Z•ûŒü‚ÉˆÚ“®‚ª‚ ‚Á‚½ê‡
-	else if (moveZ != CHECK_ZERO) {
-		int newColZ = z + moveZ;          // V‚µ‚­‹ŠE‚É“ü‚és
-		int oldColZ = oldPosition_.z - moveZ; // ‹ŠE‚©‚çŠO‚ê‚és
-
-		// X•ûŒü‚Ì•i3ƒ}ƒX•ªj‚É‘Î‚µ‚ÄXV‚ğ‚©‚¯‚é
-		for (int i = -MIN_ARRAY_SIZE; i <= MIN_ARRAY_SIZE; i++) {
-			int targetX = x + i;
-
-			// X•ûŒü‚Ì”ÍˆÍƒ`ƒFƒbƒN
-			if (targetX >= CHECK_ZERO && targetX < X_NUM_) {
-				// is•ûŒü‚ÌV‚µ‚¢s‚ğu¶¬v
-				if (newColZ >= CHECK_ZERO && newColZ < Z_NUM_) {
-					Cell c = { newColZ, targetX };
-					AddCreateist(c);
-				}
-				// ’Ê‚è‰ß‚¬‚½ŒÃ‚¢s‚ğuíœv
-				if (oldColZ >= CHECK_ZERO && oldColZ < Z_NUM_) {
-					Cell c = { oldColZ, targetX };
-					AddDeleteList(c);
-				}
+	// å…¨ã‚°ãƒªãƒƒãƒ‰ã‚’èµ°æŸ»ã—ã¦ã€å¸ç€æ¸ˆã¿ä»¥å¤–ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å…¨ã¦éè¡¨ç¤ºã«ã™ã‚‹
+	// ãƒªã‚¶ãƒ«ãƒˆç”»é¢é·ç§»æ™‚ã«ä¸€åº¦ã ã‘å‘¼ã¶
+	for (int x = GRID_MIN; x < X_NUM; x++) {
+		for (int z = GRID_MIN; z < Z_NUM; z++) {
+			for (auto* obj : grid_[x][z]) {
+				if (attachedObjects_.count(obj) > 0) continue;
+				obj->SetVisible(false);
 			}
 		}
 	}
 
-	// Œ»İˆÊ’u‚ğXV
-	oldPosition_.x = x;
-	oldPosition_.z = z;
+	// æ›´æ–°ã‚‚æ­¢ã‚ã‚‹ï¼ˆãƒªã‚¶ãƒ«ãƒˆä¸­ã¯ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤ºåˆ‡æ›¿ãŒä¸è¦ï¼‰
+	UpdateStop();
 }
 
 void SpacePartitioning::ReleaseOwnership(AttachableObject* object)
 {
 	if (object == nullptr) return;
 
-	// 1. ƒ|ƒCƒ“ƒ^‚ªˆê’v‚·‚éIDiƒL[j‚ğ’T‚·
-	int targetID = -1;
-	bool found = false;
+	// å¸ç€æ¸ˆã¿ã‚»ãƒƒãƒˆã«è¿½åŠ ã™ã‚‹
+	// ä»¥é™ ShowCell / HideCell ã§ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã¯è§¦ã‚Œãªããªã‚‹
+	attachedObjects_.insert(object);
 
-	// objectList_ ‚Í map<int, AttachableObject*> ‚È‚Ì‚Å‘–¸‚µ‚Ä’T‚·
-	for (auto it = objectList_.begin(); it != objectList_.end(); ) {
-		if (it->second == object) {
-			targetID = it->first; // ID‚ğŠm•Û
-
-			// ŠÇ—ƒŠƒXƒg‚©‚çƒ|ƒCƒ“ƒ^‚ÌŠ—LŒ ‚ğ•úŠüiíœ‚Í‚µ‚È‚¢j
-			it = objectList_.erase(it);
-			found = true;
-			break; // Œ©‚Â‚©‚Á‚½‚çƒ‹[ƒvI—¹
-		}
-		else {
-			++it;
+	// ã‚°ãƒªãƒƒãƒ‰ã‹ã‚‰ã‚‚é™¤å¤–ã™ã‚‹ï¼ˆæ¬¡å›ã® ShowCell/HideCell ã®èµ°æŸ»å¯¾è±¡ã‹ã‚‰å¤–ã™ï¼‰
+	for (int x = GRID_MIN; x < X_NUM; x++) {
+		for (int z = GRID_MIN; z < Z_NUM; z++) {
+			auto& list = grid_[x][z];
+			list.erase(
+				std::remove(list.begin(), list.end(), object),
+				list.end()
+			);
 		}
 	}
 
-	// ŠÇ—ƒŠƒXƒg‚ÉŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚ç‰½‚à‚µ‚È‚¢i‚·‚Å‚ÉŠÇ—ŠOj
-	if (!found) return;
+	visibleCellObjects_.erase(
+		std::remove(visibleCellObjects_.begin(), visibleCellObjects_.end(), object),
+		visibleCellObjects_.end()
+	);
 
+	// å¸ç€æ¸ˆã¿ãªã®ã§å¸¸æ™‚è¡¨ç¤ºã«ã™ã‚‹
+	object->SetVisible(true);
+}
 
-	// 2. Šm•Û‚µ‚½ID‚ğg‚Á‚ÄA‘¼‚ÌƒŠƒXƒg‚©‚ç‚àî•ñ‚ğ–•Á‚·‚é
+void SpacePartitioning::ShowCell(int x, int z)
+{
+	for (auto* obj : grid_[x][z]) {
+		// å¸ç€æ¸ˆã¿ã¯è§¦ã‚‰ãªã„
+		if (attachedObjects_.count(obj) > 0) continue;
 
-	// íœ—\’èƒŠƒXƒg‚É“ü‚Á‚Ä‚¢‚½‚ç‹~o
-	auto delIt = std::find(deleteObjectList_.begin(), deleteObjectList_.end(), targetID);
-	if (delIt != deleteObjectList_.end()) {
-		deleteObjectList_.erase(delIt);
+		// ã‚°ãƒªãƒƒãƒ‰ç¯„å›²å†…ã«å…¥ã£ãŸã®ã§ã‚«ãƒªãƒ³ã‚°å¯¾è±¡ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+		// å®Ÿéš›ã® SetVisible ã¯ãƒ•ãƒ©ã‚¹ã‚¿ãƒ ã‚«ãƒªãƒ³ã‚°ãŒæ¯ãƒ•ãƒ¬ãƒ¼ãƒ åˆ¤å®šã—ã¦åˆ‡ã‚Šæ›¿ãˆã‚‹
+		visibleCellObjects_.push_back(obj);
 	}
+}
 
-	// ¶¬—\’èƒŠƒXƒg‚É“ü‚Á‚Ä‚¢‚½‚çíœ
-	auto createIt = std::find(createObjectList_.begin(), createObjectList_.end(), targetID);
-	if (createIt != createObjectList_.end()) {
-		createObjectList_.erase(createIt);
+void SpacePartitioning::HideCell(int x, int z)
+{
+	for (auto* obj : grid_[x][z]) {
+		// å¸ç€æ¸ˆã¿ã¯è§¦ã‚‰ãªã„
+		if (attachedObjects_.count(obj) > 0) continue;
+
+		// ã‚°ãƒªãƒƒãƒ‰ç¯„å›²å¤–ã«å‡ºãŸã®ã§å³éè¡¨ç¤ºã«ã™ã‚‹ï¼ˆã‚«ãƒªãƒ³ã‚°åˆ¤å®šä¸è¦ï¼‰
+		obj->SetVisible(false);
+
+		// ã‚«ãƒªãƒ³ã‚°å¯¾è±¡ãƒªã‚¹ãƒˆã‹ã‚‰ã‚‚é™¤å¤–ã™ã‚‹
+		visibleCellObjects_.erase(
+			std::remove(visibleCellObjects_.begin(), visibleCellObjects_.end(), obj),
+			visibleCellObjects_.end()
+		);
 	}
+}
 
+void SpacePartitioning::ListUpdate(int x, int z)
+{
+	const int moveX = x - oldPosition_.x;
+	const int moveZ = z - oldPosition_.z;
 
-	// 3. ƒOƒŠƒbƒh”z’uƒf[ƒ^(spacePartitioningList_)‚©‚ç‚Ì–•Á
-	// ID‚ğg‚Á‚ÄŒ³‚Ìƒf[ƒ^(objectDataList_)‚ğæ“¾‚µA‚»‚±‚©‚ç”z’uêŠ(ƒOƒŠƒbƒh)‚ğ“Á’è‚·‚é
-	if (objectDataList_.count(targetID) > CHECK_ZERO) {
-		ObjectData* data = objectDataList_[targetID];
+	if (moveX != 0)
+	{
+		// é€²è¡Œæ–¹å‘ã®æ–°ã—ã„åˆ—ã‚’è¡¨ç¤ºã™ã‚‹
+		const int newCol = x + moveX;
+		// é€šã‚ŠéããŸå¤ã„åˆ—ã‚’éè¡¨ç¤ºã«ã™ã‚‹
+		const int oldCol = oldPosition_.x - moveX;
 
-		// Œ³‚ÌÀ•W‚©‚çƒOƒŠƒbƒh”Ô†‚ğŒvZ
-		int x = static_cast<int>((data->position.x + WORLD_HALF_SIZE.x) / worldSpaceSizeX_);
-		int z = static_cast<int>((data->position.z + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
+		for (int i = -NEIGHBOR_RANGE; i <= NEIGHBOR_RANGE; i++) {
+			const int tz = z + i;
+			if (tz < GRID_MIN || tz >= Z_NUM) continue;
 
-		// ‚»‚ÌƒOƒŠƒbƒh‚ÌŠÇ—‚©‚çƒf[ƒ^‚ğÁ‚·
-		if (x >= CHECK_ZERO && x < X_NUM_ && z >= CHECK_ZERO && z < Z_NUM_) {
-			spacePartitioningList_[x][z].erase(targetID);
+			if (newCol >= GRID_MIN && newCol < X_NUM) ShowCell(newCol, tz);
+			if (oldCol >= GRID_MIN && oldCol < X_NUM) HideCell(oldCol, tz);
 		}
 	}
+	else if (moveZ != 0)
+	{
+		// é€²è¡Œæ–¹å‘ã®æ–°ã—ã„è¡Œã‚’è¡¨ç¤ºã™ã‚‹
+		const int newRow = z + moveZ;
+		// é€šã‚ŠéããŸå¤ã„è¡Œã‚’éè¡¨ç¤ºã«ã™ã‚‹
+		const int oldRow = oldPosition_.z - moveZ;
+
+		for (int i = -NEIGHBOR_RANGE; i <= NEIGHBOR_RANGE; i++) {
+			const int tx = x + i;
+			if (tx < GRID_MIN || tx >= X_NUM) continue;
+
+			if (newRow >= GRID_MIN && newRow < Z_NUM) ShowCell(tx, newRow);
+			if (oldRow >= GRID_MIN && oldRow < Z_NUM) HideCell(tx, oldRow);
+		}
+	}
+
+	oldPosition_.x = x;
+	oldPosition_.z = z;
+}
+
+int SpacePartitioning::ToGridX(float worldX) const
+{
+	return static_cast<int>((worldX + WORLD_HALF_SIZE.x) / worldSpaceSizeX_);
+}
+
+int SpacePartitioning::ToGridZ(float worldZ) const
+{
+	return static_cast<int>((worldZ + WORLD_HALF_SIZE.z) / worldSpaceSizeZ_);
 }
