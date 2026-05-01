@@ -513,7 +513,7 @@ namespace _internal
 
 		// インゲームにて「塊に吸着しているオブジェクトを描画できる」ようフラグを立てている
 		// オブジェクト全て非表示→個人(吸着しているオブジェクト)のフラグが優先されて描画がされる
-		SpacePartitioning::GetInstance()->OffRender();
+		//SpacePartitioning::GetInstance()->OffRender();
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////result->owner_->stage_->SetVisibleAll(false);
 
 		// 経過時間の初期化
@@ -1000,13 +1000,9 @@ namespace _internal
 
 		// 塊の設定
 		{
-			result->owner_->sphere_->SetIsDraw(false);
 			result->owner_->sphere_->SetPosition(FAILER_SPHERE_MIN_POS);
 			result->owner_->sphere_->Update();
 		}
-
-		// オブジェクト非表示
-		SpacePartitioning::GetInstance()->OffRender();
 
 		// ディレクションンライトのパラメーター設定
 		g_sceneLight->SetDirectionLight(DIRECTION_LIGHT_NUM, DIRECTION_LIGHT_DIRECTION, DIRECTION_LIGHT_COLOR);
@@ -1085,8 +1081,6 @@ namespace _internal
 		// リープで使用する時間の設定
 		result->calclerpValue_.InitCalcTime(LERP_TIME_STEP3);
 
-		// 塊を描画
-		result->owner_->sphere_->SetIsDraw(true);
 
 		// 文字の設定
 		for (int i = MIN_SENTENCE_NUM; i < MAX_SENTENCE_NUM; ++i)
@@ -1556,6 +1550,7 @@ GameScene::GameScene()
 }
 GameScene::~GameScene()
 {
+	SpacePartitioning::DeleteInstance();
 	if (sphere_) {
 		DeleteGO(sphere_);
 	}
@@ -1589,7 +1584,6 @@ GameScene::~GameScene()
 	InGameManager::DeleteInstance();
 	GameUIManager::DeleteInstance();
 	GameTimer::DestroyInstance();
-	SpacePartitioning::DeleteInstance();
 
 	if (inputDetection_) {
 		delete inputDetection_;
@@ -1623,8 +1617,6 @@ bool GameScene::Start()
 	InGameManager::CreateInstance();
 	GameUIManager::CreateInstance();
 	GameTimer::CreateInstance();
-	SpacePartitioning::CreateInstance();
-	SpacePartitioning::GetInstance()->UpdateStart();
 
 
 	g_sceneLight->SetDirectionLight(DIRECTION_LIGHT_NOM, DIRECTION_LIGHT_DIR , DIRECTION_LIGHT_COL);
@@ -1655,6 +1647,8 @@ void GameScene::Update()
 			{
 				canvas_ = NewGO<Canvas>(PRIOLITY_ZERO, "canvas"); // キャンバス
 				SoundManager::Get().PlayBGM(enSoundKind_InGame); // インゲーム中のBGM再生
+				SpacePartitioning::CreateInstance();
+				SpacePartitioning::GetInstance()->UpdateStart(); // 更新スタート
 
 				sphereInputSystem_->SetTarget(sphere_);	// 操作ターゲットの指定
 				sphereCamera_->SetTarget(sphere_); // カメラのターゲットの指定
@@ -1727,6 +1721,10 @@ void GameScene::Update()
 	}
 	case InGameState::InGameFinish:
 	{
+		if (SpacePartitioning::GetInstance()) {
+			SpacePartitioning::GetInstance()->HideAll();
+		}
+
 		result_->Start();
 
 		gameState_ = InGameState::Result; // 次の処理に進む
@@ -1750,7 +1748,7 @@ void GameScene::Update()
 	}
 
 	// スタートイベント中にオブジェクトを表示するため常に更新
-	SpacePartitioning::GetInstance()->Update();
+	if (SpacePartitioning::GetInstance()) { SpacePartitioning::GetInstance()->Update(); }
 
 }
 void GameScene::Render(RenderContext& rc)

@@ -50,6 +50,8 @@ bool AttachableObject::Start()
 		);
 	}
 
+	isStarted_ = true;
+
 	return true;
 }
 void AttachableObject::Update()

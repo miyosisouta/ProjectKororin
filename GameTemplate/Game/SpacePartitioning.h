@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+#include <unordered_set>
 
 struct Cell
 {
@@ -11,87 +11,95 @@ struct ObjectData;
 class AttachableObject;
 class StaticObject;
 class StageLoader;
-class StageObjectBase;
+class StageCullingSystem;
+
 class SpacePartitioning
 {
 private:
+	static SpacePartitioning* instance_;
 
-	static SpacePartitioning* instance;
-
-	/* �R���X�g���N�^ */
+	/* コンストラクタ */
 	SpacePartitioning();
 
 public:
-	/* �f�X�g���N�^ */
+	/* デストラクタ */
 	~SpacePartitioning();
 
-	/* �R�s�[�v���e�N�g */
+	/* コピープロテクト */
 	SpacePartitioning(const SpacePartitioning&) = delete;
-	/* �R�s�[�v���e�N�g */
 	SpacePartitioning& operator=(const SpacePartitioning&) = delete;
 
-	/* �C���X�^���X�̎擾 */
-	static SpacePartitioning* GetInstance() {
-		return instance;
-	}
+	/* インスタンスの取得 */
+	static SpacePartitioning* GetInstance() { return instance_; }
 
-	/* �C���X�^���X�̍쐬 */
-	static void CreateInstance() {
-		if (instance == nullptr) {
-			instance = new SpacePartitioning(); // ���񂾂��쐬
+	/* インスタンスの作成 */
+	static void CreateInstance()
+	{
+		if (instance_ == nullptr) {
+			instance_ = new SpacePartitioning();
 		}
 	}
 
-	/* �C���X�^���X�̍폜 */
-	static void DeleteInstance() {
-		delete instance;
-		instance = nullptr;
+	/* インスタンスの削除 */
+	static void DeleteInstance()
+	{
+		delete instance_;
+		instance_ = nullptr;
 	}
 
-	/* �X�V���� */
+	/* 更新処理 */
 	void Update();
-	/* �I�u�W�F�N�g�̒ǉ� */
-	void AddObject(int num, ObjectData* object);
-	void AddDeleteList(Cell& position);
-	void AddCreateist(Cell& position);
-	void DeleteObject();
-	void CreateObject();
-	void CreateStage();
+
+	/* 更新の開始・停止 */
 	void UpdateStart() { isUpdate_ = true; }
-	void UpdateStop() { isUpdate_ = false; }
-	void OffRender();
-	void RemmoveObject(int num);
+	void UpdateStop()  { isUpdate_ = false; }
+
+	/* 吸着時に呼ぶ。以降そのオブジェクトは空間管理の表示制御から外れ常に表示される */
 	void ReleaseOwnership(AttachableObject* object);
 
+	/* リザルト遷移時に呼ぶ。吸着済み以外のオブジェクトを全て非表示にする */
+	void HideAll();
+
 private:
+	/* 指定セルのオブジェクトを表示する */
+	void ShowCell(int x, int z);
+
+	/* 指定セルのオブジェクトを非表示にする */
+	void HideCell(int x, int z);
+
+	/* グリッド移動時の表示更新 */
 	void ListUpdate(int x, int z);
+
+	/* ワールド座標 → グリッドインデックス変換 */
+	int ToGridX(float worldX) const;
+	int ToGridZ(float worldZ) const;
 
 private:
 	StageLoader* stageLoader_ = nullptr;
 
-	std::unordered_map<int, ObjectData*> objectDataList_;
-	std::vector<ObjectData*> stageObjectData;
-	std::vector<StaticObject*> stageObject;
-	std::array<std::array<std::unordered_map<int, ObjectData*>, 8>, 8> spacePartitioningList_;
-	std::unordered_map<int, AttachableObject*> objectList_;
-	std::vector<int> createObjectList_;
-	std::vector<int> deleteObjectList_;
+	/* フラスタムカリング（StaticObject 用） */
+	std::unique_ptr<StageCullingSystem> cullingSystem_;
 
-	float worldSizeX_ = 0.0f; //!< �X�e�[�W�̑傫��x���W
-	float worldSizeZ_ = 0.0f; //!< �X�e�[�W�̑傫��z���W
+	/* グリッドごとの AttachableObject リスト */
+	std::array<std::array<std::vector<AttachableObject*>, 8>, 8> grid_;
 
-	float worldSpaceSizeX_ = 0.0f; //!< 1�̋�Ԃ̃T�C�Yx���W
-	float worldSpaceSizeZ_ = 0.0f; //!< 1�̋�Ԃ̃T�C�Yz���W
+	/* 現在表示対象のセルにあるオブジェクト（フラスタムカリングの入力） */
+	std::vector<AttachableObject*> visibleCellObjects_;
 
-	float worldSpaceHalfSizeX_ = 0.0f; //!< 1�̋�Ԃ̃T�C�Y�̔����̃T�C�Yx���W
-	float worldSpaceHalfSizeZ_ = 0.0f; //!< 1�̋�Ԃ̃T�C�Y�̔����̃T�C�Yz���W
+	/* 全 AttachableObject（Start()未実行含む）。デストラクタでの DeleteGO 用 */
+	std::vector<AttachableObject*> allObjects_;
 
-	float baseX_ = 0.0f; //!< ��J�n�n�_x���W
-	float baseZ_ = 0.0f; //!< ��J�n�n�_z���W
+	/* 全 StaticObject。デストラクタでの DeleteGO 用 */
+	std::vector<StaticObject*> staticObjects_;
 
-	int identificationNumber_ = 0;
+	/* 吸着済みオブジェクト（表示制御から除外する） */
+	std::unordered_set<AttachableObject*> attachedObjects_;
 
-	Cell oldPosition_ = {};
+	float worldSizeX_      = 0.0f; //!< ステージの大きさ x
+	float worldSizeZ_      = 0.0f; //!< ステージの大きさ z
+	float worldSpaceSizeX_ = 0.0f; //!< 1セルのサイズ x
+	float worldSpaceSizeZ_ = 0.0f; //!< 1セルのサイズ z
 
-	bool isUpdate_ = false;
+	Cell oldPosition_ = {};        //!< 前フレームのグリッド座標
+	bool isUpdate_    = false;     //!< 更新するかどうか
 };

@@ -95,12 +95,10 @@ void Transform::Release()
 		//子トランスフォームからの紐づけを外す
 		(*it)->m_parent_ = nullptr;
 		//子トランスフォームへの紐づけを外す
-		m_children_.erase(it);
+		it = m_children_.erase(it);
 		if (m_children_.size() <= 0) {
 			break;
 		}
-		//イテレータを進める
-		++it;
 	}
 	//念のため？vectorの要素を全削除
 	m_children_.clear();
@@ -124,9 +122,6 @@ void Transform::RemoveChild(Transform* t)
 			//処理を終了
 			return;
 		}
-
-		//イテレータを進める
-		++it;
 	}
 }
 

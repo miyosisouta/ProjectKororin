@@ -45,6 +45,7 @@ void SceneManager::Update()
 			elapsedTime_ += g_gameTime->GetFrameDeltaTime();
 			if (elapsedTime_ >= waitTime_)
 			{
+				elapsedTime_ = 0.0f;
 				delete currentScene_; // 現在のシーンを削除
 				currentScene_ = NextScene(nextId); // 次のシーンを作成
 				currentScene_->Start(); // 初期化処理を行う
