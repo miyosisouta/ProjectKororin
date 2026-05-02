@@ -1,11 +1,11 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "StageLoader.h"
-#include "SceneLoader/SceneLoader.h"
 #include "Actor/Object/StageObjectBase.h"
-#include <vector>
+#include <fstream>
+#include <cstring>
 
-// ‚±‚ÌƒNƒ‰ƒX‚Å‚µ‚©g‚¦‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß‚Ìnamespace
-// ‚Ü‚½A‘¼‚Ìƒtƒ@ƒCƒ‹‚©‚çƒAƒNƒZƒX‚Å‚«‚È‚¢‚½‚ß–¼‘O‚Ì‹£‡‚à–h‚®
+// ã“ã®ã‚¯ãƒ©ã‚¹ã§ã—ã‹ä½¿ãˆãªã„ã‚ˆã†ã«ã™ã‚‹ãŸã‚ã®namespace
+// ã¾ãŸã€ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã§ããªã„ãŸã‚åå‰ã®ç«¶åˆã‚‚é˜²ã
 namespace
 {
 	const std::array<std::string, 51> objectNamePatterns = {
@@ -62,123 +62,134 @@ namespace
 		"Wine"
 	};
 
-
-	// ƒV[ƒ“‚©‚ç“Ç‚İ‚ñ‚¾ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ªŠ®‘Sˆê’v‚©
-	bool IsMatchObjectName(const char* jsonNameA, const char* nameB)
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«å¤šï¼š1ã§åå‰ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+	bool IsForwardMatchObjectsName(const std::string& name)
 	{
-		if (strcmp(jsonNameA, nameB) == 0) {
-			// Š®‘Sˆê’v
-			return true;
-		}
-		// ˆê’v‚µ‚È‚¢
-		return false;
-	}
-
-	// æ“ª‚©‚ç len •¶š•ª‚ªˆê’v‚µ‚Ä‚¢‚é‚©”»’è‚·‚éŠÖ”
-	// ƒIƒuƒWƒFƒNƒg“¯m1F1‚Å–¼‘O‚ªˆê’v‚µ‚Ä‚¢‚é‚©‚ğ’²‚×‚é
-	bool IsForwardMatchObjectName(const char* jsonNameA, const char* nameB)
-	{
-		auto len = strlen(nameB);
-		auto namelen = strlen(jsonNameA);
-		if (len > namelen) {
-			//–¼‘O‚ª’·‚¢B•sˆê’vB
-			return false;
-		}
-		if (strncmp(jsonNameA, nameB, len) == 0) {
-			// Š®‘Sˆê’v
-			return true;
-		}
-		// ˆê’v‚µ‚È‚¢
-		return false;
-	}
-
-	// ƒIƒuƒWƒFƒNƒg“¯m‘½F1‚Å–¼‘O‚ªˆê’v‚µ‚Ä‚¢‚é‚©‚ğ’²‚×‚é
-	bool IsForwardMatchObjectsName(const char* jsonObjectName)
-	{
-		for (auto targetName : objectNamePatterns) {
-			if (IsForwardMatchObjectName(jsonObjectName, targetName.c_str())) {
+		for (const auto& pattern : objectNamePatterns) {
+			if (name.size() >= pattern.size() &&
+				name.compare(0, pattern.size(), pattern) == 0) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	// ---- ãƒã‚¤ãƒŠãƒªèª­ã¿å–ã‚Šãƒ˜ãƒ«ãƒ‘ãƒ¼ -------------------------------------------
 
-	// AttributeValueƒf[ƒ^‚ğæ“¾‚µintŒ^‚Å•Ô‚·‚½‚ß‚ÌŠÖ”
-	auto ParseAttachableValue(const nlohmann::json& attributeJson)
+	// Tå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’1ã¤èª­ã¿è¾¼ã‚€
+	template<typename T>
+	bool BinRead(std::ifstream& fs, T& out)
 	{
-		return attributeJson["attachableValue"].get<int>();
+		return static_cast<bool>(
+			fs.read(reinterpret_cast<char*>(&out), sizeof(T)));
 	}
 
-	// attachableValueƒf[ƒ^‚ğæ“¾‚µintŒ^‚Å•Ô‚·‚½‚ß‚ÌŠÖ”
-	auto ParseRequiredSphereSize(const nlohmann::json& attributeJson)
+	// uint16(é•·ã•) + UTF-8æ–‡å­—åˆ— ã‚’èª­ã¿è¾¼ã‚€
+	bool BinReadString(std::ifstream& fs, std::string& out)
 	{
-		return attributeJson["requiredSphereSize"].get<int>();
+		uint16_t len = 0;
+		if (!BinRead(fs, len)) return false;
+		out.resize(len);
+		return len == 0 || static_cast<bool>(fs.read(&out[0], len));
 	}
 
-	// attachableValueƒf[ƒ^‚ğæ“¾‚µintŒ^‚Å•Ô‚·‚½‚ß‚ÌŠÖ”
-	auto ParseGrowthAmount(const nlohmann::json& attributeJson)
+	// Vector3 ã‚’èª­ã¿è¾¼ã‚€
+	bool BinReadVector3(std::ifstream& fs, Vector3& v)
 	{
-		return attributeJson["objectRadius"].get<int>();
+		return BinRead(fs, v.x) && BinRead(fs, v.y) && BinRead(fs, v.z);
 	}
 
-	// objectAssetNameƒf[ƒ^‚ğæ“¾‚µstringŒ^‚Å•Ô‚·‚½‚ß‚ÌŠÖ”
-	auto ParseObjectAssetName(const nlohmann::json& attributeJson) {
-		return attributeJson["objectAssetName"].get<std::string>();
-	}
-
-	auto ParseUIDisPlayScale(const nlohmann::json& attributeJson) {
-		return attributeJson["UIDisplayScale"].get<float>();
-	}
-
-	// attachableValueƒf[ƒ^‚ğæ“¾‚µintŒ^‚Å•Ô‚·‚½‚ß‚ÌŠÖ”
-	auto ParseAttachSoundNum(const nlohmann::json& attributeJson)
+	// Quaternion ã‚’èª­ã¿è¾¼ã‚€
+	bool BinReadQuaternion(std::ifstream& fs, Quaternion& q)
 	{
-		return attributeJson["attachSoundNum"].get<int>();
+		return BinRead(fs, q.x) && BinRead(fs, q.y) && BinRead(fs, q.z) && BinRead(fs, q.w);
 	}
 }
 
 void StageLoader::LoadObject(std::unordered_map<int, ObjectData*>& objectList)
 {
+	std::ifstream fs("Assets/Scene/SceneExportTest.bin", std::ios::binary);
+	if (!fs) {
+		K2_LOG("StageLoader: ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“\n");
+		return;
+	}
+
+	// ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ç¢ºèª "SCNE"
+	char magic[4] = {};
+	fs.read(magic, 4);
+	if (std::memcmp(magic, "SCNE", 4) != 0) {
+		K2_LOG("StageLoader: ä¸æ­£ãªãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã™\n");
+		return;
+	}
+
+	uint32_t version     = 0;
+	uint32_t objectCount = 0;
+	BinRead(fs, version);
+	BinRead(fs, objectCount);
+
 	int num = 0;
-	// for•ª‚ÅŒJ‚è•Ô‚³‚ê‚é
-	//LoadScene("Assets/Scene/SceneExport.json", [&](const nlohmann::json& j)
-	LoadScene("Assets/Scene/SceneExportTest.json", [&](const nlohmann::json& j)
-		{
-			// JSONƒf[ƒ^‚©‚ç "name" ƒtƒB[ƒ‹ƒh‚ğæ“¾‚µAname •Ï”‚ÉŠi”[
-			const std::string name = j["name"];
-			// ƒIƒuƒWƒFƒNƒg–¼‚ª "  " ‚Ån‚Ü‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
-			// —á‚¦‚Î "block01" ‚â "blockA" ‚È‚Ç‚àˆê’v‚·‚éB
-			if (IsForwardMatchObjectsName(name.c_str()))	// Šm”F‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ªƒŠƒXƒg‚Ì’†‚É‚ ‚é‚©‚ğ’²‚×‚é
-			{
-				ObjectData* objectData = new ObjectData;
 
-				// JSONƒf[ƒ^‚Ì "Transform" ƒtƒB[ƒ‹ƒhiˆÊ’uE‰ñ“]EƒXƒP[ƒ‹î•ñj‚ğ
-				// ParseTransformComponents ŠÖ”‚Åƒp[ƒX‚µAtransform •Ï”‚ÉŠi”[‚µ‚Ü‚·B
-				// ƒp[ƒX:ƒf[ƒ^i•¶š—ñ‚âƒtƒ@ƒCƒ‹‚È‚Çj‚ğƒvƒƒOƒ‰ƒ€‚Åg•ª‰ğE‰ğÍh‚µ‚ÄAg‚¢‚â‚·‚¢Œ`i\‘¢‘Ì‚âƒNƒ‰ƒX‚È‚Çj‚É•ÏŠ·‚·‚é‚±‚Æ
-				objectData->position = ParseTransformComponents(j["Transform"]).position;
-				objectData->rotation = ParseTransformComponents(j["Transform"]).rotation;
-				objectData->scale = ParseTransformComponents(j["Transform"]).scale;
-				// Attribute‚ÌƒAƒhƒŒƒX‚ğæ“¾
-				const auto& attributeJson = j["Attribute"];
+	for (uint32_t i = 0; i < objectCount; ++i)
+	{
+		// name
+		std::string name;
+		if (!BinReadString(fs, name)) break;
 
-				// ƒAƒhƒŒƒX‚Ì’†‚Ìƒf[ƒ^‚ğŠi”[
-				objectData->attachValue = ParseAttachableValue(attributeJson); // ‹z’…‰Â”\‚©‚Ç‚¤‚©‚Ìƒf[ƒ^‚ğŠi”[
-				objectData->size = ParseRequiredSphereSize(attributeJson); // ‰ò‚ª‹z’…‚Å‚«‚éƒTƒCƒY‚ğŠi”[
-				objectData->assetName = ParseObjectAssetName(attributeJson); // ƒAƒZƒbƒg‚Ì–¼‘O‚ğŠi”[
+		// Transform
+		Vector3    position, scale;
+		Quaternion rotation;
+		if (!BinReadVector3(fs, position))    break;
+		if (!BinReadQuaternion(fs, rotation)) break;
+		if (!BinReadVector3(fs, scale))       break;
 
-				K2_LOG("Name : %s \n", objectData->assetName.c_str());
+		// Attributeãƒ•ãƒ©ã‚°
+		uint8_t hasAttribute = 0;
+		if (!BinRead(fs, hasAttribute)) break;
 
-				objectData->grouthAmount = ParseGrowthAmount(attributeJson); // ‰ò‚Ì¬’·—Ê
-				objectData->colliderPivot = ParseVector3(attributeJson.at("colliderCenter")); // ƒRƒ‰ƒCƒ_[‚Ì‹N“_‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğŠi”[
-				objectData->colliderSize = ParseVector3(attributeJson.at("colliderSize")); // ƒRƒ‰ƒCƒ_[‚Ì‘å‚«‚³‚ğŠi”[
-				objectData->uiObjectScal = ParseUIDisPlayScale(attributeJson); // UI‚Æ‚µ‚Ä•\¦‚·‚éƒIƒuƒWƒFƒNƒg‚Ì‘å‚«‚³‚ğŠi”[
-				objectData->soundNum = ParseAttachSoundNum(attributeJson);
-				objectData->ID = num;
+		// Attributeãƒ‡ãƒ¼ã‚¿ï¼ˆã‚ã‚Œã°èª­ã‚€ï¼‰
+		int32_t  attachableValue    = 0;
+		int32_t  requiredSphereSize = 0;
+		int32_t  objectRadius       = 0;
+		int32_t  attachSoundNum     = 0;
+		float    uiDisplayScale     = 0.0f;
+		std::string assetName;
+		Vector3  colliderCenter, colliderSize;
 
-				objectList.emplace(num,objectData);
-				num++;
-			}
-			return true;
-		});
+		if (hasAttribute) {
+			BinRead(fs, attachableValue);
+			BinRead(fs, requiredSphereSize);
+			BinRead(fs, objectRadius);
+			BinRead(fs, attachSoundNum);
+			BinRead(fs, uiDisplayScale);
+			BinReadString(fs, assetName);
+			BinReadVector3(fs, colliderCenter);
+			BinReadVector3(fs, colliderSize);
+		}
+
+		// ç¢ºèªã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ãŒãƒªã‚¹ãƒˆã®ä¸­ã«ã‚ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+		if (!hasAttribute || !IsForwardMatchObjectsName(name)) {
+			continue;
+		}
+
+		ObjectData* objectData = new ObjectData;
+
+		objectData->position     = position;
+		objectData->rotation     = rotation;
+		objectData->scale        = scale;
+		objectData->attachValue  = attachableValue;		// å¸ç€å¯èƒ½ã‹ã©ã†ã‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
+		objectData->size         = requiredSphereSize;	// å¡ŠãŒå¸ç€ã§ãã‚‹ã‚µã‚¤ã‚ºã‚’æ ¼ç´
+		objectData->assetName    = assetName;			// ã‚¢ã‚»ãƒƒãƒˆã®åå‰ã‚’æ ¼ç´
+
+		K2_LOG("Name : %s \n", objectData->assetName.c_str());
+
+		objectData->grouthAmount  = objectRadius;		// å¡Šã®æˆé•·é‡
+		objectData->colliderPivot = colliderCenter;		// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®èµ·ç‚¹ã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’æ ¼ç´
+		objectData->colliderSize  = colliderSize;		// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å¤§ãã•ã‚’æ ¼ç´
+		objectData->uiObjectScal  = uiDisplayScale;		// UIã¨ã—ã¦è¡¨ç¤ºã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§ãã•ã‚’æ ¼ç´
+		objectData->soundNum      = attachSoundNum;
+		objectData->ID            = num;
+
+		objectList.emplace(num, objectData);
+		num++;
+	}
 }
